@@ -1,0 +1,1 @@
+<%@ WebHandler Language="C#" CodeBehind="Handler.ashx.cs" Class="byForm_Server.Handler" %>

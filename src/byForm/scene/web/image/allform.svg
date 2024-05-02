@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="16" viewBox="0 0 16 16" fill="none">
+<path   fill="rgba(11, 125, 255, 1)"  d="M2.3335 1.33333L13.6668 1.33333C14.5873 1.33333 15.3335 2.07953 15.3335 3L15.3335 13C15.3335 13.9205 14.5873 14.6667 13.6668 14.6667L2.3335 14.6667C1.41302 14.6667 0.666829 13.9205 0.666829 13L0.666829 3C0.666829 2.07953 1.41302 1.33333 2.3335 1.33333ZM2.3335 2.66667C2.1494 2.66667 2.00016 2.81591 2.00016 3L2.00016 13C2.00016 13.1841 2.1494 13.3333 2.3335 13.3333L13.6668 13.3333C13.8509 13.3333 14.0002 13.1841 14.0002 13L14.0002 3C14.0002 2.81591 13.8509 2.66667 13.6668 2.66667L2.3335 2.66667Z">
+</path>
+<path    stroke="rgba(11, 125, 255, 1)" stroke-width="1.3333333333333333" stroke-linejoin="round" stroke-linecap="round"  d="M1.3335 4.66669L14.6668 4.66669">
+</path>
+<path    stroke="rgba(11, 125, 255, 1)" stroke-width="1.3333333333333333" stroke-linejoin="round" stroke-linecap="round"  d="M6.6665 8L11.9998 8">
+</path>
+<path    stroke="rgba(11, 125, 255, 1)" stroke-width="1.3333333333333333" stroke-linejoin="round" stroke-linecap="round"  d="M6.6665 10.6667L11.9998 10.6667">
+</path>
+<path    stroke="rgba(11, 125, 255, 1)" stroke-width="1.3333333333333333" stroke-linejoin="round" stroke-linecap="round"  d="M4 8L4.66667 8">
+</path>
+<path    stroke="rgba(11, 125, 255, 1)" stroke-width="1.3333333333333333" stroke-linejoin="round" stroke-linecap="round"  d="M4 10.6667L4.66667 10.6667">
+</path>
+</svg>

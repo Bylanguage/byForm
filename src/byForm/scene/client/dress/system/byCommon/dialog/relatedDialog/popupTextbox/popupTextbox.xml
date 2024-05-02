@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <dialog ClassAndFileName="popupTextbox" ku="byCommon" identity="relatedDialog" dialog="popupTextbox" path="byCommon\dialog\relatedDialog\popupTextbox" namespace="byCommon.dress.relatedDialog">
+    <field name="cLblTitle" alias="cLblTitle" />
+    <field name="cContent" alias="cContent" />
+    <field name="cBtnOk" alias="cBtnOk" />
+    <field name="cBtnCancel" alias="cBtnCancel" />
+  </dialog>
+</root>

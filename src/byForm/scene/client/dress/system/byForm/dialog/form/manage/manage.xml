@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <dialog ClassAndFileName="manage" ku="byForm" identity="form" dialog="manage" path="byForm\dialog\form\manage" namespace="byForm.dress.form">
+    <field name="mainPanel" alias="mainPanel" />
+    <field name="formManage" alias="formManage" />
+    <field name="cFieldTemplatePanel" alias="cFieldTemplatePanel" />
+    <field name="cFormPanel" alias="cFormPanel" />
+    <field name="cFormNamePanel" alias="cFormNamePanel" />
+    <field name="cFormNameValueLabel" alias="cFormNameValueLabel" />
+    <field name="cFieldPanel" alias="cFieldPanel" />
+    <field name="cDetailPanel" alias="cDetailPanel" />
+    <field name="buttonContainer" alias="buttonContainer" />
+    <field name="saveButton" alias="saveButton" />
+    <field name="previewButton" alias="previewButton" />
+    <field name="publishButton" alias="publishButton" />
+  </dialog>
+</root>

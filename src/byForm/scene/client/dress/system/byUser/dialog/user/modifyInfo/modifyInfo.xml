@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <dialog ClassAndFileName="modifyInfo" ku="byUser" identity="user" dialog="modifyInfo" path="byUser\dialog\user\modifyInfo" namespace="byUser.dress.user">
+    <field name="cNameLabel" alias="cNameLabel" />
+    <field name="cNametextBox" alias="cNametextBox" />
+    <field name="cSureButton" alias="cSureButton" />
+    <field name="cCancelButton" alias="cCancelButton" />
+  </dialog>
+</root>

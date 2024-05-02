@@ -1,0 +1,51 @@
+﻿ku byFormNew
+{
+    data biao formData [primaryKey(iD), index(formID)] (
+    string iD "ID" [by.identity.ID, notNull]
+    , string formID "表单ID" [by.identity.Reference, ref: form.iD]
+    , string rowPK "数据行中的主键，非用户录入的表字段主键值，该项由系统自动编号" [by.identity.Attribute]
+    , string fieldID "字段ID" [by.identity.Reference,ref:formField.iD]
+    , string fieldName "字段名" [by.identity.Reference]
+    , string cellValue "单元格中的值" [by.identity.Attribute,max:4000]
+    , string userID "用户ID" [by.identity.Attribute, ref: user.ID])
+    {
+        
+    }
+
+    config biao formData.source "数据源配置表。必须配置 SQL 后才有效，例 select [config 配置名], a.* from this, 直接写 select a.* from this 则相关配置无效" (
+    string name "名称"
+    , string mode "模式"
+    , string[] actions "动作"
+    , string fieldAccess "字段访问"
+    , string[] settings "设置")
+    {
+        { iD, user, { select, insert }, iD, { name: "iD", text: "ID" } }
+        { formID, user, { insert, delete, update, select }, formID, { name: "formID", text: "表单ID" } }
+        { rowPK, user, { insert, delete, update, select }, rowPK, { name: "rowPK", text: "数据行中的主键，非用户录入的表字段主键值，该项由系统自动编号" } }
+        { fieldID, user, { insert,delete,update,select }, fieldID, { name: "fieldID", text: "字段ID" } }
+        { fieldName, user, { insert, delete, update, select }, fieldName, { name: "fieldName", text: "字段名" } }
+        { cellValue, user, { insert, delete, update, select }, cellValue, { name: "cellValue", text: "单元格中的值" } }
+        { userID, user, { insert, delete, update, select }, userID, { name: "userID", text: "用户ID" } }
+    }
+
+    config biao formData.flow "数据流配置表" (
+    string name "名称"
+    , string action "动作"
+    , string[] sources "数据源(source.name)")
+    {
+        { insert, insert, { iD, formID, rowPK, fieldID, fieldName, cellValue, userID } }
+        { update, update, { formID, rowPK, fieldID, fieldName, cellValue, userID } }
+        { delete, delete, { iD } }
+        { select, select, { iD, formID, rowPK, fieldName, fieldID, cellValue, userID } }
+        { popup, select, { iD } }
+    }
+
+    config biao formData.control "控件配置表" (
+    string name "名称"
+    , string[] types "控件类型"
+    , string[] sources "数据源(source.name)")
+    {
+        { edit, { Grid, EditArea }, { formID, rowPK,fieldID, fieldName, cellValue, userID } }
+        { popup, { Grid, QueryArea }, { iD } }
+    }
+}

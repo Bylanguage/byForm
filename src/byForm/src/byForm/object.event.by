@@ -1,0 +1,50 @@
+﻿ku byForm
+{
+    system biao object.event "面向对象事件表" (
+    string belong "所属类型"
+    , string name "名称"
+    , string[] scenes "场景"
+    , string[] modifiers "修饰符"
+    , string[] parameters "参数")
+    {
+        { FieldTermPanel, generalClick, {  }, {  }, {Object sender,EventArgs args  } }
+        { FieldTermPanel, generalDragStart, {  }, {  }, { Object sender,DragStartEventArgs args } }
+        { FieldTermPanel, generalDragDrop, {  }, {  }, {Object sender,DragEventArgs args  } }
+        { FieldTermPanel, deleteButtonClick, {  }, {  }, {Object sender,EventArgs args  } }
+        //{ FieldTermPanel, editButtonClick, {  }, {  }, { Object sender,EventArgs args } }
+
+        { FieldControlEditor, addButtonClick, {  }, {  }, {Object sender,EventArgs args  } }
+        { FieldControlEditor, saveButtonClick, {  }, {  }, {Object sender,EventArgs args  } }
+        { FieldControlEditor, cancelButtonClick, {  }, {  }, {Object sender,EventArgs args  } }
+        { FormNameEditor, saveButtonClick, {  }, {  }, {Object sender,EventArgs args  } }
+        { FormNameEditor, cancelButtonClick, {  }, {  }, { Object sender,EventArgs args } }
+        
+        
+        { SelectionEditor, addButtonClick, {  }, {  }, { Object sender,EventArgs args } }
+        { SelectionEditor, delButtonClick, {  }, {  }, { Object sender,EventArgs args } }
+        { SelectionEditor, textBoxTextChanged, {  }, {  }, {Object sender,EventArgs args  } }
+        
+        { FormItem~I, editButtonClick, {  }, {  }, { Object sender,EventArgs args } }
+        { FormItem~I, sendButtonClick, {  }, {  }, { Object sender,EventArgs args } }
+        { FormItem~I, delButtonClick, {  }, {  }, { Object sender,EventArgs args } }
+        { FormItem~I, resultButtonClick, {  }, {  }, {Object sender,EventArgs args  } }
+        { FormItem~I, statisticsButtonClick, {  }, {  }, { Object sender,EventArgs args } }
+        
+        { FormNameEditor, formNameChange, {  }, {  }, { Object sender,EventArgs args } }
+        { FormNameEditor, formSummaryChange, {  }, {  }, { Object sender,EventArgs args } }
+        { FormNameEditor, formSuccessMsgChange, {  }, {  }, { Object sender,EventArgs args } }
+        { FormNameEditor, formSubmitButtonTextChange, {  }, {  }, {Object sender,EventArgs args  } }
+        
+        { FormInstancePanel, submitButtonClick, {  }, {  }, {Object sender,EventArgs args  } }
+        { FormInstancePanel, cancelButtonClick, {  }, {  }, {Object sender,EventArgs args  } }
+        
+        { PropertyInputBox, propertyTextChanged, {  }, {  }, {Object sender,EventArgs args  } }
+        { PropertyComboBox, propertyComboChanged, {  }, {  }, {Object sender,EventArgs args  } }
+        
+        { FormInfoArea, createButtonClick, {  }, {  }, { Object sender,EventArgs args } }
+        { FormDataAnalyzeArea, displayButtonClick, {  }, {  }, {Object sender,EventArgs args  } }
+        { FormDataAnalyzeArea, deleteButtonClick, {  }, {  }, { Object sender,EventArgs args } }
+    
+    }
+    
+}

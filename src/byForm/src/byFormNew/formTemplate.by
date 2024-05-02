@@ -1,0 +1,43 @@
+﻿ku byFormNew
+{
+    data biao formTemplate [primaryKey(ID)] (
+    string ID "唯一标识" [identity.ID, notNull,max:32]
+    , string name "名称" [identity.Name, notNull,max:32]
+    , string formID "对应的表单id" [by.identity.Reference,notNull,max:32]
+    , string userID "用户ID" [by.identity.Attribute,ref:user.ID]
+    )
+    {
+        { "template-order-0", "在线订单模板", "form-order-0", "" }
+        { "template-collect-0", "意见反馈模板", "form-collect-0", "" }
+        { "template-register-0", "在线登记模板", "form-register-0", "" }
+        { "template-appointment-0", "会议预约模板", "form-appointment-0", "" }
+        { "template-sign-0", "在线登记模板", "form-sign-0", "" }
+        { "template-statistics-0", "在线统计模板", "form-statistics-0", "" }
+    }
+
+    config biao formTemplate.source "数据源配置表。必须配置 SQL 后才有效" (
+    string name "名称"
+    , string mode "模式"
+    , string[] actions "动作"
+    , string fieldAccess "字段访问"
+    , string[] settings "设置")
+    {
+        
+    }
+
+    config biao formTemplate.flow "数据流配置表" (
+    string name "名称"
+    , string action "动作"
+    , string[] sources "数据源(source.name)")
+    {
+        
+    }
+
+    config biao formTemplate.control "控件配置表" (
+    string name "名称"
+    , string[] types "控件类型"
+    , string[] sources "数据源(source.name)")
+    {
+        
+    }
+}

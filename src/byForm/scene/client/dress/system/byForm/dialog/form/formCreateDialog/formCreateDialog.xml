@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <dialog ClassAndFileName="formCreateDialog" ku="byForm" identity="form" dialog="formCreateDialog" path="byForm\dialog\form\formCreateDialog" namespace="byForm.dress.form">
+    <field name="headPanel" alias="headPanel" />
+    <field name="headLabel" alias="headLabel" />
+    <field name="bodyPanel" alias="bodyPanel" />
+    <field name="contentPanel" alias="contentPanel" />
+    <field name="namePanel" alias="namePanel" />
+    <field name="nameLabel" alias="nameLabel" />
+    <field name="nameInputBox" alias="nameInputBox" />
+    <field name="summaryPanel" alias="summaryPanel" />
+    <field name="summaryLabel" alias="summaryLabel" />
+    <field name="summaryInputBox" alias="summaryInputBox" />
+    <field name="buttonContainer" alias="buttonContainer" />
+    <field name="createButton" alias="createButton" />
+    <field name="cancelButton" alias="cancelButton" />
+  </dialog>
+</root>

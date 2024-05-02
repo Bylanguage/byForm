@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <dialog ClassAndFileName="manage" ku="byBase" identity="detail" dialog="manage" path="byBase\dialog\detail\manage" namespace="byBase.dress.detail">
+    <field name="cGrid" alias="cGrid" />
+  </dialog>
+</root>

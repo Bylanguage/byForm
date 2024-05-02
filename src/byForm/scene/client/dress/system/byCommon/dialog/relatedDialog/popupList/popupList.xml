@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <dialog ClassAndFileName="popupList" ku="byCommon" identity="relatedDialog" dialog="popupList" path="byCommon\dialog\relatedDialog\popupList" namespace="byCommon.dress.relatedDialog">
+    <field name="cGrid" alias="cGrid" />
+    <field name="cBtnOk" alias="cBtnOk" />
+    <field name="cBtnCancel" alias="cBtnCancel" />
+  </dialog>
+</root>

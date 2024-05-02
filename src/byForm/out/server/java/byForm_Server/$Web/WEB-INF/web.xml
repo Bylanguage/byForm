@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+    version="4.0" xmlns="http://xmlns.jcp.org/xml/ns/javaee">
+    <listener>
+        <listener-class>$Ku.$Web.ContextListener</listener-class>
+    </listener>
+    <listener>
+        <listener-class>$Ku.$Web.ThreadLocalCleanListener</listener-class>
+    </listener>
+    <servlet>
+        <servlet-name>Server</servlet-name>
+        <servlet-class>$Ku.by.ToolClass.Handler</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Server</servlet-name>
+        <url-pattern>/server</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+</web-app>

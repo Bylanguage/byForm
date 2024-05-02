@@ -1,0 +1,4 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <dialog ClassAndFileName="diUserLog" ku="byUser" identity="user" dialog="diUserLog" path="byUser\dialog\user\diUserLog" namespace="byUser.dress.user" />
+</root>

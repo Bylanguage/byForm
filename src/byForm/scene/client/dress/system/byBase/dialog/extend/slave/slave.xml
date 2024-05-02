@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <dialog ClassAndFileName="slave" ku="byBase" identity="extend" dialog="slave" path="byBase\dialog\extend\slave" namespace="byBase.dress.extend">
+    <field name="cEditArea" alias="cEditArea" />
+    <field name="cContextMenu" alias="cContextMenu" />
+  </dialog>
+</root>

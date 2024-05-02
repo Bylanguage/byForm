@@ -1,0 +1,105 @@
+﻿-- 以下为数据库 buUserTest 的 sqlserver 脚本
+
+
+-- 先检查当前库是否已存在，若不存在则创建
+IF NOT EXISTS (SELECT * FROM master..SYSDATABASES WHERE name = 'buUserTest')
+CREATE DATABASE buUserTest
+GO
+
+USE buUserTest
+GO
+
+-- 先检查当前表是否已存在，若不存在，则需要先创建表
+IF NOT EXISTS (SELECT * FROM SYSOBJECTS WHERE name = 'userUpload')
+CREATE TABLE [userUpload] (
+[iD] NVARCHAR(200) DEFAULT '' NOT NULL,
+[fileName] NVARCHAR(200) DEFAULT '' NOT NULL,
+[fileSize] INT DEFAULT 0,
+[userID] NVARCHAR(200) DEFAULT '',
+[summery] NVARCHAR(200) DEFAULT '',
+[dT] DATETIME2 DEFAULT CURRENT_TIMESTAMP)
+GO
+
+-- 添加主键
+ALTER TABLE [userUpload] ADD PRIMARY KEY ([iD])
+GO
+
+-- 先检查当前表是否已存在，若不存在，则需要先创建表
+IF NOT EXISTS (SELECT * FROM SYSOBJECTS WHERE name = 'log')
+CREATE TABLE [log] (
+[iD] NVARCHAR(200) DEFAULT '' NOT NULL,
+[sceneType] NVARCHAR(200) DEFAULT '',
+[userID] NVARCHAR(200) DEFAULT '' NOT NULL,
+[userName] NVARCHAR(200) DEFAULT '' NOT NULL,
+[state] NVARCHAR(200) DEFAULT '',
+[ip] NVARCHAR(200) DEFAULT '',
+[summary] NVARCHAR(200) DEFAULT '',
+[dt] DATETIME2 DEFAULT CURRENT_TIMESTAMP)
+GO
+
+-- 添加主键
+ALTER TABLE [log] ADD PRIMARY KEY ([iD])
+GO
+
+-- 先检查当前表是否已存在，若不存在，则需要先创建表
+IF NOT EXISTS (SELECT * FROM SYSOBJECTS WHERE name = 'user')
+CREATE TABLE [user] (
+[ID] NVARCHAR(200) DEFAULT '' NOT NULL,
+[freeze] BIT DEFAULT 0 NOT NULL,
+[rank] NVARCHAR(200) DEFAULT '',
+[name] NVARCHAR(200) DEFAULT '' NOT NULL,
+[password] NVARCHAR(200) DEFAULT '' NOT NULL,
+[displayName] NVARCHAR(200) DEFAULT '' NOT NULL,
+[mobile] NVARCHAR(200) DEFAULT '' NOT NULL,
+[mail] NVARCHAR(200) DEFAULT '' NOT NULL,
+[cerMode] NVARCHAR(200) DEFAULT '',
+[cerName] NVARCHAR(200) DEFAULT '',
+[cerNO] NVARCHAR(200) DEFAULT '',
+[money] DECIMAL DEFAULT 0,
+[regDt] DATETIME2 DEFAULT CURRENT_TIMESTAMP,
+[Remark] NVARCHAR(200) DEFAULT '')
+GO
+
+-- 添加主键
+ALTER TABLE [user] ADD PRIMARY KEY ([ID])
+GO
+
+-- 先检查当前表是否已存在，若不存在，则需要先创建表
+IF NOT EXISTS (SELECT * FROM SYSOBJECTS WHERE name = 'userICO')
+CREATE TABLE [userICO] (
+[iD] NVARCHAR(200) DEFAULT '' NOT NULL,
+[icoFile] NTEXT DEFAULT '',
+[uploadDt] DATETIME2 DEFAULT CURRENT_TIMESTAMP,
+[fileName] NVARCHAR(200) DEFAULT '',
+[extendName] NVARCHAR(200) DEFAULT '')
+GO
+
+-- 添加主键
+ALTER TABLE [userICO] ADD PRIMARY KEY ([iD])
+GO
+
+-- 先检查当前表是否已存在，若不存在，则需要先创建表
+IF NOT EXISTS (SELECT * FROM SYSOBJECTS WHERE name = 'userAdmin')
+CREATE TABLE [userAdmin] (
+[iD] NVARCHAR(200) DEFAULT '' NOT NULL,
+[userMode] NVARCHAR(200) DEFAULT '',
+[dt] DATETIME2 DEFAULT CURRENT_TIMESTAMP)
+GO
+
+-- 添加主键
+ALTER TABLE [userAdmin] ADD PRIMARY KEY ([iD])
+GO
+
+-- 先检查当前表是否已存在，若不存在，则需要先创建表
+IF NOT EXISTS (SELECT * FROM SYSOBJECTS WHERE name = 'anonymous')
+CREATE TABLE [anonymous] (
+[iD] NVARCHAR(200) DEFAULT '' NOT NULL,
+[userID] NVARCHAR(200) DEFAULT '',
+[regDt] DATETIME2 DEFAULT CURRENT_TIMESTAMP,
+[iP] NVARCHAR(200) DEFAULT '')
+GO
+
+-- 添加主键
+ALTER TABLE [anonymous] ADD PRIMARY KEY ([iD])
+GO
+

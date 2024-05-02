@@ -1,0 +1,142 @@
+﻿ku byFormNew
+{
+    system biao identity.skill "身份技能表" (
+    string belong "所属类型"
+    , string name "名称"
+    , string[] scenes "场景"
+    , string[] modifiers "修饰符"
+    , string[] parameters "参数"
+    , string returnType "返回类型"
+    , string body "技能体")
+    {
+        { ClientStartup, main "客户端入口点", { client }, { static }, { string[] args "启动参数"}, void, {
+            by.object.Message.alert("表单暂不支持客户端，敬请期待！");
+            //by.object.Message.alert("系统启动! 当前为库:[" + nameof(byFormNew) + "] "+ by.object.System.currentScene + " 端入口点");
+            /*
+            var tmpFormRow = new Row()~:new identity:.form;
+            var tmpList = new List<Row~formData>();
+            var tmpDialog = :new identity:.form.new manage( tmpFormRow , tmpList ); 
+            tmpDialog.show();
+             */ 
+             
+            byUser.:new identity:.user.pConfigSMSCode = false; //启用短信验证 
+        } }
+        { ServerStartup, main "服务端入口点", { server }, { static }, { string[] args "启动参数" }, void, {
+            byUser.:new identity:.user.pIsGetServerUserRow = false; //不允许用户通过 cookies 登录
+            byUser.:new identity:.user.pConfigSMSCode = false; //启用短信验证
+            
+            /*
+                //smtp邮件发送设定，用于用户注册及密码找回
+                mail.host = "smtp.126.com";             //邮箱服务商的 smtp 地址
+                mail.userName = "********@126.com";      //你的邮箱账号
+                mail.password = "****************";     //密码，可能各邮件运营商有差别
+                
+                //短信接口，，用于用户注册及密码找回
+                feigeSend.p_apikey = "N87846****";      //通知短信/营销短信产品接口账号
+                feigeSend.p_secret = "8784611*********";//与接口账号对应的秘钥
+                feigeSend.p_sign_id = "16****";         //短信签名
+                feigeSend.p_template_id ="13****";      //模板短信ID
+            */
+            //系统日志目录及文件名
+            byUser.:new identity:.user.rLog.pLogMode = logMode.file;       //设定日志模式 
+            byUser.:new identity:.userAdmin.initInsertAdmin();//自动产生一个空的管理员账号 ，正式布署前可将该代码及所属skill一起删除，以利于安全
+        } }
+        { home, main "网页主技能，重写此技能以实现自定义的网页初始化逻辑", { web }, {  }, { string queryArgs "网页当前参数字符串，即url中?符后面的内容" }, void, {
+            //if( this.isFirstRun() ) 
+            //{ 
+            //    this.pFrmLogin.cTxtName.text = "admin";  //演示
+            //    this.pFrmLogin.cTxtPwd.isPassword = false; //第一次运行展示明文明码，以让用户记住
+            //    this.pFrmLogin.cTxtPwd.text = "admin123"; //演示  
+            //    Message.alert("请记住初始管理员用户名与密码，密码可以在管理界面修改，密码框明文仅显示一次！");
+            //} 
+            var tmpWaiting = byCommon.identity.relatedDialog.Loading();
+            byUser.:new identity:.user.pConfigSMSCode = true; //启用短信验证
+
+            var tmpFormsManager = :new identity:.form.new formsManager(); 
+            tmpWaiting.close(); 
+            var tmpMenubar = new MenuBar(); 
+            WebElement loginButton = System.currentDocument.getElementByID("user");
+            loginButton.after(tmpMenubar.element);
+            tmpMenubar.element.style.setProperty("display","none");
+            var showFormManagersMenuItem = new MenuItem(){text="显示所有表单"}; 
+            var createFormMenuItem = new MenuItem(){text = "创建表单"};
+            
+            tmpMenubar.element.addClass(CssClassNameHelper.indexUserMenuBar);
+            
+            WebElement activeButton = System.currentDocument.getElementByID("active");
+            activeButton.click +=(OBJECT sender, EventArgs args){
+                tmpFormsManager.initShowManage();
+            };
+            WebElement activeButton2 = System.currentDocument.getElementByID("active2");
+            if(activeButton2 != null) 
+            {
+                activeButton2.click +=(OBJECT sender, EventArgs args){
+                    tmpFormsManager.initShowManage();
+                };
+            }
+            
+            showFormManagersMenuItem.click +=(OBJECT sender, EventArgs args){
+                if(:new identity:.form.rFormSys.rUser.confirmUserIsLogin(confirmUserIsLoginMode.verifyLogin)){
+                    tmpFormsManager.show();
+                    tmpFormsManager.RefreshFormListPanel();
+                }
+            };
+            createFormMenuItem.click +=(OBJECT sender, EventArgs args){
+                if(:new identity:.form.rFormSys.rUser.confirmUserIsLogin(confirmUserIsLoginMode.verifyLogin))
+                {
+                    tmpFormsManager.initShowManage();
+                }
+            };
+            :new identity:.formSys.rUser.loginSuccessEvent +=(user.userOrm f_userRow){
+                tmpMenubar.element.style.setProperty("display","inline");
+                loginButton.style.setProperty("display","none");
+                tmpMenubar.clear();
+                :new identity:.form.rFormSys.rUser.addUserMenuBar(tmpMenubar);
+                tmpMenubar.add(showFormManagersMenuItem);
+                tmpMenubar.add(createFormMenuItem);
+                
+            };
+            :new identity:.formSys.rUser.userExitEvent+=(user.userOrm f_userRow){
+                tmpMenubar.element.style.setProperty("display","none");
+                loginButton.style.setProperty("display","inline");
+            };
+            loginButton.click+=(OBJECT sender, EventArgs args){
+                var loginWaiting = byCommon.identity.relatedDialog.Loading();
+                :new identity:.form.rFormSys.rUser.new diLogin().show();
+                //if(:new identity:.form.rFormSys.rUser.pSession)
+                //:new identity:.form.rFormSys.rUser.addUserMenuBar(tmpMenubar);
+                loginWaiting.close();
+            };
+            
+            //添加模板快速访问创建表单
+            WebElement orderTemplateBtn = System.currentDocument.getElementByID("order");
+            WebElement signTemplateBtn = System.currentDocument.getElementByID("sign");
+            WebElement registerTemplateBtn = System.currentDocument.getElementByID("register");
+            WebElement collectTemplateBtn = System.currentDocument.getElementByID("collect");
+            WebElement statisticsTemplateBtn = System.currentDocument.getElementByID("statistics");
+            WebElement appointmentTemplateBtn = System.currentDocument.getElementByID("appointment");
+            
+            orderTemplateBtn.click +=(OBJECT sender, EventArgs args){
+                tmpFormsManager.showManageFromTemplate("template-order-0");
+            };
+            signTemplateBtn.click+=(OBJECT sender, EventArgs args){
+                tmpFormsManager.showManageFromTemplate("template-sign-0");
+            };
+            registerTemplateBtn.click+=(OBJECT sender, EventArgs args){
+                tmpFormsManager.showManageFromTemplate("template-register-0");
+            };
+            collectTemplateBtn.click+=(OBJECT sender, EventArgs args){
+                tmpFormsManager.showManageFromTemplate("template-collect-0");
+            };
+            statisticsTemplateBtn.click+=(OBJECT sender, EventArgs args){
+                tmpFormsManager.showManageFromTemplate("template-statistics-0");
+            };
+            appointmentTemplateBtn.click+=(OBJECT sender, EventArgs args){
+                tmpFormsManager.showManageFromTemplate("template-appointment-0");
+            };
+            
+        } }
+    
+    
+    }
+}

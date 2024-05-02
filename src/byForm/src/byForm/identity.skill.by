@@ -1,0 +1,826 @@
+﻿ku byForm
+{
+    system biao identity.skill "身份技能表" (
+    string belong "所属类型"
+    , string name "名称"
+    , string[] scenes "场景"
+    , string[] modifiers "修饰符"
+    , string[] parameters "参数"
+    , string returnType "返回类型"
+    , string body "技能体")
+    {
+        { fieldTemplate, getList "获取列表数据", {  }, {  }, {  }, List<Row~fieldTemplate>, {
+            scene(server)
+            {
+                if( this.pList == null )
+                    this.pList = ( select a.* from this a order by a.iCreateDt asc ).rows ;
+                
+                return this.pList;
+            }
+            scene(web,client)
+                return this.:server getList:();
+        } }
+        { fieldTemplate, getFieldTemplate, {  }, {  }, {string id  }, Row~fieldTemplate, {
+            List<Row~fieldTemplate> templateList = this.getList();
+            foreach(Row~fieldTemplate templateRow in templateList)
+            {
+                if(templateRow.iID == id)
+                {
+                    return templateRow;
+                }
+            } 
+            
+            throw new Exception(TextHelper.invalidFieldTemplateID);
+        } }
+
+        { form, load "装入完整数据，非法数据则直接返回null", { server,web,client }, {  }, { string f_userID"表单ID" }, List<Row~Table>[] "0为form.Row, 1为formField.Row ", {
+            if( !byCommon.object.verifyRequest.isOk(f_userID,32) || !this.rFormSys.rUser.confirmUserIsLogin(f_userID)) 
+                return null; //非法数据则直接返回 ,或者没有登录
+
+            scene(server) 
+            {
+                f_userID = this.rFormSys.rUser.rsaDecode(f_userID); 
+                var tmpMuiltList = exec( select a.* from this a where a.iUserID == f_userID  , select b.* from this.rFormSys.rFormField b where b.iUserID == f_userID ); 
+                return new List<Row~Table>[]{tmpMuiltList.select1.rows,tmpMuiltList.select2.rows};
+            }
+            scene(web,client) 
+                return this.:server load:( this.rFormSys.rUser.rsaEncode(f_userID) ); //对用户ID加密传输
+        } } 
+        { form, loadSingle "装入完整数据，非法数据则直接返回null", { server,web,client }, {  }, { string f_FormID"表单ID" },   List<Row~Table>[] "0为form.Row, 1为formField.Row ", {
+            if( !byCommon.object.verifyRequest.isOk(f_FormID,32) ) 
+                return null; //非法数据则直接返回
+                
+            scene(server) 
+            {
+                if( this.pCacheDic.containsKey(f_FormID))
+                    return this.pCacheDic[f_FormID];
+                else
+                {
+                    var tmpMuiltList = exec( select a.* from this a where a.iID == f_FormID , select b.* from this.rFormSys.rFormField b where b.iFormID == f_FormID ); 
+                    var tmpListArr = new List<Row~Table>[]{tmpMuiltList.select1.rows,tmpMuiltList.select2.rows} ; 
+                    if(this.pCacheDic.count < 1000)
+                        this.pCacheDic.add( f_FormID , tmpListArr); //仅缓存1000条
+                    return tmpListArr;
+                }
+            }
+            scene(web,client) 
+                return this.:server loadSingle:(f_FormID);
+        } }
+        { form , loadVDataSingle "查询对应的vData ", { server, web, client }, {  }, { string f_FormID"表单ID" }, List<Row~formData> "VData64 - VData4000  集中放入一个列表中" , {
+            if( !byCommon.object.verifyRequest.isOk(f_FormID,32) ) 
+                return null;   //非法数据则直接返回
+            scene( server )
+            {
+                var tmpExecList = exec( 
+                select a.* from this.rFormSys.rVData64 a where a.iFormID == f_FormID, 
+                select a.* from this.rFormSys.rVData256 a where a.iFormID == f_FormID , 
+                select a.* from this.rFormSys.rVData1024 a where a.iFormID == f_FormID , 
+                select a.* from this.rFormSys.rVData4000 a where a.iFormID == f_FormID  ); 
+                tmpExecList.select1.rows.addRange(tmpExecList.select2.rows);
+                tmpExecList.select1.rows.addRange(tmpExecList.select3.rows);
+                tmpExecList.select1.rows.addRange(tmpExecList.select4.rows); 
+                return tmpExecList.select1.rows;
+            }
+            scene( web , client )
+                return this.:server loadVDataSingle:( f_FormID );
+        } }
+        { form, update , { server, web, client }, {  }, { List<Row~Table> f_list ,Action f_action "仅支持增、删、改" }, Result , {
+            if( f_list.count == 0  ) 
+                return new Result(){info=TextHelper.misssingListData}; 
+            var tmpID = new identity.Table[]{this,this.rFormSys.rVData1024,this.rFormSys.rVData256,this.rFormSys.rVData4000,this.rFormSys.rVData64};
+            if( !byCommon.object.verifyRowIdentity.isExists(f_list ,tmpID) ) //主要是验证是不是指定的表源，不能乱操作数据库的   
+                return new Result(){info=TextHelper.illegalInjection}; 
+            scene(server)
+            {
+                //int tmpOutCount = f_list.count;
+                //tran
+                //{
+                //    int tmpCount = 0;
+                //    if( f_action == Action.insert)
+                //        tmpCount = insert by f_list;
+                //    else if(f_action == Action.update)
+                //        tmpCount = update by f_list;
+                //    else if(f_action == Action.delete)
+                //        tmpCount = delete by f_list;
+                        
+                //    if (tmpCount != tmpOutCount )
+                //    {
+                //        rollback;
+                //        interrupt "对数据库 "+f_action+" 失败";
+                //    }
+                //}
+                //error (string errorInfo)
+                //{
+                //    return new Result(){info=errorInfo};
+                //}
+                tran{
+                    if( f_action == Action.insert)
+                        insert by f_list;
+                    else if(f_action == Action.update)
+                        update by f_list;
+                    else if(f_action == Action.delete)
+                        delete by f_list;
+                }
+                error(string errorInfo)
+                {
+                    return new Result(){isOk=false,info=errorInfo};
+                }
+                return new Result(){ isOk = true }; //执行成功
+            }
+            scene(web,client)
+                return this.:server update:(f_list,f_action);
+                //return this.update( f_list , f_action );
+        } }
+        { form, vDataToStringArr "把一个vdata行组装成一个string[] 行用于在界面上的grid中展示，{主键,行值,...}", { web, client }, {  }, { List<Row~formData> f_vDataList"vData数据行列表",string[] f_fieldName "要生成的表结构行,字段名数组" }, List<string[]> "把一组Row~structureData展开为一个列表数组", {
+            Dictionary<string,Dictionary<string, Row~formData>> tmpDic = this.rowStructureDataToDic(f_vDataList); //<row.PK<field,row>>
+            List<string[]> tmpResultList = new List<string[]>();
+            foreach (var item in tmpDic)
+            {
+                var tmpArr = new string[f_fieldName.length +1];
+                
+                tmpArr[0] = item.key; //第一列为主键
+                for (int i = 1; i < tmpArr.length; i++)
+                {
+                    var tmpFieldName =f_fieldName[i-1];
+                    if(item.value.containsKey(tmpFieldName)) 
+                    {
+                        tmpArr[i] = item.value[tmpFieldName].iCellValue;
+                    }
+                }
+                tmpResultList.add(tmpArr);
+            } 
+            return tmpResultList;
+        } }
+        { form, rowStructureDataToDic "把一个Row~vData转成一个字典， <pk,row~id...>", { web, client }, { private }, { List<Row~formData> f_vDataList}, Dictionary<string,Dictionary<string, Row~formData>> , {
+            Dictionary<string,Dictionary<string, Row~formData>> tmpDic = new Dictionary<string, Dictionary<string, Row~formData>>();//<pk,<fieldName,row>> 
+            foreach (var item in f_vDataList)
+            {
+                if(!tmpDic.containsKey(item.iRowPK)) 
+                {
+                    tmpDic.add(item.iRowPK,new Dictionary<string, Row~formData>());
+                }
+                tmpDic[item.iRowPK].add(item.iFieldName,item);
+            } 
+            return tmpDic;
+        } }
+        { form, toVDataDic "把一个字符串折成一个row~structureData 字典", { web, client }, {  }, {string f_userID, string[] f_fieldName "要生成的表结构行,字段名数组",int f_pkIndex "主键列索引",List<string[]> f_DataList"数据行列表" }, Dictionary<string,Dictionary<string, Row~formData>>, {
+            var tmpDic = new Dictionary<string,Dictionary<string, Row~formData>>(); 
+            foreach (var item in f_DataList)
+            {
+                var tmpPk = item[f_pkIndex];
+                var tmpForDic = new Dictionary<string, Row~formData>();
+                tmpDic.add( tmpPk , tmpForDic );
+                for (int i = 0; i < f_fieldName.length; i++)
+                {
+                    if(item[i] != null) 
+                    { 
+                       var tmpVData = new Row()~this.rFormSys.rVData256; 
+                       tmpVData.iID =general.getGuid();
+                       tmpVData.iUserID = f_userID;
+                       tmpVData.iFieldName = f_fieldName[i]; 
+                       tmpVData.iCellValue = item[i]; 
+                       tmpVData.iRowPK=item[f_pkIndex]; 
+                       tmpForDic.add(tmpVData.iFieldName,tmpVData); 
+                    }
+                }
+            } 
+            return tmpDic;
+        } }
+        { form, toVDataDic "把一个字符串折成一个row~structureData 字典，不处理iID & iKuID构件字段", { web, client }, {  }, {string f_FormID, string[] f_fieldName "要生成的表结构行,字段名数组",string f_pkFieldName "主键列名称",List<string[]> f_DataList"数据行列表" }, Dictionary<string,Dictionary<string, Row~formData>>, {
+            var tmpPkIndex = this.getPkIndex(f_fieldName , f_pkFieldName);
+            return this.toVDataDic( f_FormID , f_fieldName , tmpPkIndex , f_DataList );
+        } }
+        { form, getPkIndex "找出主键索引出来", { web, client }, {  }, {string[] f_fieldNameArr"字段列表" , string f_pkName "字段名称" }, int, {
+            var tmpPkIndex = 0;
+            for (int i = 0; i < f_fieldNameArr.length; i++)
+            {
+                if( f_fieldNameArr[i] == f_pkName ) 
+                {
+                    tmpPkIndex = i;
+                    break;
+                }
+            } 
+            return tmpPkIndex;
+        } }
+
+        { formData, getformDataIdentity"获取表单存储身份", {  }, {  }, { Row~formField f_formField"字段信息" }, formData "返回值身份", {
+            return this.getformDataIdentity( f_formField.iVDataValue );
+        } } 
+        { formData, getformDataIdentity"获取表单存储身份", {  }, {  }, { int f_Value "字段长度" }, formData "返回值身份", {
+            if(f_Value <= 64)
+                return this.rFormSys.rVData64;
+            if( f_Value <= 256)
+                return this.rFormSys.rVData256;
+            if( f_Value <= 1024)
+                return this.rFormSys.rVData1024;
+            else if( f_Value >= 4000)
+                return this.rFormSys.rVData4000;
+            else 
+                return this.rFormSys.rVData4000;
+        } }
+        
+        { formField, addUpdate "向数据库中增加或更新", {  }, {  }, {Row~formField f_formField,Action action  }, int, {
+            scene(server) 
+            {
+                int tmpResultValue =0;
+                switch(action) 
+                {
+                    case Action.insert:
+                        tmpResultValue = insert by f_formField;
+                        break;
+                    case Action.update:
+                        tmpResultValue = update by f_formField;
+                        break;
+                    case Action.delete:
+                        break;
+                }
+                return tmpResultValue;
+            }
+            scene( web , client ) 
+                return this.:server addUpdate:( f_formField , action );
+        } }
+        { formField, showAllFieldInfoAsTemplate "读取所有字段，并以formField表初始数据的形式显示 谨慎使用", { client,web }, {  }, {  }, void, {
+            if(this.rFormSys.rUser.pSession == null){Message.alert(TextHelper.notLoggedIn);return;}
+            if(this.rFormSys.rUser.pSession.a.iRank != rank.vip){Message.alert(TextHelper.insufficientPermissions);return;}
+            var queryResult = select data.* from this data ;
+            string allfield = "";
+            foreach(Row~formField fieldRow in queryResult.rows)
+            {
+                string text = "";
+                text += "{";
+                text += " \""+fieldRow.iID+"\",";
+                text += " \"formID\",";
+                text += " \""+fieldRow.iFieldNO+"\",";
+                text += " \""+fieldRow.iFieldName+"\",";
+                text += " \""+fieldRow.iFieldType+"\",";
+                text +=  fieldRow.iFieldCtrl+",";
+                text += " \""+ fieldRow.iSelectValue+"\",";
+                text += " "+fieldRow.iFieldMin+",";
+                text += " "+fieldRow.iFieldMax+",";
+                text += " \""+fieldRow.iFieldReg+"\",";
+                text += " \""+fieldRow.iFieldRegMsg+"\",";
+                text += " \""+fieldRow.iFieldDefault+"\",";
+                text += " "+fieldRow.iOrder+",";
+                text += " "+fieldRow.iNotNull+",";
+                text += " "+fieldRow.iVDataValue+",";
+                text += " \""+"\",";
+                text += " \""+fieldRow.iSummary+"\"";
+
+                text += "}\r\n";
+                allfield += text;
+            }
+            Dialog tmpdialog = new Dialog();
+            tmpdialog.add(new TextBox(){isMultiLine=true,text=allfield});
+            tmpdialog.show();
+        } }    
+        { formField, delByFormId "根据表单id删除对应行" , {  }, {  }, {string formID  }, void, {
+            scene(server){
+                delete from this where iFormID == formID;
+            }
+            scene(web,client)
+            {
+                this.:server delByFormId:(formID);
+            }
+        } }
+        { form, saveField "将字段行保存到数据库", {  }, { private }, {Row~formField f_formField,Action action  }, void, {
+            this.rFormSys.rFormField.addUpdate(f_formField,action);
+        } }
+        { form, delFieldByFormId "删除给定表单id的所有字段", {  }, { private }, {string formID  }, void, {
+           this.rFormSys.rFormField.delByFormId(formID);
+        } }
+        { form, displayFormData "展示答卷数据", { web,client }, {  }, {Row~form f_row "要展示结果的表单行" ,List<Row~formData> f_dataList ,Panel f_panel "要生成在该元素上"  }, void, {
+            
+            Label titleLabel = new Label(){webWidthFilled=true,text=f_row.iName,fontIsBold=true,fontSize=25};
+            Label summaryLabel = new Label(){webWidthFilled=true,text = f_row.iSummary==null?"":f_row.iSummary};
+            scene(web)
+            {
+                f_panel.element.addClass(CssClassNameHelper.resultsPanel);
+                summaryLabel.element.addClass(CssClassNameHelper.resultsSummaryLabel);
+                titleLabel.element.addClass(CssClassNameHelper.resultsTitleLabel);
+            }
+            f_panel.add(titleLabel);
+            if(summaryLabel.text!=""){f_panel.add(summaryLabel);}
+
+            var result = select a.* from this.rFormSys.rFormData a where a.iFormID == f_row.iID;
+            Dictionary<string,List<Row~formData>> resultDict = new Dictionary<string, List<Row~formData>>();
+            foreach(Row~formData row in result.rows)
+            {
+                if(!resultDict.containsKey(row.iRowPK))
+                {
+                    resultDict.add(row.iRowPK,new List<Row~formData>());
+                }
+                resultDict[row.iRowPK].add(row);
+            }   
+
+            foreach(string rowPK in resultDict.keys)
+            {
+                ResultPanel resultPanel = new ResultPanel(resultDict[rowPK]);
+                resultPanel.setHeadInfo(rowPK);
+                f_panel.add(resultPanel);
+                
+            }
+            
+            
+        } }
+        { form, generateFormInstancePanel "生成供填写的表单实例面板", { web, client }, {  }, { Row~form f_row,List<Row~formField> f_fieldList }, FormInstancePanel, {
+            FormInstancePanel formInstancePanel = new FormInstancePanel(f_row);
+            this.generateInstanceFields(f_fieldList,formInstancePanel.getContentPanel());
+            return formInstancePanel;
+        } }
+        { form, generateInstanceFields "生成多个字段实例", { web, client }, { private }, {List<Row~formField> fieldRows,Panel f_panel  }, void, {   
+            foreach(Row~formField fieldRow in fieldRows)
+            {
+                FieldControl fieldControl = generateInstanceField(fieldRow);
+                f_panel.add(fieldControl);
+            }
+        } }    
+        { form, generateInstanceField "生成单个字段实例", { web, client }, { private }, { Row~formField fieldRow }, FieldControl, {
+            switch(fieldRow.iFieldCtrl){
+                case ctrType.checkBox:{
+                    return new FieldCheckBox(fieldRow);
+                }
+                case ctrType.checkBoxList:{
+                    return new FieldCheckBoxList(fieldRow);
+                }
+                case ctrType.dropdownList:{
+                    return new FieldComboBox(fieldRow);
+                }
+                case ctrType.muiltTextbox:{
+                    return new FieldMultiTextBox(fieldRow);
+                }
+                case ctrType.radbutton:{
+                    return new FieldRadioButtonGroup(fieldRow);
+                }
+                case ctrType.slider:{
+                    return new FieldSlider(fieldRow);
+                }
+                case ctrType.textbox:{
+                    return new FieldTextBox(fieldRow);
+                }
+                case ctrType.datePicker:
+                case ctrType.timePicker:
+                case ctrType.dateTimePicker:
+                {
+
+                    return new FieldDateTimePicker(fieldRow);
+                }
+                default:{
+                    throw new Exception(TextHelper.unexpectedControl);
+                }
+            }
+        } }
+
+        { form, getFieldDatas "表单填写后读取并验证填写的内容", { web, client }, {  }, { Panel fieldsPanel, Row~form row }, List<Row~formData>, {
+            List<Row~formData> resultList = new List<Row~formData>();
+            string rowPK = byCommon.identity.general.getGuid();
+            foreach(Control control in fieldsPanel.children)
+            {
+                if(!(control is FieldControl)){throw new Exception(TextHelper.unexpectedControl);}
+                FieldControl fieldControl = control as FieldControl;
+                Row~formData tmpRow = new Row()~this.rFormSys.rVData64.getformDataIdentity(fieldControl.fieldRow.iVDataValue);
+                resultList.add(tmpRow);
+                tmpRow.iID = byCommon.identity.general.getGuid();
+                tmpRow.iRowPK = rowPK;
+                tmpRow.iFieldName = fieldControl.fieldRow.iFieldName;
+                tmpRow.iFormID = fieldControl.fieldRow.iFormID;
+                tmpRow.iUserID = fieldControl.fieldRow.iUserID;
+                tmpRow.iFieldID = fieldControl.fieldRow.iID;
+                switch(fieldControl.fieldRow.iFieldCtrl)
+                {
+                    case ctrType.checkBox:{tmpRow.iCellValue = (fieldControl as FieldCheckBox).getValue();break; }
+                    case ctrType.checkBoxList:{tmpRow.iCellValue=(fieldControl as FieldCheckBoxList).getValue();break;}
+                    case ctrType.dropdownList:{tmpRow.iCellValue=(fieldControl as FieldComboBox).getValue();break;}
+                    case ctrType.muiltTextbox:{tmpRow.iCellValue=(fieldControl as FieldMultiTextBox).getValue();break;}
+                    case ctrType.radbutton:{tmpRow.iCellValue=(fieldControl as FieldRadioButtonGroup).getValue();break;}
+                    case ctrType.slider:{tmpRow.iCellValue=(fieldControl as FieldSlider).getValue();break;}
+                    case ctrType.datePicker:
+                    case ctrType.timePicker:
+                    case ctrType.dateTimePicker:{tmpRow.iCellValue=(fieldControl as FieldDateTimePicker).getValue();break;}
+                    case ctrType.textbox:
+                    {
+                        tmpRow.iCellValue=(fieldControl as FieldTextBox).getValue();
+                        break;}
+                    default:{throw new Exception(TextHelper.unexpectedControl);}
+                }
+            }
+            return resultList;
+        } }
+        { form, verifyFieldDatas "验证表单填写是否合法", { web, client }, {  }, { Panel fieldsPanel, Row~form row }, Result, {
+            List<Result> results = new List<Result>();
+            foreach(Control control in fieldsPanel.children)
+            {
+                if(!(control is FieldControl)){throw new Exception(TextHelper.unexpectedControl);}
+                FieldControl fieldControl = control as FieldControl;
+                Result result;
+                switch(fieldControl.fieldRow.iFieldCtrl)
+                {
+                    case ctrType.checkBox: { result = (fieldControl as FieldCheckBox).verify();break;}
+                    case ctrType.checkBoxList: {result = (fieldControl as FieldCheckBoxList).verify();break;}
+                    case ctrType.dropdownList: {result = (fieldControl as FieldComboBox).verify();break;}
+                    case ctrType.muiltTextbox: {result = (fieldControl as FieldMultiTextBox).verify();break;}
+                    case ctrType.radbutton: { result = (fieldControl as FieldRadioButtonGroup).verify();break;}
+                    case ctrType.slider: { result = (fieldControl as FieldSlider).verify();break;}
+                    case ctrType.textbox: { result = (fieldControl as FieldTextBox).verify();break;}
+                    case ctrType.datePicker:
+                    case ctrType.timePicker:
+                    case ctrType.dateTimePicker:{ result = (fieldControl as FieldDateTimePicker).verify();break;}
+                    default:{throw new Exception(TextHelper.unexpectedControl);}
+                }    
+                result.info = (fieldControl.fieldRow.iFieldNO+1).toString()+" "+fieldControl.fieldRow.iFieldName+"--"+result.info;
+                results.add(result);
+                
+            }
+            foreach(Result result in results)
+            {
+                if(result!=null)
+                {
+                    if(!result.isOk){return result;}
+                }
+            }
+            return new Result(){isOk = true};
+        } }
+        
+
+        { formFilling, main "网页主技能，重写此技能以实现自定义的网页初始化逻辑", { web }, {  }, { string queryArgs "网页当前参数字符串，即url中?符后面的内容" }, void, {
+            //base.main(queryArgs);
+            Dictionary<string,string> queryDic = byWebCommon.identity.webCommon.getQueryArgDic(queryArgs); //把传入的URL转成一个字典 ,大小写敏感
+            if(!queryDic.containsKey(NameHelper.formID))
+            {
+                if(System.bySaaSID == null || System.bySaaSID =="")
+                { 
+                    Message.alert(TextHelper.formIdLoss);return; 
+                }
+                else //add by donald 2024-4-22 for 启动外部saas支持
+                {
+                    queryDic.add(NameHelper.formID, System.bySaaSID);
+                }
+            }
+            if(queryDic[NameHelper.formID] ==null || queryDic[NameHelper.formID]=="" )
+            {
+                Message.alert(TextHelper.formIdError);return;
+            }
+            // var tmpSelect  = exec(select a.* from this.rFormSys.rForm a where a.iID == queryDic[NameHelper.formID] , select b.* from this.rFormSys.rFormField b where b.iFormID == queryDic[NameHelper.formID]);
+            var formQueryResult =  select a.* from this.rFormSys.rForm a where a.iID == queryDic[NameHelper.formID];
+            var formFieldQueryResult = select b.* from this.rFormSys.rFormField b where b.iFormID == queryDic[NameHelper.formID];
+           
+            try
+            {
+                if(formQueryResult.rows.count == 0) 
+                {
+                    Message.alert(TextHelper.sheetSubmittedLoss); 
+                    return;
+                }
+                var f_row = formQueryResult.rows[0];
+                FormInstancePanel formInstancePanel = this.rFormSys.rForm.generateFormInstancePanel(f_row, formFieldQueryResult.rows);
+                formInstancePanel.setSubmitButtonText(f_row.iSubmitButton);
+                formInstancePanel.submitButtonClick +=(OBJECT sender, EventArgs args)
+                {
+                    if(this.isPreview){Message.alert(TextHelper.previewOnly);return;}
+                    Result verifyResult = this.rFormSys.rForm.verifyFieldDatas(formInstancePanel.getContentPanel(),f_row);
+                    if(!verifyResult.isOk){Message.alert(verifyResult.info);return;}
+                    
+                    var tmpList = this.rFormSys.rForm.getFieldDatas(formInstancePanel.getContentPanel(),f_row);
+  
+                    
+                    Result commitResult = new Result(){isOk=true,info=""};
+                    foreach(Row~formData formdata in tmpList )
+                    {
+                        formData targetFormData = this.rFormSys.rFormData.getformDataIdentity(formdata.iCellValue.length);
+                        tran{
+                            insert targetFormData values formdata ;
+                        }
+                        error(string errorInfo)
+                        {
+                            commitResult.isOk=false;
+                            commitResult.info+=(formdata.iFieldName+"--" + errorInfo);
+                        } 
+                    }
+                    if(commitResult.isOk){
+                        Message.alert(f_row.iSuccessMsg);
+                        formInstancePanel.hide();  //提交成功后隐藏
+                        //formInstancePanel.isEnabled = false;
+                    }
+                    else{ 
+                        Message.alert( TextHelper.saveFail + commitResult.info );
+                        this.rFormSys.rUser.rLog.write(logState.Error,TextHelper.saveFail+ commitResult.info );
+                    };
+                }; 
+
+                /*
+                if( this.rFormSys.rUser.confirmUserIsLogin(confirmUserIsLoginMode.onlyVerify) ) //仅在登录后显示
+                {
+                    if(this.pageWindow.url.matches("^https?://[^/]+", RegexMode.multiIgnoreCase)[0] == System.webRootPath.matches("^https?://[^/]+", RegexMode.multiIgnoreCase)[0] ) //仅在同域下显示
+                    {
+                        var  tmpEle = WebElement.createElement("div"); 
+                        string tmpUrl = this.pageWindow.url.replaceReg("[\\.][^\r\n\\.]+$","", RegexMode.multiline);
+                        string tmpValue = "&lt;script&gt;window.localStorage.setItem(&quot;_byt_saasid_storage&quot;, &quot;"+queryDic[NameHelper.formID]+"&quot;)&lt;/script&gt;<br/>&lt;script src=&quot;"+ tmpUrl +".js&quot;&gt; &lt;/script&gt;";
+                        tmpEle.innerHTML="<h3>saas服务调用代码</h3>"+ tmpValue;
+                        System.currentDocument.body.append(tmpEle); 
+                    }
+                }
+                 * */
+                if(System.bySaaSID != null && System.bySaaSID !="") 
+                {
+                    var tmpSaasEle = this.pageWindow.document.getElementByID( System.bySaaSID );
+                    if(tmpSaasEle != null) 
+                        tmpSaasEle.append(formInstancePanel.element);
+                    else
+                        System.currentDocument.body.append(formInstancePanel.element);
+                }
+                else
+                    System.currentDocument.body.append(formInstancePanel.element);
+            }
+            catch(Exception e)
+            {
+                throw new Exception(e.message);
+            }
+            //可以根据id寻找特定元素并插入
+            
+            
+
+        } }
+        { formResult, main "网页主技能，重写此技能以实现自定义的网页初始化逻辑", { web }, {  }, { string queryArgs "网页当前参数字符串，即url中?符后面的内容" }, void, {
+            //base.main(queryArgs);
+            
+            
+            Dictionary<string,string> queryDic = byWebCommon.identity.webCommon.getQueryArgDic(queryArgs); //把传入的URL转成一个字典 ,大小写敏感
+
+            if(!queryDic.containsKey(NameHelper.formID)){Message.alert(TextHelper.formIdLoss);return;}
+            if(queryDic[NameHelper.formID] ==null || queryDic[NameHelper.formID]=="" ){Message.alert(TextHelper.formIdError);return;}
+            
+            
+            var formQueryResult =  (select a.* from this.rFormSys.rForm a where a.iID == queryDic[NameHelper.formID]).rows[0];
+            var formDataQueryResult = (select b.* from this.rFormSys.rFormData b where b.iFormID == queryDic[NameHelper.formID]).rows;
+            
+            if(! this.rFormSys.rUser.confirmUserIsLogin(formQueryResult.iUserID))
+            {
+                Message.alert(TextHelper.formUserLoss);
+                return;
+            }
+            
+            Panel formDataPanel = new Panel(){hasBorder = false};
+            try{
+                this.rFormSys.rForm.displayFormData(formQueryResult,formDataQueryResult,formDataPanel);
+            }
+            catch(Exception e)
+            {
+                throw new Exception(e.message);
+            }
+            //todo:根据id寻找特定元素并插入
+            System.currentDocument.body.append(formDataPanel.element);
+
+        } }
+        
+        { formAnalyzer, main "网页主技能，重写此技能以实现自定义的网页初始化逻辑", { web }, {  }, { string queryArgs "网页当前参数字符串，即url中?符后面的内容" }, void, {
+            base.main(queryArgs);
+            Dictionary<string,string> queryDic = byWebCommon.identity.webCommon.getQueryArgDic(queryArgs);
+            if(!queryDic.containsKey(NameHelper.formID)){
+                Message.alert(TextHelper.formIdLoss);return;
+            }
+            if(Common.isEmptyString( queryDic[NameHelper.formID])){
+                Message.alert(TextHelper.formIdError);return;
+            }
+
+            var formQueryResult =  select a.* from this.rFormSys.rForm a where a.iID == queryDic[NameHelper.formID];
+            var formFieldQueryResult = select b.* from this.rFormSys.rFormField b where b.iFormID == queryDic[NameHelper.formID];
+            Row~form formRow = formQueryResult.rows[0];
+            List<Row~formField> fieldRows = formFieldQueryResult.rows;
+            
+            if(! this.rFormSys.rUser.confirmUserIsLogin(formRow.iUserID))
+            {
+                Message.alert(TextHelper.formUserLoss);
+                return;
+            }
+            
+            //初始统计图像区
+            FormInfoArea formInfoArea = new FormInfoArea(formRow);
+            System.currentDocument.getElementByID(NameHelper.formInfoID).append(formInfoArea.element);
+            this.generateAnalyzeOperateArea(formRow,fieldRows,NameHelper.operateAreaID,NameHelper.canvasID,NameHelper.containerID);
+            
+            
+            formInfoArea.createButtonClick+=(OBJECT sender, EventArgs args)
+            {
+                WebElement chartsContainer = System.currentDocument.getElementByID(NameHelper.chartsContainerID);
+                string operateAreaId = "op"+chartsContainer.children.length;
+                string canvasId = "cv"+ chartsContainer.children.length;
+                string chartId = "chart"+chartsContainer.children.length;
+                
+                WebElement newOperateArea = System.currentDocument.createElement("div");
+                WebElement newCanvasArea = System.currentDocument.createElement("canvas");
+                WebElement newChartContainer = System.currentDocument.createElement("div");
+
+                newOperateArea.addAttribute("id",operateAreaId);
+                newCanvasArea.addAttribute("id",canvasId);
+                newCanvasArea.addAttribute("width",ValueHelper.initChartWidth.toString());
+                newCanvasArea.addAttribute("height",ValueHelper.initChartHeight.toString());
+                newChartContainer.addAttribute("id",chartId);
+                newChartContainer.addClass(CssClassNameHelper.analyzerChartContainer);
+                newCanvasArea.addClass(CssClassNameHelper.analyzerChartCanvas);
+                newChartContainer.append(newOperateArea);
+                newChartContainer.append(newCanvasArea);
+                chartsContainer.append(newChartContainer);
+                generateAnalyzeOperateArea(formRow,fieldRows,operateAreaId,canvasId,chartId);
+            };
+        } }
+        { formAnalyzer, generateAnalyzeOperateArea "生成统计操作区", { web }, {  }, { Row~form formRow,List<Row~formField> fieldRows,string elementID,string canvasID,string containerID }, void, {
+            FormDataAnalyzeArea analyzeArea = new FormDataAnalyzeArea(formRow,fieldRows);
+            analyzeArea.displayButtonClick+=(OBJECT sender, EventArgs args){
+                List<AnalyzeConfigInfo> configInfos = analyzeArea.getAnalyzeConfigs();
+                if(configInfos.count == 0){Message.alert(TextHelper.stasticsFieldLess);return;}
+                if(configInfos.count == 1){
+                    AnalyzeConfigInfo configInfo = configInfos[0];
+                    this.analyze(configInfo,canvasID);  //单个图表
+                }
+                else
+                {
+                    this.analyze(configInfos,canvasID);  //混合图表
+                } 
+            };
+            analyzeArea.deleteButtonClick+=(OBJECT sender, EventArgs args){
+                WebElement containerElement = System.currentDocument.getElementByID(containerID);
+                containerElement.remove();
+            };
+            System.currentDocument.getElementByID(elementID).append(analyzeArea.element);
+        } }
+        { formAnalyzer, analyze "分析生成单个图表", { web }, {  }, { AnalyzeConfigInfo configInfo,string canvasID}, void, {
+            if(configInfo.fieldID == null){Message.alert(TextHelper.stasticsFieldLess);return;}
+            string fieldID = configInfo.fieldID;
+            chartType type = configInfo.chartType;
+            List<Row~formField> fields = (select a.* from this.rFormSys.rFormField a where a.iID == fieldID).rows;
+            List<Row~formData> fieldData = (select b.* from this.rFormSys.rFormData b where b.iFieldID == fieldID).rows;
+            Row~formField fieldRow = fields[0];
+            
+            if(!checkFieldChartMatch(fieldRow.iFieldCtrl,type)){return;}
+            this.expandCanvas(canvasID);
+            switch(fieldRow.iFieldCtrl)
+            {
+                case ctrType.dropdownList:
+                case ctrType.radbutton:
+                case ctrType.checkBoxList:
+                case ctrType.checkBox:
+                {
+                    displayCheckBox(fieldData,fieldRow,canvasID,type);
+                    break;
+                }
+                default:
+                {
+                    break;
+                }
+            }
+        } }
+        { formAnalyzer, analyze "分析生成复合图表", { web }, {  }, { List<AnalyzeConfigInfo> configInfos,string canvasID }, void, {
+            
+            List<string> charts = new List<string>();
+            List<string[]> selectionsList = new List<string[]>();
+            string[] selectionList;
+            List<float[]> valuesList = new List<float[]>();
+            List<string> summaries = new List<string>();
+            foreach(AnalyzeConfigInfo configInfo in configInfos)
+            {
+                if(configInfo.fieldID == null){Message.alert(TextHelper.stasticsFieldLess);return;}
+                List<Row~formField> fields = (select a.* from this.rFormSys.rFormField a where a.iID == configInfo.fieldID).rows;
+                List<Row~formData> fieldData = (select b.* from this.rFormSys.rFormData b where b.iFieldID == configInfo.fieldID).rows;
+                Row~formField field = fields[0];
+                //如果字段或图表类型无效则直接返回
+                if(!checkFieldChartMatch(field.iFieldCtrl,configInfo.chartType)){return;}
+                Dictionary<string,float> countTable = statisticsFormDataList(fieldData,field);
+                selectionsList.add(countTable.keys.toArray());
+                valuesList.add(countTable.values.toArray());
+                charts.add(configInfo.chartType.toString());
+                summaries.add(field.iSummary);
+                selectionList = countTable.keys.toArray();
+            }
+            this.expandCanvas(canvasID);
+            chartjs.fullMix(
+                canvasID,
+                charts.toArray(),
+                summaries.toArray(),
+                //selectionsList.toArray()[0],   //这里只保留一组选项
+                selectionList,
+                valuesList.toArray(),
+                Common.getStringColors(configInfos.count,0.2f),
+                Common.getStringColors(configInfos.count,1),
+                Common.getStringColors(configInfos.count,1)
+            );
+        } }
+        { formAnalyzer, expandCanvas "展示图像时将canvas容器展开", { web }, {  }, { string canvasID }, void, {
+            System.currentDocument.getElementByID(canvasID).addAttribute("width",ValueHelper.chartWidth.toString());
+            System.currentDocument.getElementByID(canvasID).addAttribute("height",ValueHelper.chartHeight.toString());
+        } }
+        { formAnalyzer, checkFieldChartMatch "判断字段控件类型和图表是否匹配且可统计", { web }, {  }, { ctrType ctrl,chartType chart }, bool, {
+            switch(ctrl)
+            {
+                case ctrType.dropdownList:
+                case ctrType.radbutton:
+                case ctrType.checkBoxList:
+                case ctrType.checkBox:
+                {
+                    if(chart==chartType.bar
+                    ||chart==chartType.doughnut
+                    ||chart==chartType.line
+                    ||chart==chartType.pie
+                    ||chart==chartType.polarArea)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        Message.alert(TextHelper.unsupportedChart);
+                        return false;
+                    }
+                }
+                default:
+                {
+                    Message.alert(TextHelper.unsupportedChart);
+                    return false;
+                }
+            }
+        } }
+        { formAnalyzer, displayCheckBox "任意可以勾选的字段控件类型展示统计结果图表", { web }, {  }, { List<Row~formData> formDataList,Row~formField fieldRow , string canvasID, enum.chartType chart}, void, {
+            Dictionary<string,float> countTable = statisticsFormDataList(formDataList,fieldRow);
+            if(chart == chartType.bar)
+            {
+                chartjs.fullBar(
+                    canvasID,
+                    fieldRow.iFieldName,
+                    countTable.keys.toArray(),
+                    countTable.values.toArray(),
+                    Common.getStringColors(countTable.keys.count,1),
+                    Common.getStringColors(countTable.keys.count,1)
+                );
+            }
+            else if(chart == chartType.pie)
+            {
+                chartjs.fullPie(
+                    canvasID,
+                    fieldRow.iFieldName,
+                    countTable.keys.toArray(),
+                    countTable.values.toArray(),
+                    Common.getStringColors(countTable.keys.count,1)
+                );
+            }
+            else if(chart == chartType.doughnut)
+            {
+                chartjs.fullDoughnut(
+                    canvasID,
+                    fieldRow.iFieldName,
+                    countTable.keys.toArray(),
+                    countTable.values.toArray(),
+                    Common.getStringColors(countTable.keys.count,1)
+                );
+            }
+            else if(chart == chartType.line)
+            {
+                chartjs.fullLine(
+                    canvasID,
+                    fieldRow.iFieldName,
+                    countTable.keys.toArray(),
+                    countTable.values.toArray(),
+                    Common.getStringColors(countTable.keys.count,1)
+                );
+            }
+            else if(chart == chartType.polarArea)
+            {
+                chartjs.fullPolarArea(
+                    canvasID,
+                    fieldRow.iFieldName,
+                    countTable.keys.toArray(),
+                    countTable.values.toArray(),
+                    Common.getStringColors(countTable.keys.count,1)
+                );
+            }
+            else
+            {
+                Message.alert(TextHelper.unsupportedChart);
+            }
+        } }
+        { formAnalyzer, statisticsFormDataList "对答卷某字段进行统计", { web }, {  }, { List<Row~formData> formDataList ,Row~formField fieldRow}, Dictionary<string,float>, {
+            string[] options = fieldRow.iSelectValue.split('\n');
+            if(fieldRow.iFieldCtrl == ctrType.checkBox){options = new string[2];options[0]="0";options[1]="1";}
+            Dictionary<string,float> countTable = new Dictionary<string, float>();
+            foreach(string option in options)
+            {
+                countTable.add(option,0);
+            }
+            foreach(Row~formData dataRow in formDataList)
+            {
+                string[] selections = dataRow.iCellValue.split('\n');
+                foreach(string selection in selections)
+                {
+                    if(countTable.containsKey(selection))
+                    {
+                        countTable[selection] += 1;
+                    }
+                }
+            }
+            
+            return countTable;
+            
+        } }
+        
+        { previewFormFilling, main "网页主技能，重写此技能以实现自定义的网页初始化逻辑", { web }, {  }, { string queryArgs "网页当前参数字符串，即url中?符后面的内容" }, void, {
+            base.main(queryArgs);
+            this.isPreview = true;
+        } }
+    }
+}

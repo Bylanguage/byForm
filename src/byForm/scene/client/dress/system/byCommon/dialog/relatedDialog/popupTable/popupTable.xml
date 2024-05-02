@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <dialog ClassAndFileName="popupTable" ku="byCommon" identity="relatedDialog" dialog="popupTable" path="byCommon\dialog\relatedDialog\popupTable" namespace="byCommon.dress.relatedDialog">
+    <field name="cGrid" alias="cGrid" />
+    <field name="cBtnOk" alias="cBtnOk" />
+    <field name="cBtnCancel" alias="cBtnCancel" />
+  </dialog>
+</root>

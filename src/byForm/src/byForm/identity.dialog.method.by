@@ -1,0 +1,1006 @@
+﻿ku byForm
+{
+    system biao identity.dialog.method "身份窗体方法表" (
+    string belong "所属类型"
+    , string name "名称"
+    , string[] scenes "场景"
+    , string[] modifiers "修饰符"
+    , string[] parameters "参数"
+    , string returnType "返回类型"
+    , string body "方法体")
+    {
+        { form.manage, manage, , {  }, { Row~form f_formRow"表单数据" }, , {
+            this.isFullscreen = true;
+            this.mainPanel.add(this.formManage);
+            this.mainPanel.add(this.buttonContainer);
+            this.formManage.add(this.cFieldTemplatePanel);
+            this.formManage.add(this.cFormPanel);
+            this.formManage.add(this.cDetailPanel);
+            this.cFormPanel.add(this.cFormNamePanel);
+            this.cFormPanel.add(this.cFieldPanel);
+            this.cFormNameValueLabel.text = Common.isEmptyString(f_formRow.iName)?TextHelper.defaultFormName:f_formRow.iName;
+            this.cFormNamePanel.add(this.cFormNameValueLabel);
+            this.buttonContainer.add(this.previewButton);
+            //this.cFormSummaryValueBox.text = f_formRow.iSummary;
+            //this.cFormNamePanel.add(this.cFormSummaryValueBox);
+
+            this.buttonContainer.add(this.saveButton);
+            this.buttonContainer.add(this.publishButton);
+
+            
+            this.setFieldControlEditor(null);
+            this.setFormNameEditor(null);
+            this.formManage.scrollable = false;
+            scene(web){
+                //由css控制
+                //this.webStyle = ;
+                this.mainPanel.webStyle = "height:100%;width:100%;min-width:800px;min-height:600px";
+                this.mainPanel.element.children[0].style.setProperty("height","100%"); 
+                this.formManage.webStyle = "height:90%;width:100%";
+                this.formManage.element.children[0].style.setProperty("height","100%");
+                this.cFieldTemplatePanel.webStyle = "float:left;width:18%;height:100%;"; 
+                this.cFormPanel.webStyle = "float:left;width:45%;height:100%";  
+                this.cDetailPanel.webStyle = "float:right;width:30%;height=100%;";
+                this.cFieldPanel.webStyle = "width:100%;height:100%;";
+                this.cFormNamePanel.webStyle = "width:100%;";
+                this.cFormPanel.element.children[0].style.setProperty("height","90%");
+                
+                this.element.addClass(CssClassNameHelper.formManageDialog);
+                this.formManage.element.addClass(CssClassNameHelper.formManagePanel);
+                this.cFormPanel.element.addClass(CssClassNameHelper.formPanel);
+                this.cFormNamePanel.element.addClass(CssClassNameHelper.formNamePanel);
+                this.cFormNameValueLabel.element.addClass(CssClassNameHelper.formNameValueLabel);
+                this.cFieldPanel.element.addClass(CssClassNameHelper.formFieldContainer);
+                this.cFieldTemplatePanel.element.addClass(CssClassNameHelper.formFieldTemplateContainer);
+                this.cDetailPanel.element.addClass(CssClassNameHelper.formFieldDetailContainer);
+                this.buttonContainer.element.addClass(CssClassNameHelper.formButtonContainer);
+                this.saveButton.element.addClass(CssClassNameHelper.generalDetailSaveButton);
+                this.previewButton.element.addClass(CssClassNameHelper.formPreviewButton);
+                this.publishButton.element.addClass(CssClassNameHelper.formPublishButton);
+            }
+            
+            this.formRow = f_formRow;
+            Row~fieldTemplate tmpFieldTemplateRow =null; 
+            foreach (var item in :identity this:.rFormSys.rFieldTemplate.getList()){
+                var tmpLabel = new Label(){ text = item.iSummary , tag = item  , allowDrop=true  , image = object.Ku.getKu(nameof(byForm)).getResource(item.iIco).toImage()   };
+                scene(web){
+                    tmpLabel.element.addClass(CssClassNameHelper.generalFieldTemplateLabel);
+                    //todo:这里利用了转译后的html结构，如果后续更改可能会出错
+                    tmpLabel.element.children[0].addClass(CssClassNameHelper.generalFieldTemplateInnerLabel);
+                    tmpLabel.webWidthFilled = true; 
+                }
+                this.cFieldTemplatePanel.add(tmpLabel); 
+                tmpLabel.allowDrag = true;
+                tmpLabel.toolTip = TextHelper.draggableTip;  
+                tmpLabel.dragStart+=onTemplateLabelDragStart;
+            } 
+            
+            this.cFieldPanel.allowDrop = true;
+            this.cFieldPanel.dragDrop+=onTemplateLabelDragDrop;
+            this.cFieldPanel.dragDrop+=onFieldPanelTermDragDrop;
+            this.saveButton.click += onSaveButtonClick;
+            this.previewButton.click += onPreviewButtonClick;
+            this.publishButton.click += onPublishButtonClick;
+            this.modified +=(){
+                this.isModified = true;
+            };
+            this.cFormNamePanel.click += (OBJECT sender, EventArgs args){
+                this.formNameClick(this,args);
+            };
+            this.cFormNameValueLabel.click += (OBJECT sender, EventArgs args){
+                this.formNameClick(this,args);
+            };
+            this.formNameClick += onFormNameClick;
+            
+            
+            var fieldQueryResult = select a.* from :identity this:.rFormSys.rFormField a where a.iFormID == f_formRow.iID order by a.iFieldNO;
+            foreach(Row~formField fieldRow in fieldQueryResult.rows){
+                this.cFieldInfos.add(fieldRow);
+            }
+            this.reloadFromChildrenList();
+            //从窗体右上角关闭时，触发确认保存
+            this.dialogClosing +=(OBJECT sender, CancelEventArgs args){
+                if(!this.isModified){return;}
+                querySaveDialog saveDialog = new querySaveDialog();
+                
+                
+                saveDialog.saveButtonClick+=(OBJECT sender2, EventArgs args2)
+                {
+                    if(!this.requireLogin()){Message.alert(TextHelper.pleaseLogIn);return;}
+                    Result saveResult = this.save();
+                    if(!saveResult.isOk){
+                        Message.alert(TextHelper.remainError+saveResult.info);
+                        args.cancel = true;
+                        return;
+                    }
+                    saveDialog.close();
+                };
+                saveDialog.notSaveButtonClick+=(OBJECT sender2, EventArgs args2){
+                    saveDialog.close();  
+                };
+                saveDialog.cancelButtonClick+=(OBJECT sender2, EventArgs args2){
+                    args.cancel = true;
+                    saveDialog.close();
+                };
+                saveDialog.showDialog();
+                
+            };
+            
+            this.openFormNameEditor();
+        } } 
+        
+        { form.manage, injectInfoPanel "将当前窗体添加到目标面板中，从而脱离窗体，嵌入到网页", {  }, {  }, {Panel targetPanel  }, void, {
+            targetPanel.add(this.mainPanel);
+        } }
+        { form.manage, checkLogin "判断是否登录，未登录则弹窗提示", {  }, {  }, {  }, bool, {
+            if(!:identity this:.rFormSys.rUser.confirmUserIsLogin()) 
+            {
+                Message.alert(TextHelper.notLoggedIn);
+                return false;
+            }
+            return true;
+        } }
+        { form.manage, createFieldInfo "根据模板创建字段行，并填入其他信息", {  }, {  }, { Row~fieldTemplate fieldTemplateRow }, Row~formField, {
+            Row~formField fieldRow = new Row()~:identity this:.rFormSys.rFormField;
+            fieldRow.iFieldCtrl = fieldTemplateRow.iCtrType;
+            fieldRow.iID = byCommon.identity.general.getGuid();
+            fieldRow.iFormID = this.formRow.iID;
+            fieldRow.iFieldName = fieldTemplateRow.iSummary;
+            fieldRow.iSummary = fieldTemplateRow.iSummary;
+            fieldRow.iFieldReg = fieldTemplateRow.iReg;
+            fieldRow.iFieldRegMsg = fieldTemplateRow.iRegMsg;
+            fieldRow.iUserID = this.formRow.iUserID;
+            fieldRow.iFieldDefault = fieldTemplateRow.iDefault;
+            fieldRow.iFieldMin = 0;
+            fieldRow.iFieldMax = 64;
+            fieldRow.iFieldType = "string";
+            fieldRow.iNotNull = true;
+            fieldRow = FieldTermPanel.generateControlField(fieldRow);
+            return fieldRow;
+        } }
+        
+        { form.manage, createField "创建显示字段", {  }, {  }, { Row~fieldTemplate fieldTemplateRow  }, FieldTermPanel , {
+            Row~formField fieldRow = createFieldInfo(fieldTemplateRow);
+            return rebuildField(fieldRow);
+        } } 
+        
+        { form.manage, rebuildField "根据数据信息创建表单字段", {  }, {  }, {Row~formField row  }, FieldTermPanel, {
+            FieldTermPanel fieldTermPanel = new FieldTermPanel(row,false);
+            
+            fieldTermPanel.dragStart += onFieldPanelTermDragStart;
+            fieldTermPanel.dragDrop += onFieldPanelTermDragDrop;
+            fieldTermPanel.dragDrop += onTemplateLabelDragDrop;
+            
+            fieldTermPanel.generalClick += onFieldClick;
+            fieldTermPanel.deleteButtonClick += onFieldDelete;
+            this.modified();
+            return fieldTermPanel;
+            
+        } }
+        
+        { form.manage, fillVDataGrid, {  }, {  }, { Row~form f_rowForm }, void, { 
+            
+            var tmpVdataList = :identity this:.loadVDataSingle( f_rowForm.iID ) ;
+            scene(web){
+                var tmpDiv = System.currentDocument.createElement("div"); 
+            }
+
+        } }
+        
+        { form.manage, onTemplateLabelDragStart, {  }, {  }, {Object sender,DragStartEventArgs args  }, void, {
+            if(!(sender is Label)){throw new Exception(TextHelper.labelEventError);}
+            Label tmpLabel =  sender as Label;
+            if(!(tmpLabel.tag is Row~fieldTemplate)){throw new Exception(TextHelper.templateLabelRowLossError);}
+            Row~fieldTemplate rowFieldTemplate = tmpLabel.tag as Row~fieldTemplate;
+            
+            args.data.setData(NameHelper.draggingItemType,DraggingItemType.termLabel.toString());
+
+            args.data.setData(NameHelper.fieldTemplateID,rowFieldTemplate.iID);
+            
+        } }
+        { form.manage, onTemplateLabelDragDrop, {  }, {  }, { Object sender,DragEventArgs args }, void, {
+            if(args.data.getData(NameHelper.draggingItemType)!= DraggingItemType.termLabel.toString()){return;}
+
+            string fieldTemplateId = args.data.getData(NameHelper.fieldTemplateID);
+            if(fieldTemplateId==null){throw new Exception(TextHelper.fieldCreatedLossError);}
+            
+            Row~fieldTemplate templateRow = :identity this:.rFormSys.rFieldTemplate.getFieldTemplate(fieldTemplateId);
+            var fieldInfo = this.createFieldInfo(templateRow);
+            if(sender is FieldTermPanel)
+            {
+                this.cFieldInfos.insert(int.parse((sender as FieldTermPanel).fieldInfo.iFieldNO),fieldInfo);
+                this.reloadFromChildrenList();
+            }
+            else
+            {
+                this.cFieldInfos.add(fieldInfo);
+                this.reorderChildrenList();
+                this.cFieldPanel.add(rebuildField(fieldInfo));
+            }
+
+            
+            
+            
+        } }
+        { form.manage, onFieldPanelTermDragStart, {  }, {  }, {Object sender,DragStartEventArgs args }, void, {
+            
+            args.data.setData(NameHelper.draggingItemType,DraggingItemType.termPanel.toString());
+            args.data.setData(NameHelper.draggingItemOrder,(sender as FieldTermPanel).fieldInfo.iFieldNO.toString());
+            args.data.setData(NameHelper.screenY,args.screenY.toString());
+            
+        } }
+        { form.manage, onFieldPanelTermDragDrop, {  }, {  }, {Object sender,DragEventArgs args  }, void, {
+            
+            if(args.data.getData(NameHelper.draggingItemType)!= DraggingItemType.termPanel.toString()){return;}
+            int newRelativeY =  cFieldPanel.children[int.parse(args.data.getData(NameHelper.draggingItemOrder))].top+args.screenY-int.parse(args.data.getData(NameHelper.screenY));
+      
+
+            string newOrderId = getTermOrderAtPoint(newRelativeY);
+       
+            
+            setTermMove(args.data.getData(NameHelper.draggingItemOrder),newOrderId);
+            
+        } }
+        { form.manage, onFieldClick, {  }, {  }, {Object sender,EventArgs args  }, void, {
+            Result saveResult = this.saveModifyOfEditor();
+            if(!saveResult.isOk)
+            {
+                Message.alert(TextHelper.remainError+saveResult.info);
+                return;
+            }
+            //todo: 提示已自动保存
+            this.cDetailPanel.clear();
+            
+            this.setFormNameEditor(null);
+            this.setFieldControlEditor(FieldControlEditor.getEditor((sender as FieldTermPanel).fieldInfo));
+            
+            this.getFieldControlEditor().saveButtonClick += onDetailSaveButtonClick;
+            this.getFieldControlEditor().cancelButtonClick += onDetailCancelButtonClick;
+            this.cDetailPanel.add(this.getFieldControlEditor());
+            this.modified();
+
+        } }
+        { form.manage, onFieldDelete, {  }, {  }, { Object sender,EventArgs args }, void, {
+            FieldTermPanel fieldTermPanel = sender as FieldTermPanel;
+            int fieldNO = int.parse(fieldTermPanel.fieldInfo.iFieldNO);
+
+            if(this.editorManager.fieldControlEditor !=null )
+            {
+                if( this.editorManager.fieldControlEditor.fieldInfo.iID == fieldTermPanel.fieldInfo.iID)
+                {
+                    queryDeleteDialog deleteDialog = new queryDeleteDialog();
+                    deleteDialog.deleteButtonClick +=(OBJECT sender2, EventArgs args2){
+                        deleteDialog.close();
+                        this.cFieldInfos.removeAt(fieldNO);
+                        this.reloadFromChildrenList();
+                        this.cDetailPanel.clear();
+                    };
+                    deleteDialog.cancelButtonClick +=(OBJECT sender2, EventArgs args2){
+                        deleteDialog.close();
+                    };
+                    deleteDialog.showDialog();
+                    return;
+                }
+                
+            }
+            this.cFieldInfos.removeAt(fieldNO);
+            this.reloadFromChildrenList();
+            this.modified();
+            
+        } }
+        { form.manage, onDetailSaveButtonClick, {  }, {}, { Object sender,EventArgs args }, void, {
+            Result saveResult = saveModifyOfFieldEditor(this.getFieldControlEditor()); 
+            if(saveResult.isOk){
+                Message.alert(TextHelper.saveSuccess);}
+            else
+            {
+                Message.alert(TextHelper.saveFail + saveResult.info);
+            }
+        } }
+        { form.manage, onDetailCancelButtonClick, {  }, {  }, { Object sender,EventArgs args }, void, {
+            querySaveDialog querySaveDialog = new querySaveDialog();
+            querySaveDialog.cancelButtonClick +=(OBJECT sender2, EventArgs args2){
+                querySaveDialog.close();
+                
+            };
+            querySaveDialog.saveButtonClick +=(OBJECT sender2, EventArgs args2){
+                this.getFieldControlEditor().remove();
+                this.setFieldControlEditor(null); 
+                this.onDetailSaveButtonClick(this,args2);
+                querySaveDialog.close();
+            };
+            querySaveDialog.notSaveButtonClick +=(OBJECT sender2, EventArgs args2){
+                this.getFieldControlEditor().remove();
+                this.setFieldControlEditor(null);
+                querySaveDialog.close();
+            };
+            
+            querySaveDialog.showDialog();
+
+        } }
+    
+        { form.manage, saveModifyOfFieldEditor "保存字段编辑器的修改内容", {  }, {  }, {FieldControlEditor  controlEditor  "字段编辑器"}, Result, {
+            if(controlEditor == null){return new Result(){isOk=true};}
+            Result result;
+
+            switch(controlEditor.fieldInfo.iFieldCtrl)
+            {
+                case ctrType.slider:{result = (controlEditor as FieldSliderEditor).refreshFieldInfo();break;}
+                case ctrType.checkBoxList:{result = (controlEditor as FieldCheckBoxListEditor).refreshFieldInfo();break;}
+                case ctrType.textbox:{result=(controlEditor as FieldTextBoxEditor).refreshFieldInfo();break;}
+                case ctrType.muiltTextbox:{result=(controlEditor as FieldMultiTextBoxEditor).refreshFieldInfo();break;}
+                default:{result=controlEditor.refreshFieldInfo();break;}
+            }
+            if(!result.isOk){return result;}
+
+            for(int fieldNO=0;fieldNO<this.cFieldInfos.count;fieldNO++)
+            {
+                if(cFieldInfos[fieldNO].iID == controlEditor.fieldInfo.iID)
+                {
+                    cFieldInfos[fieldNO] = controlEditor.fieldInfo;
+                }
+            }
+            this.reloadFromChildrenList();
+            
+            return result;
+        } }
+        { form.manage, saveModifyOfFormNameEditor "保存表单名编辑器的修改内容", {  }, {  }, {FormNameEditor formNameEditor  }, Result, {
+            if(formNameEditor == null){return new Result(){isOk=true};}
+            string tempName = formNameEditor.getEditFormName();
+            if(tempName==null || tempName.lTrim()==""){return new Result(){isOk=false,info=TextHelper.formNameNull};}
+            if(tempName.length>ValueHelper.generalTextMax){return new Result(){isOk=false,info=Common.getLengthMaxError(TextHelper.formName,ValueHelper.generalTextMax)};}
+            if(formNameEditor.getEditFormSummary().length>ValueHelper.generalTextMax){return new Result(){isOk=false,info=Common.getLengthMaxError(TextHelper.formSummary,ValueHelper.generalTextMax)};}
+            if(formNameEditor.getEditFormSuccessMsg().length>ValueHelper.generalTextMax){return new Result(){isOk=false,info=Common.getLengthMaxError(TextHelper.successMessage,ValueHelper.generalTextMax)};}
+            if(formNameEditor.getEditFormSubmitButtonText().length>ValueHelper.generalTextMax){return new Result(){isOk=false,info=Common.getLengthMaxError(TextHelper.submitButtonText,ValueHelper.generalTextMax)};}
+
+            this.formRow.iName = formNameEditor.getEditFormName();
+            this.formRow.iSummary = formNameEditor.getEditFormSummary();
+            this.formRow.iSuccessMsg = formNameEditor.getEditFormSuccessMsg();
+            this.formRow.iSubmitButton = formNameEditor.getEditFormSubmitButtonText();
+            this.cFormNameValueLabel.text = this.formRow.iName;
+            this.modified();
+            return new Result(){isOk=true};
+        } }
+        { form.manage, saveModifyOfEditor "保存编辑区", {  }, {  }, {  }, Result, {
+            Result fieldSaveResult = this.saveModifyOfFieldEditor(this.getFieldControlEditor());
+            if(!fieldSaveResult.isOk){return fieldSaveResult;}
+            Result formNameSaveResult = this.saveModifyOfFormNameEditor(this.getFormNameEditor());
+            if(!formNameSaveResult.isOk){return formNameSaveResult;}
+            this.modified();
+            return new Result(){isOk=true};
+        } }
+        
+        
+        { form.manage, onSaveButtonClick, {  }, {  }, {Object sender,EventArgs args  }, void, {
+            if(!this.requireLogin()){Message.alert(TextHelper.pleaseLogIn);return;}
+            Result saveResult = this.save();
+            if(!saveResult.isOk)
+            {
+                Message.alert(TextHelper.remainError+saveResult.info);
+                return;
+            }
+            queryExitDialog exitDialog = :identity this:.new queryExitDialog();
+            exitDialog.exitButtonClick+=(OBJECT sender2, EventArgs args2){
+                exitDialog.close();
+                this.close();
+            };
+            exitDialog.cancelButtonClick+=(OBJECT sender2, EventArgs args2){
+                exitDialog.close();
+            };
+            exitDialog.showDialog();
+        } }
+        { form.manage, onPreviewButtonClick, {  }, {  }, {Object sender,EventArgs args  }, void, { 
+            if(!this.requireLogin()){Message.alert(TextHelper.pleaseLogIn);return;}
+            Result saveResult = this.save();
+            if(!saveResult.isOk)
+            {
+                Message.alert(TextHelper.remainError+saveResult.info);
+                return;
+            }
+            scene(web)
+            {
+                :identity this:.rFormSys.rPreviewFormFilling.isPreview = true;
+                Page.open(:identity this:.rFormSys.rPreviewFormFilling,"formID="+this.formRow.iID.toString());
+            }
+            //scene(client)
+            //{
+            //    displayDialog tmpDisplayDialog = new displayDialog();
+            //    var fieldTermPanelList = select a.* from :identity this:.rFormSys.rFormField a ;
+            //    :identity this:.generateUICtrol(this.formRow,fieldTermPanelList.rows,tmpDisplayDialog.displayPanel);
+            //    tmpDisplayDialog.show();
+            //}
+        } }
+        { form.manage, onPublishButtonClick, {  }, {  }, { Object sender,EventArgs args }, void, {
+            if(!this.requireLogin()){Message.alert(TextHelper.pleaseLogIn);return;}
+            Result saveResult = this.save();
+            if(!saveResult.isOk)
+            {
+                Message.alert(TextHelper.remainError+saveResult.info);
+                return;
+            }
+            scene(web)
+            {
+                publishDialog publishDialog = :identity this:.new publishDialog(this.formRow);
+                publishDialog.show();
+                :identity this:.rFormSys.rFormFilling.isPreview = false;
+            }
+        } }
+        
+        { form.manage, requireLogin "提示用户登录", {  }, {  }, {  }, bool, {
+            
+            if(:identity this:.rFormSys.rUser.confirmUserIsLogin())
+            {
+                if(this.formRow.iUserID == null || this.formRow.iUserID == ""){
+                    this.formRow.iUserID = :identity this:.rFormSys.rUser.pSession.a.iID;
+                    insert by this.formRow;
+                    this.insertFormRow(this,new EventArgs());
+                }
+                return true;
+            }
+            return false;
+        } }
+
+        { form.manage, save "保存当前编辑页面所有内容", {  }, {  }, {  }, Result, {
+            if(:identity this:.rFormSys.rUser.pSession != null)
+            {
+                this.formRow.iUserID = :identity this:.rFormSys.rUser.pSession.a.iID;
+                foreach(Row~formField fieldRow in this.cFieldInfos)
+                {
+                    fieldRow.iUserID = :identity this:.rFormSys.rUser.pSession.a.iID;
+                }
+            }
+            
+            Result saveResult = saveModifyOfEditor();
+            if(!saveResult.isOk){return saveResult;}
+            try
+            {
+                this.formRow.iCurrentModifyDt = DateTime.getNow();
+                update by this.formRow;
+                //清除同一表单已经存在的项
+                :identity this:.delFieldByFormId(this.formRow.iID);
+                //写入编辑的项
+                foreach(Row~formField fieldInfo in this.cFieldInfos )
+                {
+                    :identity this:.saveField(fieldInfo,Action.insert);
+                }
+                this.isModified = false;
+                return new Result(){isOk=true};
+            }
+            catch(Exception e){
+                throw new Exception(TextHelper.saveFormFailed+e.message);
+            }
+        } }
+        { form.manage, saveAs "另存为新的表单", {  }, {  }, {  }, Result, {
+            Result saveResult = saveModifyOfEditor();
+            if(!saveResult.isOk){return saveResult;}
+            try
+            {
+                this.formRow.iID = byCommon.identity.general.getGuid();
+                this.formRow.iCurrentModifyDt = DateTime.getNow();
+                foreach(Row~formField fieldInfo in this.cFieldInfos)
+                {
+                    string orginFieldID = fieldInfo.iID;
+                    fieldInfo.iID = byCommon.identity.general.getGuid();
+                    :identity this:.saveField(fieldInfo,Action.insert);
+                    if(this.getFieldControlEditor()!=null)
+                    {
+                        if(this.getFieldControlEditor().fieldInfo.iID == orginFieldID)
+                        {
+                            this.getFieldControlEditor().fieldInfo.iID = fieldInfo.iID;
+                        }
+                    }
+                }
+                this.isModified = false;
+                return new Result(){isOk=true};
+            }
+            catch(Exception e)
+            {
+                throw new Exception(TextHelper.saveFormFailed+e.message);
+            }
+        } }
+
+        { form.manage, onFormNameClick, {  }, {  }, { Object sender,EventArgs args }, void, {
+            this.openFormNameEditor();
+        } }
+        { form.manage, openFormNameEditor, {  }, {  }, {  }, void, {
+            Result saveResult = saveModifyOfEditor();
+            if(!saveResult.isOk){Message.alert(TextHelper.remainError+saveResult.info);return;}
+            this.setFieldControlEditor(null);
+            this.setFormNameEditor(new FormNameEditor(this.formRow));
+            this.cDetailPanel.clear();
+            this.cDetailPanel.add(this.getFormNameEditor());
+            this.getFormNameEditor().saveButtonClick += this.onNameSaveButtonClick;
+            this.getFormNameEditor().cancelButtonClick += this.onNameCancelButtonClick;
+            this.modified();
+        } }
+        
+        { form.manage, onNameSaveButtonClick, {  }, {  }, { Object sender,EventArgs args }, void, {
+            Result saveResult = this.saveModifyOfFormNameEditor(this.getFormNameEditor());
+            if(saveResult.isOk){Message.alert(TextHelper.saveSuccess);}
+            else{Message.alert(TextHelper.saveFail+ saveResult.info);}
+        } }
+        { form.manage, onNameCancelButtonClick, {  }, {  }, { Object sender,EventArgs args }, void, {
+            this.getFormNameEditor().remove();
+            this.setFormNameEditor(null);
+        } }
+    
+        { form.manage, getTermOrderAtPoint "获取指定位置下FieldPanel中项的序号", {  }, {  }, {int relativeLocationY  }, string, {
+            if(cFieldPanel.children.count == 0){throw new Exception(TextHelper.emptyFieldPanel);}
+            int calculatedTermCount = 0;
+
+            foreach(Control termPanel in this.cFieldPanel.children)
+            {
+                if(!(termPanel is Panel)){throw new Exception(TextHelper.unexpectedControlInFieldPanel);}
+                if(termPanel.top+termPanel.height>relativeLocationY)
+                {
+                    //if(calculatedTermsHeight-termPanel.height/2 < relativeLocationY){return termCount;}
+                    //Message.alert(termCount.toString());
+                    return (termPanel as FieldTermPanel).fieldInfo.iFieldNO;
+                }
+            } 
+            return this.cFieldInfos.count.toString();
+
+        } }
+        { form.manage, setTermMove "移动字段项", {  }, {  }, {string originOrder,string newOrder  }, void, {
+            
+            //this.cFieldInfos.clear();
+            //FieldTermPanel movedPanel;
+            //foreach(Control tmpPanel in this.cFieldPanel.children)
+            //{
+            //    if(!(tmpPanel is FieldTermPanel)){throw new Exception("cFieldPanel 中存在控件不为FieldTermPanel，需要特殊处理");}
+            //    FieldTermPanel fieldTermPanel = tmpPanel as FieldTermPanel;
+            //    if(fieldTermPanel.fieldInfo.iFieldNO == originOrder){movedPanel = fieldTermPanel;continue;}
+            //    this.cFieldInfos.add(fieldTermPanel.fieldInfo );
+            //}
+
+            Row~formField tmpFieldRow;
+            foreach(Row~formField fieldInfo in this.cFieldInfos)
+            {
+                if(fieldInfo.iFieldNO == originOrder){tmpFieldRow = fieldInfo;this.cFieldInfos.remove(fieldInfo);}
+            }
+            
+            this.cFieldInfos.insert(int.parse(newOrder) ,tmpFieldRow);
+            this.reloadFromChildrenList();
+    
+        } }
+        { form.manage, reloadFromChildrenList "从表单数据中重建表单各字段项", {  }, {  }, {  }, void, {
+            this.reorderChildrenList();
+            this.cFieldPanel.clear();
+            foreach(Row~formField fieldInfo in this.cFieldInfos)
+            {
+                this.cFieldPanel.add(rebuildField(fieldInfo));
+            }
+        } }
+        { form.manage, reorderChildrenList , {  }, {  }, {  }, void, {
+            int fieldTermPanelCount = 0;
+            foreach(Row~formField fieldInfo in this.cFieldInfos)
+            {
+                fieldInfo.iFieldNO = fieldTermPanelCount.toString();
+                fieldTermPanelCount++;
+            }
+
+        } }
+    
+        { form.manage, getFieldControlEditor, {  }, {  }, {  }, FieldControlEditor, {
+            return this.editorManager.fieldControlEditor;
+        } }
+        { form.manage, setFieldControlEditor, {  }, {  }, {FieldControlEditor fieldControlEditor  }, void, {
+            this.editorManager.fieldControlEditor = fieldControlEditor;
+        } }
+        { form.manage, getFormNameEditor, {  }, {  }, {  }, FormNameEditor, {
+            return this.editorManager.formNameEditor;
+        } }
+        { form.manage, setFormNameEditor, {  }, {  }, {FormNameEditor formNameEditor  }, void, {
+            this.editorManager.formNameEditor = formNameEditor;
+        } }
+        
+        { form.querySaveDialog, querySaveDialog, , {  }, {  }, , {
+            scene(web)
+            {
+                this.element.addClass(CssClassNameHelper.queryDialog);
+                this.textLabel.element.addClass(CssClassNameHelper.querySaveTextLabel);
+                this.saveButton.element.addClass(CssClassNameHelper.generalDetailSaveButton);
+                this.notSaveButton.element.addClass(CssClassNameHelper.querySaveNotSaveButton);
+                this.cancelButton.element.addClass(CssClassNameHelper.generalDetailCancelButton);
+                this.buttonContainer.element.addClass(CssClassNameHelper.queryDeleteButtonContainer);
+            }
+            this.buttonContainer.add(this.saveButton);
+            this.buttonContainer.add(this.notSaveButton);
+            this.buttonContainer.add(this.cancelButton);
+            this.height = ValueHelper.popupWindowHeight;
+            this.width = ValueHelper.popupWindowWidth;
+            this.saveButton.click+=(OBJECT sender, EventArgs args){
+                saveButtonClick(this,args);
+            };
+            this.notSaveButton.click+=(OBJECT sender, EventArgs args){
+                notSaveButtonClick(this,args);
+            };
+            this.cancelButton.click+=(OBJECT sender, EventArgs args){
+                cancelButtonClick(this,args);
+            };
+        } }
+        { form.queryDeleteDialog, queryDeleteDialog, , {  }, {  }, , {
+            scene(web)
+            {
+                this.element.addClass(CssClassNameHelper.queryDialog);
+                this.textLabel.element.addClass(CssClassNameHelper.queryDeleteTextLabel);
+                this.buttonContainer.element.addClass(CssClassNameHelper.queryDeleteButtonContainer);
+                this.cancelButton.element.addClass(CssClassNameHelper.generalDetailCancelButton);
+                this.deleteButton.element.addClass(CssClassNameHelper.generalDetailSelectionDelButton);
+            }
+            this.buttonContainer.add(this.deleteButton);
+            this.buttonContainer.add(this.cancelButton);
+            this.width=ValueHelper.popupWindowWidth;
+            this.height = ValueHelper.popupWindowHeight;
+            this.deleteButton.click +=(OBJECT sender, EventArgs args){
+                this.deleteButtonClick(sender,args);
+            };
+            this.cancelButton.click +=(OBJECT sender, EventArgs args){
+                this.cancelButtonClick(sender,args);
+            };
+        } }
+        { form.queryDeleteDialog, setText, {  }, {  }, { string text }, void, {
+            this.textLabel.text = text;
+        } }
+        { form.queryExitDialog, queryExitDialog, , {  }, {  }, , {
+            this.buttonContainer.add(this.exitButton);
+            this.buttonContainer.add(this.cancelButton);
+            this.width = ValueHelper.popupWindowWidth;
+            this.height = ValueHelper.popupWindowHeight;
+            scene(web)
+            {
+                this.buttonContainer.element.addClass(CssClassNameHelper.queryDeleteButtonContainer);
+                this.exitButton.element.addClass(CssClassNameHelper.generalDetailSaveButton);
+                this.cancelButton.element.addClass(CssClassNameHelper.generalDetailCancelButton);
+            }
+            this.exitButton.click +=(OBJECT sender, EventArgs args){
+                this.exitButtonClick(this,args);
+            };
+            this.cancelButton.click +=(OBJECT sender, EventArgs args){
+                this.cancelButtonClick(this,args);
+            };
+        } }
+        
+        { form.formsManager, formsManager, , {  }, {  }, , {
+            //请在此处写代码主体
+            scene(web)
+            {
+                this.webStyle = "min-width:750px;min-height:550px";
+                this.mainPanel.webStyle = "min-width:700px;min-height:450px;width:100%;height:100%";
+                this.mainPanel.element.children[0].style.setProperty("height","100%");
+                //this.operateArea.webStyle = "float:left;width:100px;height:90%;";
+                //this.displayArea.webStyle = "float:left;width:60%;height:90%;";
+                this.operateArea.element.addClass(CssClassNameHelper.formsManagerOperateArea);
+                this.displayArea.element.addClass(CssClassNameHelper.formsManagerDisplayArea);
+                //this.headMenuBar.element.addClass(CssClassNameHelper.formsManagerHeadMenuBar);
+                this.formListLabel.element.addClass(CssClassNameHelper.formsManagerFormListLabel);
+                this.formListPanel.element.addClass(CssClassNameHelper.formsManagerFormListPanel);
+                this.createFormButton.element.addClass(CssClassNameHelper.formsManagerCreateFormButton);
+                this.formsHeader.element.addClass(CssClassNameHelper.formsManagerFormsHeader);
+                this.formListLabel.fontSize = ValueHelper.formListLabelFontSize;
+            }
+            :identity this:.rFormSys.rUser.pVerifyMode = verifyMode.session;  //设置是session验证还是cookie验证
+            :identity this:.rFormSys.rUser.loginSuccessEvent += onUserLoginSuccess;
+            :identity this:.rFormSys.rUser.userExitEvent += onUserExit;
+            this.createFormButton.click += onCreateFormButtonClick;
+            this.mainPanel.add(this.operateArea);
+            this.mainPanel.add(this.displayArea);
+            
+            this.displayArea.add(formsHeader);
+            this.displayArea.add(formListPanel);
+            this.operateArea.add(createFormButton);
+            this.formsHeader.add(formListLabel);
+            this.isFullscreen = true;
+            
+            //:identity this:.rFormSys.rUser.confirmUserIsLogin();
+            //:identity this:.rFormSys.rUser.new diLogin().showDialog();
+            //直接打开表单编辑窗体，等用户保存表单时再提示登录
+            
+            
+           
+        } }
+        { form.formsManager, initShowManage, {  }, {  }, {  }, void, {
+            var trialWaiting = byCommon.identity.relatedDialog.Loading();
+            Row~form tmpFormRow = createFormRow();
+            var formManage = :identity this:.new manage(tmpFormRow);
+            //formManage.insertFormRow+=(OBJECT sender, EventArgs args)
+            //{
+            //    this.RefreshFormListPanel();
+            //};
+            formManage.show();
+            trialWaiting.close();
+        } }
+        { form.formsManager, showManageFromTemplate "基于模板创建表单", {  }, {  }, { string templateID }, void, {
+            var trialWaiting = byCommon.identity.relatedDialog.Loading();
+            var templateQueryResult = select a.* from :identity this:.rFormSys.rFormTemplate a where a.iID == templateID;
+            Row~formTemplate formTemplate = templateQueryResult.rows[0];
+            if(formTemplate == null){Message.alert(TextHelper.formTemplateNotFound);}
+            var formQueryResult =  select b.* from :identity this:.rFormSys.rForm b where b.iID == formTemplate.iFormID;
+            Row~form formRow = formQueryResult.rows[0];
+            if(formRow == null){Message.alert(TextHelper.formNotFound);}
+            var formManage = :identity this:.new manage(formRow);
+            //formManage.insertFormRow+=(OBJECT sender, EventArgs args)
+            //{
+            //    this.RefreshFormListPanel();
+            //};
+            
+            formManage.formRow.iID = byCommon.identity.general.getGuid();
+            foreach(Row~formField formField in formManage.cFieldInfos)
+            {
+                formField.iFormID = formManage.formRow.iID;
+                formField.iID = byCommon.identity.general.getGuid();
+            }
+            formManage.reloadFromChildrenList();
+            formManage.show();
+            
+            trialWaiting.close();
+        } }
+        
+        { form.formsManager, setParent, {  }, {  }, { Panel targetPanel }, void, {
+            targetPanel.add(this.mainPanel);
+        } }
+        { form.formsManager, onUserLoginSuccess, {  }, {  }, { user.userOrm f_userRow }, void, {
+            if(!:identity this:.rFormSys.rUser.confirmUserIsLogin(f_userRow.a.iID))
+            {
+                Message.alert(TextHelper.notLoggedIn);
+                return;
+            }
+            //this.headMenuBar.clear();
+            //:identity this:.rFormSys.rUser.addUserMenuBar(headMenuBar);
+            RefreshFormListPanel();
+        } }
+        { form.formsManager, onUserExit, {  }, {  }, { user.userOrm f_userRow }, void, {
+            this.formListPanel.clear();
+        } }
+        { form.formsManager, RefreshFormListPanel "根据字段行重建整个表单", {  }, {  }, {  }, void, {
+            this.formListPanel.clear();
+
+            var formListResult = select r.*  from :identity this: r where r.iUserID == :identity this:.rFormSys.rUser.pSession.a.iID;
+            foreach(Row~form row in formListResult.rows)
+            {
+                this.formListPanel.add(createFormItem(row));
+            }
+        } }
+        
+        { form.formsManager, createFormItem "创建展示表单", {  }, {  }, {Row~form row  }, FormItem~form, {
+            FormItem~form formItem = new FormItem(row)~row;
+
+            formItem.editButtonClick +=this.onEditButtonClick;
+            formItem.sendButtonClick += this.onSendButtonClick;
+            formItem.delButtonClick += this.onDeleteButtonClick;
+            formItem.resultButtonClick +=this.onResultButtonClick;
+            formItem.statisticsButtonClick +=this.onStatisticsButtonClick;
+            return formItem;
+        } }
+        { form.formsManager, onEditButtonClick, {  }, {  }, {Object sender,EventArgs args  }, void, {
+            Row~form row = (sender as FormItem~form).relativeRow;
+            var formManage = :identity this:.new manage(row);
+            //todo: 是否要改成以打开网页的形式  ---特意以窗口形式展示
+            formManage.show();
+        } }
+        { form.formsManager, onSendButtonClick, {  }, {  }, { Object sender,EventArgs args }, void, {
+            scene(web)
+                {
+                    publishDialog publishDialog = :identity this:.new publishDialog((sender as FormItem~form).relativeRow);
+                    publishDialog.show();
+                    :identity this:.rFormSys.rFormFilling.isPreview = false;
+                    //Page.open(:identity this:.rFormSys.rFormFilling, "formID="+ (sender as FormItem~form).relativeRow.iID);
+                    //Message.alert(:identity this:.rFormSys.rFormFilling.pageName);
+                    //Message.alert(System.webRootPath+"../form.html"+"?formID="+row.iID);
+                }
+        } }
+        { form.formsManager, onDeleteButtonClick, {  }, {  }, { Object sender,EventArgs args }, void, {
+            queryDeleteDialog queryDialog = new queryDeleteDialog();
+            Row~form row = (sender as FormItem~form).relativeRow;
+            
+            queryDialog.setText(TextHelper.queryDeleteForm.replace("{0}",row.iName));
+            queryDialog.cancelButtonClick+=(OBJECT sender2, EventArgs args2){
+            queryDialog.close();
+                };
+                queryDialog.deleteButtonClick+=(OBJECT sender2, EventArgs args2){
+                    queryDialog.close();
+                    tran{
+                        delete :identity this:.rFormSys.rFormData where iFormID == row.iID;
+                        delete :identity this:.rFormSys.rFormField where iFormID == row.iID;
+                        delete by row;
+                        
+                    }
+                    error(string errorInfo)
+                    {
+                        Message.alert(errorInfo);return;
+                    }
+                    //(sender2 as FormItem~form).remove();
+                    this.RefreshFormListPanel();
+                };
+                queryDialog.showDialog();
+        } }
+        { form.formsManager, onResultButtonClick, {  }, {  }, { Object sender,EventArgs args }, void, {
+            Row~form row = (sender as FormItem~form).relativeRow;
+            scene(web)
+            {
+                Page.open(:identity this:.rFormSys.rFormResult,"formID="+row.iID);
+            }
+        } }
+        { form.formsManager, onStatisticsButtonClick, {  }, {  }, { Object sender,EventArgs args }, void, {
+            Row~form row = (sender as FormItem~form).relativeRow;
+            scene(web)
+            {
+                Page.open(:identity this:.rFormSys.rFormAnalyzer,"formID="+row.iID);
+            }
+        } }
+        
+        { form.formsManager, createNewForm, {  }, {  }, {  }, void, {
+            formCreateDialog createDialog = :identity this:.new formCreateDialog(); 
+            createDialog.cancelButtonClick+=(OBJECT sender, EventArgs args){
+                createDialog.close();
+            };
+            createDialog.createButtonClick+=(OBJECT sender, EventArgs args){
+                if(createDialog.isNameInputBoxEmpty())
+                {
+                    //todo:后续可能改成在名称输入框处提示
+                    Message.alert(TextHelper.formNameNull);
+                }
+                else
+                {
+                    Row~form newForm = createFormRow();
+                    newForm.iName = createDialog.getInputName();
+                    newForm.iSummary = createDialog.getInputSummary();
+                    
+                    if(:identity this:.rFormSys.rUser.pSession != null){
+                        newForm.iUserID = :identity this:.rFormSys.rUser.pSession.a.iID;
+                        insert by newForm;
+                    }
+                    
+                    var formManage = :identity this:.new manage(newForm);
+                    
+                    
+                    createDialog.close();
+                    //todo: 是否要改成以打开网页的形式
+                    formManage.show();
+                    this.formListPanel.add(createFormItem(formManage.formRow));
+                }
+                
+            };
+            createDialog.showDialog();
+
+        } }
+        { form.formsManager, createFormRow "创建新的表单行实例", {  }, {  }, {  }, Row~form, {
+            Row~form newForm = new Row()~:identity this:.rFormSys.rForm;
+            //主键是字符串时不能用autoID
+            newForm.iID = general.getGuid();
+            newForm.iName = "";
+            newForm.iSummary = "";
+            newForm.iCreateDt = DateTime.getNow();
+            newForm.iCurrentModifyDt = DateTime.getNow();
+            newForm.iSuccessMsg = "";
+            newForm.iSubmitButton = "";
+            return newForm;
+        } }
+        { form.formsManager, onCreateFormButtonClick, {  }, {  }, {Object sender,EventArgs args  }, void, {
+
+            if(:identity this:.rFormSys.rUser.confirmUserIsLogin()){
+                createNewForm();
+            }
+        } }
+        
+        { form.formCreateDialog, formCreateDialog, , {  }, {  }, , {
+            this.headPanel.add(this.headLabel);
+            this.bodyPanel.add(this.contentPanel);
+            this.bodyPanel.add(this.buttonContainer);
+            this.contentPanel.add(this.namePanel);
+            this.contentPanel.add(this.summaryPanel);
+            this.namePanel.add(this.nameLabel);
+            this.namePanel.add(this.nameInputBox);
+            this.summaryPanel.add(this.summaryLabel);
+            this.summaryPanel.add(this.summaryInputBox);
+            this.buttonContainer.add(this.createButton);
+            this.buttonContainer.add(this.cancelButton);
+            
+            scene(web)
+            {
+
+                this.headPanel.element.addClass(CssClassNameHelper.formCreateHeadPanel);
+                this.bodyPanel.element.addClass(CssClassNameHelper.formCreateBodyPanel);
+                this.contentPanel.element.addClass(CssClassNameHelper.formCreateContentPanel);
+                this.buttonContainer.element.addClass(CssClassNameHelper.formCreateOperatePanel);
+                this.namePanel.element.addClass(CssClassNameHelper.formCreateNamePanel);
+                this.nameLabel.element.addClass(CssClassNameHelper.formCreateNameLabel);
+                this.nameInputBox.element.addClass(CssClassNameHelper.formCreateNameBox);
+                this.summaryPanel.element.addClass(CssClassNameHelper.formCreateSummaryLabel);
+                this.summaryLabel.element.addClass(CssClassNameHelper.formCreateSummaryLabel);
+                this.summaryInputBox.element.addClass(CssClassNameHelper.formCreateSummaryBox);
+                //暂时复用其他按键样式
+                this.createButton.element.addClass(CssClassNameHelper.generalDetailSaveButton);
+                this.cancelButton.element.addClass(CssClassNameHelper.generalDetailCancelButton);
+            }
+            
+            this.createButton.click +=(OBJECT sender, EventArgs args){
+                this.createButtonClick(this,args);
+            };
+            this.cancelButton.click +=(OBJECT sender, EventArgs args){
+                this.cancelButtonClick(this,args);
+            };
+            
+        } }
+        { form.formCreateDialog, isNameInputBoxEmpty, {  }, {  }, {  }, bool, {
+            return this.nameInputBox.text == "" || this.nameInputBox.text == null;
+        } }
+        { form.formCreateDialog, getInputName, {  }, {  }, {  }, string, {
+            return this.nameInputBox.text;
+        } }
+        { form.formCreateDialog, getInputSummary, {  }, {  }, {  }, string, {
+            return this.summaryInputBox.text;
+        } }
+
+        { form.publishDialog, publishDialog, , {  }, { Row~form formRow }, , {
+            PropertyMultilineInputBox saasJsBox = new PropertyMultilineInputBox(TextHelper.saasInfo);
+            saasJsBox.setBoxHeight(ValueHelper.publishSaasBoxHeight);
+            this.saasPanel.add(saasJsBox);
+            
+            PropertyMultilineInputBox saasSampleBox = new PropertyMultilineInputBox(TextHelper.saasSample);
+            saasSampleBox.setBoxHeight(ValueHelper.publishSaasSampleBoxHeight);
+            this.saasSamplePanel.add(saasSampleBox);
+            
+            this.width = ValueHelper.publishDialogWidth;
+            this.height = ValueHelper.publishDialogHeight;
+            //this.saasInfoLabel.toolTip = "将此段代码复制到html文件中以嵌入表单";
+            scene(web)
+            {
+                this.element.addAttribute("div","publish-info-dialog");
+                //this.saasSamplePanel.webWidthFilled = true;
+                this.urlLabel.webWidthFilled = true;
+            }
+            scene(web)
+            {
+                string tmpUrl = System.webRootPath.replace("/Byt","")+ :identity this:.rFormSys.rFormFilling.pageName;
+                tmpUrl = tmpUrl.replaceReg("[\\.][^\r\n\\.]+$","", RegexMode.multiline)+".js";
+                
+                string scriptTemplate =
+                "    <script>window.localStorage.setItem(\"_byt_saasid_storage\", \"{1}\")</script>\r\n".replace("{1}",formRow.iID)+
+                "    <script src=\"{2}\"> </script>\r\n".replace("{2}",tmpUrl);
+
+                string htmlTemplate = 
+                "<!DOCTYPE html>\r\n"+
+                "<html>\r\n"+ 
+                "  <head>\r\n"+
+                "    <meta http-equiv=\"Content-Type\" content=\"text/html\" charset=\"utf-8\" />\r\n"+
+                "    <title>{0}</title>\r\n"+
+                "  </head>\r\n"+
+                "  <body>\r\n"+
+                "    <script>window.localStorage.setItem(\"_byt_saasid_storage\", \"{1}\")</script>\r\n"+
+                "    <script src=\"{2}\"> </script>\r\n"+
+                "    <div id=\"{1}\"><!--"+TextHelper.saasDivTip+"--></div>\r\n"+
+                "  </body>\r\n"+
+                "</html>";
+                htmlTemplate = htmlTemplate.replace("{0}",formRow.iName).replace("{1}",formRow.iID).replace("{2}",tmpUrl);
+     
+                
+                saasJsBox.setText(scriptTemplate);
+                saasSampleBox.setText( htmlTemplate );
+                
+                
+                
+                WebElement urla = System.currentDocument.createElement("a");
+                string url = System.webRootPath.replace("/Byt","")+ :identity this:.rFormSys.rFormFilling.pageName +"?"+NameHelper.formID+"="+formRow.iID;
+                urla.addAttribute("href",url);
+                urla.addAttribute("target","_blank");
+                urla.innerHTML = url;
+                
+                
+                //this.saasSamplePanel.element.append(saasDiv);
+                this.urlLabel.text = "链接:";
+                this.urlLabel.element.append(urla);
+                
+                
+                
+                
+            }
+            
+         
+
+            
+            
+        } }
+        
+    }
+}

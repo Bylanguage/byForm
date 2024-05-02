@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <dialog ClassAndFileName="popup" ku="byBase" identity="Tree" dialog="popup" path="byBase\dialog\Tree\popup" namespace="byBase.dress.Tree">
+    <field name="cMQueryArea" alias="cMQueryArea" />
+    <field name="cBtnQuery" alias="cBtnQuery" />
+    <field name="cTree" alias="cTree" />
+    <field name="cBtnComplete" alias="cBtnComplete" />
+    <field name="cContextMenu" alias="cContextMenu" />
+  </dialog>
+</root>

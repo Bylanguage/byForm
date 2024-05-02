@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <dialog ClassAndFileName="displayDialog" ku="byForm" identity="form" dialog="displayDialog" path="byForm\dialog\form\displayDialog" namespace="byForm.dress.form">
+    <field name="displayPanel" alias="displayPanel" />
+  </dialog>
+</root>

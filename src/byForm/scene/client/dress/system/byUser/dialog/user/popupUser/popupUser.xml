@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <dialog ClassAndFileName="popupUser" ku="byUser" identity="user" dialog="popupUser" path="byUser\dialog\user\popupUser" namespace="byUser.dress.user">
+    <field name="cLblKeyword" alias="cLblKeyword" />
+    <field name="cTxtKeyword" alias="cTxtKeyword" />
+    <field name="cBtnSearch" alias="cBtnSearch" />
+    <field name="cGrid" alias="cGrid" />
+    <field name="cBtnOk" alias="cBtnOk" />
+  </dialog>
+</root>

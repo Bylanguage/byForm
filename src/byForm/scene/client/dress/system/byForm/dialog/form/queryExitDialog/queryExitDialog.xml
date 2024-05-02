@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <dialog ClassAndFileName="queryExitDialog" ku="byForm" identity="form" dialog="queryExitDialog" path="byForm\dialog\form\queryExitDialog" namespace="byForm.dress.form">
+    <field name="textLabel" alias="textLabel" />
+    <field name="buttonContainer" alias="buttonContainer" />
+    <field name="exitButton" alias="exitButton" />
+    <field name="cancelButton" alias="cancelButton" />
+  </dialog>
+</root>

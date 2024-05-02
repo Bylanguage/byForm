@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <dialog ClassAndFileName="manage" ku="byBase" identity="bridge" dialog="manage" path="byBase\dialog\bridge\manage" namespace="byBase.dress.bridge">
+    <field name="cGridLeft" alias="cGridLeft" />
+    <field name="cGridRight" alias="cGridRight" />
+    <field name="cBtnModif" alias="cBtnModif" />
+    <field name="cBtnDelete" alias="cBtnDelete" />
+  </dialog>
+</root>

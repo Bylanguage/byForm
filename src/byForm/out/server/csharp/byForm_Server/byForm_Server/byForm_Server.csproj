@@ -1,0 +1,468 @@
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <Import Project="D:\WorkSpace\By Language v9\Shared\Product\IDE\Environment\MSBuild.Targets\build\MSBuild.Microsoft.VisualStudio.Web.targets.props" Condition="Exists('D:\WorkSpace\By Language v9\Shared\Product\IDE\Environment\MSBuild.Targets\build\MSBuild.Microsoft.VisualStudio.Web.targets.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion></ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{c077842c-ccc0-483e-889f-17214115b367}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>byForm_Server</RootNamespace>
+    <AssemblyName>byForm_Server</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="MySql.Data, Version=8.0.28.0">
+      <HintPath>..\lib\MySql.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Oracle.ManagedDataAccess, Version=4.122.19.1">
+      <HintPath>..\lib\Oracle.ManagedDataAccess.dll</HintPath>
+    </Reference>
+    <Reference Include="BouncyCastle.Crypto, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\byForm_Server\ExternalDll\BouncyCastle.Crypto.dll</HintPath>
+    </Reference>
+    <Reference Include="byExternalBase, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\byForm_Server\ExternalDll\byExternalBase.dll</HintPath>
+    </Reference>
+    <Reference Include="byExternalSMScsharp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\byForm_Server\ExternalDll\byExternalSMScsharp.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Handler.ashx" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Global.asax" />
+    <Content Include="Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ku\ExtendMethod.cs" />
+    <Compile Include="ku\Root.cs" />
+    <Compile Include="ku\Start.cs" />
+    <Compile Include="ku\DataTypeEnum.cs" />
+    <Compile Include="ku\FunctionEnum.cs" />
+    <Compile Include="ku\SqlObjParameterTypeEnum.cs" />
+    <Compile Include="ku\DBTypeEnum.cs" />
+    <Compile Include="ku\MethodNameStorage.cs" />
+    <Compile Include="ku\by\by.cs" />
+    <Compile Include="ku\by\Action\Action.cs" />
+    <Compile Include="ku\by\Delegates\KuDelegates.cs" />
+    <Compile Include="ku\by\Enum\attribute.cs" />
+    <Compile Include="ku\by\Enum\DragDropEffects.cs" />
+    <Compile Include="ku\by\Enum\ImageSizeMode.cs" />
+    <Compile Include="ku\by\Enum\SceneType.cs" />
+    <Compile Include="ku\by\Enum\CursorStyle.cs" />
+    <Compile Include="ku\by\Enum\DockStyle.cs" />
+    <Compile Include="ku\by\Enum\DateTimeStyle.cs" />
+    <Compile Include="ku\by\Enum\RegexMode.cs" />
+    <Compile Include="ku\by\Enum\ToolBarItemDisplayStyle.cs" />
+    <Compile Include="ku\by\Enum\DialogManagerMode.cs" />
+    <Compile Include="ku\by\Enum\DayOfWeek.cs" />
+    <Compile Include="ku\by\Enum\TableType.cs" />
+    <Compile Include="ku\by\Enum\Action.cs" />
+    <Compile Include="ku\by\Enum\MouseButton.cs" />
+    <Compile Include="ku\by\Object\table.cs" />
+    <Compile Include="ku\by\Object\Cell.cs" />
+    <Compile Include="ku\by\Object\ReadOnlyList.cs" />
+    <Compile Include="ku\by\Object\Void.cs" />
+    <Compile Include="ku\by\Object\ServerCallInfo.cs" />
+    <Compile Include="ku\by\Object\ServerSession.cs" />
+    <Compile Include="ku\by\Object\dictionary.cs" />
+    <Compile Include="ku\by\Object\byObject.cs" />
+    <Compile Include="ku\by\Object\list.cs" />
+    <Compile Include="ku\by\Object\keyValue.cs" />
+    <Compile Include="ku\by\Object\orm.cs" />
+    <Compile Include="ku\by\Object\Row.cs" />
+    <Compile Include="ku\by\Object\field.cs" />
+    <Compile Include="ku\by\Object\Result.cs" />
+    <Compile Include="ku\by\Object\datetime.cs" />
+    <Compile Include="ku\by\Object\QueryData.cs" />
+    <Compile Include="ku\by\Object\math.cs" />
+    <Compile Include="ku\by\Object\system.cs" />
+    <Compile Include="ku\by\Identity\Name.cs" />
+    <Compile Include="ku\by\Identity\Reference.cs" />
+    <Compile Include="ku\by\Identity\Menu.cs" />
+    <Compile Include="ku\by\Identity\Table.cs" />
+    <Compile Include="ku\by\Identity\Attribute.cs" />
+    <Compile Include="ku\by\Identity\NO.cs" />
+    <Compile Include="ku\by\Identity\Identity_.cs" />
+    <Compile Include="ku\by\Identity\Sys.cs" />
+    <Compile Include="ku\by\Identity\Server.cs" />
+    <Compile Include="ku\by\Identity\IServerDoor.cs" />
+    <Compile Include="ku\by\Identity\Role.cs" />
+    <Compile Include="ku\by\Identity\ID.cs" />
+    <Compile Include="ku\by\Identity\Field.cs" />
+    <Compile Include="ku\by\SqlExpression\sql.cs" />
+    <Compile Include="ku\by\SqlExpression\SqlserverAssembler.cs" />
+    <Compile Include="ku\by\SqlExpression\MysqlAssembler.cs" />
+    <Compile Include="ku\by\SqlExpression\OracleAssembler.cs" />
+    <Compile Include="ku\by\SqlExpression\SqlLocation.cs" />
+    <Compile Include="ku\by\SqlExpression\LocalSql.cs" />
+    <Compile Include="ku\by\ToolClass\BaseKu.cs" />
+    <Compile Include="ku\by\ToolClass\AbstractIdentityBase.cs" />
+    <Compile Include="ku\by\ToolClass\IExecItem.cs" />
+    <Compile Include="ku\by\ToolClass\ExecObj.cs" />
+    <Compile Include="ku\by\ToolClass\IIdentity.cs" />
+    <Compile Include="ku\by\ToolClass\Component.cs" />
+    <Compile Include="ku\by\ToolClass\Config.cs" />
+    <Compile Include="ku\by\ToolClass\Field.cs" />
+    <Compile Include="ku\by\ToolClass\IOrmType.cs" />
+    <Compile Include="ku\by\ToolClass\ITableSource.cs" />
+    <Compile Include="ku\by\ToolClass\SqlType.cs" />
+    <Compile Include="ku\by\ToolClass\IBaseDataSheet.cs" />
+    <Compile Include="ku\by\ToolClass\ISqlLocation.cs" />
+    <Compile Include="ku\by\ToolClass\SheetRelation.cs" />
+    <Compile Include="ku\by\ToolClass\Source.cs" />
+    <Compile Include="ku\by\ToolClass\SaveInspect.cs" />
+    <Compile Include="ku\by\ToolClass\ThrowHelper.cs" />
+    <Compile Include="ku\by\ToolClass\ActionClass.cs" />
+    <Compile Include="ku\by\ToolClass\ErrorInfo.cs" />
+    <Compile Include="ku\by\ToolClass\Parse.cs" />
+    <Compile Include="ku\by\ToolClass\RequestTypeEnum.cs" />
+    <Compile Include="ku\by\ToolClass\Response.cs" />
+    <Compile Include="ku\by\ToolClass\SqlHelper.cs" />
+    <Compile Include="ku\by\ToolClass\SqlServerHelper.cs" />
+    <Compile Include="ku\by\ToolClass\SqlInvocation.cs" />
+    <Compile Include="ku\by\ToolClass\ToolFunction.cs" />
+    <Compile Include="ku\by\ToolClass\VerifyFunction.cs" />
+    <Compile Include="ku\by\ToolClass\SqlIDUResult.cs" />
+    <Compile Include="ku\by\ToolClass\OrmField.cs" />
+    <Compile Include="ku\by\ToolClass\ExecResult.cs" />
+    <Compile Include="ku\by\ToolClass\Placeholder.cs" />
+    <Compile Include="ku\by\ToolClass\TildePlaceHolder.cs" />
+    <Compile Include="ku\by\ToolClass\OrmResult.cs" />
+    <Compile Include="ku\by\ToolClass\MySqlHelper.cs" />
+    <Compile Include="ku\by\ToolClass\OracleHelper.cs" />
+    <Compile Include="ku\by\ToolClass\Exceptions\TheKnownException.cs" />
+    <Compile Include="ku\by\ToolClass\Exceptions\KuInitException.cs" />
+    <Compile Include="ku\by\ToolClass\Exceptions\ParseTransferException.cs" />
+    <Compile Include="ku\by\ToolClass\Exceptions\VerifyException.cs" />
+    <Compile Include="ku\by\ToolClass\Exceptions\SqlPreCompileException.cs" />
+    <Compile Include="ku\by\ToolClass\Exceptions\FuncInvocationException.cs" />
+    <Compile Include="ku\by\ToolClass\Exceptions\DataMatchException.cs" />
+    <Compile Include="ku\by\ToolClass\Exceptions\RelationOperationException.cs" />
+    <Compile Include="ku\by\ToolClass\Exceptions\SerializeException.cs" />
+    <Compile Include="ku\by\ToolClass\Exceptions\OrmException.cs" />
+    <Compile Include="ku\by\ToolClass\Sql\OperatorEnum.cs" />
+    <Compile Include="ku\by\ToolClass\Sql\OrderByField.cs" />
+    <Compile Include="ku\by\ToolClass\Sql\ParamsPackage.cs" />
+    <Compile Include="ku\by\ToolClass\Sql\QueryDataParameter.cs" />
+    <Compile Include="ku\by\ToolClass\Sql\TranParamsPackage.cs" />
+    <Compile Include="ku\by\ToolClass\Sql\TranSqlParameter.cs" />
+    <Compile Include="ku\by\ToolClass\Sql\UpdateSetValue.cs" />
+    <Compile Include="ku\by\ToolClass\Sql\TranLocalVariable.cs" />
+    <Compile Include="ku\by\ToolClass\Sql\IFields.cs" />
+    <Compile Include="ku\by\ToolClass\Sql\AbstractTable.cs" />
+    <Compile Include="ku\by\ToolClass\Sql\AbstractSelectField.cs" />
+    <Compile Include="ku\by\ToolClass\Sql\AsteriskField.cs" />
+    <Compile Include="ku\by\ToolClass\Sql\BinaryOperationField.cs" />
+    <Compile Include="ku\by\ToolClass\Sql\FuncField.cs" />
+    <Compile Include="ku\by\ToolClass\Sql\JoinTable.cs" />
+    <Compile Include="ku\by\ToolClass\Sql\LiteralField.cs" />
+    <Compile Include="ku\by\ToolClass\Sql\ParenthesesField.cs" />
+    <Compile Include="ku\by\ToolClass\Sql\PlusField.cs" />
+    <Compile Include="ku\by\ToolClass\Sql\SelectTable.cs" />
+    <Compile Include="ku\by\ToolClass\Sql\Table.cs" />
+    <Compile Include="ku\by\ToolClass\Sql\AssignmentField.cs" />
+    <Compile Include="ku\by\ToolClass\Sql\TableField.cs" />
+    <Compile Include="ku\by\ToolClass\Sql\SelectField.cs" />
+    <Compile Include="ku\by\ToolClass\Sql\SetField.cs" />
+    <Compile Include="ku\by\ToolClass\Sql\UnaryField.cs" />
+    <Compile Include="ku\by\ToolClass\Sql\SqlKu.cs" />
+    <Compile Include="ku\by\ToolClass\JsonParser\ErrorInfo.cs" />
+    <Compile Include="ku\by\ToolClass\JsonParser\Fill.cs" />
+    <Compile Include="ku\by\ToolClass\JsonParser\Root.cs" />
+    <Compile Include="ku\by\ToolClass\JsonParser\Utils.cs" />
+    <Compile Include="ku\by\ToolClass\JsonParser\Value\AbstractValue.cs" />
+    <Compile Include="ku\by\ToolClass\JsonParser\Value\ArrayClass.cs" />
+    <Compile Include="ku\by\ToolClass\JsonParser\Value\BoolValue.cs" />
+    <Compile Include="ku\by\ToolClass\JsonParser\Value\JsonObject.cs" />
+    <Compile Include="ku\by\ToolClass\JsonParser\Value\NullValue.cs" />
+    <Compile Include="ku\by\ToolClass\JsonParser\Value\Num.cs" />
+    <Compile Include="ku\by\ToolClass\JsonParser\Value\StringClass.cs" />
+    <Compile Include="ku\by\Skill\SkillIndex.cs" />
+    <Compile Include="ku\byExternal\byExternal.cs" />
+    <Compile Include="ku\byExternal\Action\ActionIndex.cs" />
+    <Compile Include="ku\byExternal\Action\newAction.cs" />
+    <Compile Include="ku\byExternal\SqlExpression\sql.cs" />
+    <Compile Include="ku\byExternal\SqlExpression\SqlserverAssembler.cs" />
+    <Compile Include="ku\byExternal\SqlExpression\MysqlAssembler.cs" />
+    <Compile Include="ku\byExternal\SqlExpression\OracleAssembler.cs" />
+    <Compile Include="ku\byExternal\SqlExpression\SqlLocation.cs" />
+    <Compile Include="ku\byExternal\SqlExpression\LocalSql.cs" />
+    <Compile Include="ku\byExternal\Skill\SkillIndex.cs" />
+    <Compile Include="ku\byFormNew\byFormNew.cs" />
+    <Compile Include="ku\byFormNew\Action\ActionIndex.cs" />
+    <Compile Include="ku\byFormNew\Action\newAction.cs" />
+    <Compile Include="ku\byFormNew\DataSheet\biao_formField.cs" />
+    <Compile Include="ku\byFormNew\DataSheet\biao_formTemplate.cs" />
+    <Compile Include="ku\byFormNew\DataSheet\biao_formData.cs" />
+    <Compile Include="ku\byFormNew\DataSheet\biao_form.cs" />
+    <Compile Include="ku\byFormNew\DataSheet\biao_fieldTemplate.cs" />
+    <Compile Include="ku\byFormNew\Identity\ServerStartup.cs" />
+    <Compile Include="ku\byFormNew\Source\formField.cs" />
+    <Compile Include="ku\byFormNew\Source\formData.cs" />
+    <Compile Include="ku\byFormNew\Source\form.cs" />
+    <Compile Include="ku\byFormNew\Source\fieldTemplate.cs" />
+    <Compile Include="ku\byFormNew\SqlExpression\sql.cs" />
+    <Compile Include="ku\byFormNew\SqlExpression\SqlserverAssembler.cs" />
+    <Compile Include="ku\byFormNew\SqlExpression\MysqlAssembler.cs" />
+    <Compile Include="ku\byFormNew\SqlExpression\OracleAssembler.cs" />
+    <Compile Include="ku\byFormNew\SqlExpression\SqlLocation.cs" />
+    <Compile Include="ku\byFormNew\SqlExpression\LocalSql.cs" />
+    <Compile Include="ku\byFormNew\Skill\SkillIndex.cs" />
+    <Compile Include="ku\byExternalSMS\byExternalSMS.cs" />
+    <Compile Include="ku\byExternalSMS\Action\ActionIndex.cs" />
+    <Compile Include="ku\byExternalSMS\Action\newAction.cs" />
+    <Compile Include="ku\byExternalSMS\Object\feigeSend.cs" />
+    <Compile Include="ku\byExternalSMS\SqlExpression\sql.cs" />
+    <Compile Include="ku\byExternalSMS\SqlExpression\SqlserverAssembler.cs" />
+    <Compile Include="ku\byExternalSMS\SqlExpression\MysqlAssembler.cs" />
+    <Compile Include="ku\byExternalSMS\SqlExpression\OracleAssembler.cs" />
+    <Compile Include="ku\byExternalSMS\SqlExpression\SqlLocation.cs" />
+    <Compile Include="ku\byExternalSMS\SqlExpression\LocalSql.cs" />
+    <Compile Include="ku\byExternalSMS\Skill\SkillIndex.cs" />
+    <Compile Include="ku\byWebCommon\byWebCommon.cs" />
+    <Compile Include="ku\byWebCommon\Action\ActionIndex.cs" />
+    <Compile Include="ku\byWebCommon\Action\newAction.cs" />
+    <Compile Include="ku\byWebCommon\Identity\webCommon.cs" />
+    <Compile Include="ku\byWebCommon\SqlExpression\sql.cs" />
+    <Compile Include="ku\byWebCommon\SqlExpression\SqlserverAssembler.cs" />
+    <Compile Include="ku\byWebCommon\SqlExpression\MysqlAssembler.cs" />
+    <Compile Include="ku\byWebCommon\SqlExpression\OracleAssembler.cs" />
+    <Compile Include="ku\byWebCommon\SqlExpression\SqlLocation.cs" />
+    <Compile Include="ku\byWebCommon\SqlExpression\LocalSql.cs" />
+    <Compile Include="ku\byWebCommon\Skill\SkillIndex.cs" />
+    <Compile Include="ku\byExternalChartjs\byExternalChartjs.cs" />
+    <Compile Include="ku\byExternalChartjs\Action\ActionIndex.cs" />
+    <Compile Include="ku\byExternalChartjs\Action\newAction.cs" />
+    <Compile Include="ku\byExternalChartjs\Enum\chartTypeRange.cs" />
+    <Compile Include="ku\byExternalChartjs\Enum\chartType.cs" />
+    <Compile Include="ku\byExternalChartjs\Object\RGBA.cs" />
+    <Compile Include="ku\byExternalChartjs\Object\color.cs" />
+    <Compile Include="ku\byExternalChartjs\Object\RGB.cs" />
+    <Compile Include="ku\byExternalChartjs\SqlExpression\sql.cs" />
+    <Compile Include="ku\byExternalChartjs\SqlExpression\SqlserverAssembler.cs" />
+    <Compile Include="ku\byExternalChartjs\SqlExpression\MysqlAssembler.cs" />
+    <Compile Include="ku\byExternalChartjs\SqlExpression\OracleAssembler.cs" />
+    <Compile Include="ku\byExternalChartjs\SqlExpression\SqlLocation.cs" />
+    <Compile Include="ku\byExternalChartjs\SqlExpression\LocalSql.cs" />
+    <Compile Include="ku\byExternalChartjs\Skill\SkillIndex.cs" />
+    <Compile Include="ku\byBase\byBase.cs" />
+    <Compile Include="ku\byBase\Action\ActionIndex.cs" />
+    <Compile Include="ku\byBase\Action\newAction.cs" />
+    <Compile Include="ku\byBase\Enum\sort.cs" />
+    <Compile Include="ku\byBase\Enum\ButtonState.cs" />
+    <Compile Include="ku\byBase\Identity\catalog.cs" />
+    <Compile Include="ku\byBase\Identity\TableSafe.cs" />
+    <Compile Include="ku\byBase\Identity\popupTable.cs" />
+    <Compile Include="ku\byBase\Identity\Tree.cs" />
+    <Compile Include="ku\byBase\Identity\bridge.cs" />
+    <Compile Include="ku\byBase\Identity\extend.cs" />
+    <Compile Include="ku\byBase\Identity\detail.cs" />
+    <Compile Include="ku\byBase\Identity\cloud.cs" />
+    <Compile Include="ku\byBase\Identity\dic.cs" />
+    <Compile Include="ku\byBase\Object\ByBaseStrings.cs" />
+    <Compile Include="ku\byBase\SqlExpression\sql.cs" />
+    <Compile Include="ku\byBase\SqlExpression\SqlserverAssembler.cs" />
+    <Compile Include="ku\byBase\SqlExpression\MysqlAssembler.cs" />
+    <Compile Include="ku\byBase\SqlExpression\OracleAssembler.cs" />
+    <Compile Include="ku\byBase\SqlExpression\SqlLocation.cs" />
+    <Compile Include="ku\byBase\SqlExpression\LocalSql.cs" />
+    <Compile Include="ku\byBase\Orm\Orm0.cs" />
+    <Compile Include="ku\byBase\Orm\OrmType0.cs" />
+    <Compile Include="ku\byBase\Skill\SkillIndex.cs" />
+    <Compile Include="ku\byUser\byUser.cs" />
+    <Compile Include="ku\byUser\Action\ActionIndex.cs" />
+    <Compile Include="ku\byUser\Action\newAction.cs" />
+    <Compile Include="ku\byUser\DataSheet\biao_userUpload.cs" />
+    <Compile Include="ku\byUser\DataSheet\biao_log.cs" />
+    <Compile Include="ku\byUser\DataSheet\biao_user.cs" />
+    <Compile Include="ku\byUser\DataSheet\biao_userICO.cs" />
+    <Compile Include="ku\byUser\DataSheet\biao_anonymous.cs" />
+    <Compile Include="ku\byUser\DataSheet\biao_userAdmin.cs" />
+    <Compile Include="ku\byUser\Enum\confirmUserIsLoginMode.cs" />
+    <Compile Include="ku\byUser\Enum\rank.cs" />
+    <Compile Include="ku\byUser\Enum\safetyCodeMode.cs" />
+    <Compile Include="ku\byUser\Enum\uploadMode.cs" />
+    <Compile Include="ku\byUser\Enum\adminMode.cs" />
+    <Compile Include="ku\byUser\Enum\verifyMode.cs" />
+    <Compile Include="ku\byUser\Enum\cer.cs" />
+    <Compile Include="ku\byUser\Identity\userUpload.cs" />
+    <Compile Include="ku\byUser\Identity\user.cs" />
+    <Compile Include="ku\byUser\Identity\userICO.cs" />
+    <Compile Include="ku\byUser\Identity\anonymous.cs" />
+    <Compile Include="ku\byUser\Identity\userAdmin.cs" />
+    <Compile Include="ku\byUser\Object\resultUser.cs" />
+    <Compile Include="ku\byUser\Object\ByUserStrings.cs" />
+    <Compile Include="ku\byUser\Source\userUpload.cs" />
+    <Compile Include="ku\byUser\Source\log.cs" />
+    <Compile Include="ku\byUser\Source\user.cs" />
+    <Compile Include="ku\byUser\Source\anonymous.cs" />
+    <Compile Include="ku\byUser\Source\userAdmin.cs" />
+    <Compile Include="ku\byUser\SqlExpression\sql.cs" />
+    <Compile Include="ku\byUser\SqlExpression\SqlserverAssembler.cs" />
+    <Compile Include="ku\byUser\SqlExpression\MysqlAssembler.cs" />
+    <Compile Include="ku\byUser\SqlExpression\OracleAssembler.cs" />
+    <Compile Include="ku\byUser\SqlExpression\SqlLocation.cs" />
+    <Compile Include="ku\byUser\SqlExpression\LocalSql.cs" />
+    <Compile Include="ku\byUser\Orm\Orm0.cs" />
+    <Compile Include="ku\byUser\Orm\OrmType0.cs" />
+    <Compile Include="ku\byUser\Orm\Orm1.cs" />
+    <Compile Include="ku\byUser\Orm\OrmType1.cs" />
+    <Compile Include="ku\byUser\Orm\TemporaryOrm0.cs" />
+    <Compile Include="ku\byUser\Orm\TemporaryOrm1.cs" />
+    <Compile Include="ku\byUser\Skill\SkillIndex.cs" />
+    <Compile Include="ku\byLog\byLog.cs" />
+    <Compile Include="ku\byLog\Action\ActionIndex.cs" />
+    <Compile Include="ku\byLog\Action\newAction.cs" />
+    <Compile Include="ku\byLog\Enum\logMode.cs" />
+    <Compile Include="ku\byLog\Enum\logState.cs" />
+    <Compile Include="ku\byLog\Identity\log.cs" />
+    <Compile Include="ku\byLog\SqlExpression\sql.cs" />
+    <Compile Include="ku\byLog\SqlExpression\SqlserverAssembler.cs" />
+    <Compile Include="ku\byLog\SqlExpression\MysqlAssembler.cs" />
+    <Compile Include="ku\byLog\SqlExpression\OracleAssembler.cs" />
+    <Compile Include="ku\byLog\SqlExpression\SqlLocation.cs" />
+    <Compile Include="ku\byLog\SqlExpression\LocalSql.cs" />
+    <Compile Include="ku\byLog\Skill\SkillIndex.cs" />
+    <Compile Include="ku\byInterface\byInterface.cs" />
+    <Compile Include="ku\byInterface\Action\ActionIndex.cs" />
+    <Compile Include="ku\byInterface\Action\newAction.cs" />
+    <Compile Include="ku\byInterface\Enum\curdAction.cs" />
+    <Compile Include="ku\byInterface\Identity\IBy.cs" />
+    <Compile Include="ku\byInterface\SqlExpression\sql.cs" />
+    <Compile Include="ku\byInterface\SqlExpression\SqlserverAssembler.cs" />
+    <Compile Include="ku\byInterface\SqlExpression\MysqlAssembler.cs" />
+    <Compile Include="ku\byInterface\SqlExpression\OracleAssembler.cs" />
+    <Compile Include="ku\byInterface\SqlExpression\SqlLocation.cs" />
+    <Compile Include="ku\byInterface\SqlExpression\LocalSql.cs" />
+    <Compile Include="ku\byInterface\Skill\SkillIndex.cs" />
+    <Compile Include="ku\byForm\byForm.cs" />
+    <Compile Include="ku\byForm\Action\ActionIndex.cs" />
+    <Compile Include="ku\byForm\Action\newAction.cs" />
+    <Compile Include="ku\byForm\Enum\ctrType.cs" />
+    <Compile Include="ku\byForm\Enum\DraggingItemType.cs" />
+    <Compile Include="ku\byForm\Enum\memberMode.cs" />
+    <Compile Include="ku\byForm\Identity\formField.cs" />
+    <Compile Include="ku\byForm\Identity\formSys.cs" />
+    <Compile Include="ku\byForm\Identity\formTemplate.cs" />
+    <Compile Include="ku\byForm\Identity\formData.cs" />
+    <Compile Include="ku\byForm\Identity\form.cs" />
+    <Compile Include="ku\byForm\Identity\fieldTemplate.cs" />
+    <Compile Include="ku\byForm\Object\ValueHelper.cs" />
+    <Compile Include="ku\byForm\Object\TextHelper.cs" />
+    <Compile Include="ku\byForm\Object\CssClassNameHelper.cs" />
+    <Compile Include="ku\byForm\Object\NameHelper.cs" />
+    <Compile Include="ku\byForm\SqlExpression\sql.cs" />
+    <Compile Include="ku\byForm\SqlExpression\SqlserverAssembler.cs" />
+    <Compile Include="ku\byForm\SqlExpression\MysqlAssembler.cs" />
+    <Compile Include="ku\byForm\SqlExpression\OracleAssembler.cs" />
+    <Compile Include="ku\byForm\SqlExpression\SqlLocation.cs" />
+    <Compile Include="ku\byForm\SqlExpression\LocalSql.cs" />
+    <Compile Include="ku\byForm\Skill\SkillIndex.cs" />
+    <Compile Include="ku\byCommon\byCommon.cs" />
+    <Compile Include="ku\byCommon\Action\ActionIndex.cs" />
+    <Compile Include="ku\byCommon\Action\newAction.cs" />
+    <Compile Include="ku\byCommon\Identity\session.cs" />
+    <Compile Include="ku\byCommon\Identity\relatedTable.cs" />
+    <Compile Include="ku\byCommon\Identity\general.cs" />
+    <Compile Include="ku\byCommon\Identity\relatedField.cs" />
+    <Compile Include="ku\byCommon\Object\like.cs" />
+    <Compile Include="ku\byCommon\Object\ByCommonStrings.cs" />
+    <Compile Include="ku\byCommon\Object\convert.cs" />
+    <Compile Include="ku\byCommon\Object\timeSlot.cs" />
+    <Compile Include="ku\byCommon\Object\verifyReg.cs" />
+    <Compile Include="ku\byCommon\Object\verifyRequest.cs" />
+    <Compile Include="ku\byCommon\Object\verifyRowIdentity.cs" />
+    <Compile Include="ku\byCommon\SqlExpression\sql.cs" />
+    <Compile Include="ku\byCommon\SqlExpression\SqlserverAssembler.cs" />
+    <Compile Include="ku\byCommon\SqlExpression\MysqlAssembler.cs" />
+    <Compile Include="ku\byCommon\SqlExpression\OracleAssembler.cs" />
+    <Compile Include="ku\byCommon\SqlExpression\SqlLocation.cs" />
+    <Compile Include="ku\byCommon\SqlExpression\LocalSql.cs" />
+    <Compile Include="ku\byCommon\Skill\SkillIndex.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Handler.ashx.cs">
+      <DependentUpon>Handler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="Models\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="Exists('$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets')" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>40722</DevelopmentServerPort>
+          <DevelopmentServerVPath>\</DevelopmentServerVPath>
+          <IISUrl>http://localhost:40722/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl></CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

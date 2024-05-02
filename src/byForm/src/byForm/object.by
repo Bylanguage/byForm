@@ -1,0 +1,70 @@
+﻿ku byForm
+{
+    system biao object "面向对象类型表" (
+    string name "名称"
+    , string[] scenes "场景"
+    , string[] modifiers "修饰符"
+    , string kind "类型类别"
+    , string inheritance "继承项"
+    , string[] implementations "实现接口")
+    {
+        { cFieldPanel, { client,  web }, {  }, class, Panel, {  } }
+        
+        
+        { FieldTermPanel "字段项，在中间展示的表单项", {  client, web }, {  }, class, Panel , {  } }
+        { FieldTermDisplayArea "字段项中的展示区域", { client,  web }, {  }, class, Panel, {  } }
+        
+        { FieldControlEditor "字段项基类编辑区", { client,  web }, {  }, class, Panel, {  } }
+        { FieldComboBoxEditor "字段项下拉框编辑区", { client,  web }, {  }, class, FieldControlEditor, {  } }
+        { FieldSliderEditor "字段项滑块编辑区", { client, web }, {  }, class, FieldControlEditor, {  } }
+        { FieldCheckBoxEditor "字段项判断项编辑区", { client,  web }, {  }, class, FieldControlEditor, {  } }
+        { FieldRadioButtonGroupEditor "字段项单选编辑区", { client,  web }, {  }, class, FieldControlEditor, {  } }
+        { FieldMultiTextBoxEditor "字段项多行文本编辑区", { client,  web }, {  }, class, FieldTextBoxEditor, {  } }
+        { FieldCheckBoxListEditor "字段项多选编辑区", { client, web }, {  }, class, FieldControlEditor, {  } }
+        { FieldTextBoxEditor "字段项文本框编辑区", { client, web }, {  }, class, FieldControlEditor, {  } }
+        { FieldDateTimePickerEditor, { client,  web }, {  }, class, FieldControlEditor, {  } }
+        
+
+
+        { SelectionEditor "选项编辑区", { client, web }, {  }, class, Panel, {  } }
+        { SelectionData "选项信息", { client,  web }, {  }, class, , {  } }
+        
+        { FormItem~I "在表单管理页面展示的各个表单", { client,  web }, {  }, class, Panel, {  } }
+
+        { FormNameEditor "表单名称信息编辑区", { client,  web }, {  }, class, Panel, {  } }
+        { EditorManager "用于区分和管理 表单名称编辑区和字段编辑区", { client,  web }, {  }, class, , {  } }
+        
+        { ResultPanel "(单个)答卷结果面板", { client, web }, {  }, class, Panel, {  } }
+        { FieldResultPanel "(单个)答卷(单个)字段结果面板", { client,  web }, {  }, class, Panel, {  } }
+        { FormInstancePanel "向外发布的表单实例", { client,  web }, {  }, class, Panel, {  } }
+        
+        { FieldControl "字段实例基类", { client,  web }, {  }, class, Panel, {  } }
+        { FieldComboBox "下拉框", { client,web }, {  }, class, FieldControl, {  } }
+        { FieldRadioButtonGroup "单选", { client,  web }, {  }, class, FieldControl, {  } }
+        { FieldSlider "滑块", { client,  web }, {  }, class, FieldControl, {  } }
+        { FieldCheckBox "勾选框", { client,  web }, {  }, class, FieldControl, {  } }
+        { FieldCheckBoxList "多选框", { client,  web }, {  }, class, FieldControl, {  } }
+        { FieldTextBox "文本框", { client,  web }, {  }, class, FieldControl, {  } }
+        { FieldMultiTextBox "多行文本框", { client, web }, {  }, class, FieldTextBox, {  } }
+        { FieldDateTimePicker "日期时间选择器", { client,  web }, {  }, class, FieldControl, {  } }
+        
+        { PropertyInputBox "名称和输入框", { client,  web }, {  }, class, Panel, {  } }
+        { PropertyMultilineInputBox "名称和输入框", { client,  web }, {  }, class, PropertyInputBox, {  } }
+        { PropertyNumberBox "名称和数字输入框", { client,  web }, {  }, class, Panel, {  } }
+        { PropertyComboBox "名称和下拉框", { client, web }, {  }, class, Panel, {  } }
+        
+        { AnalyzeConfigInfo, { client,  web }, {  }, class, , {  } }
+        { FormInfoArea, { client,  web }, {  }, class,Panel , {  } }
+        { FormDataAnalyzeArea "答卷结果信息统计分析", { client,  web }, {  }, class, Panel, {  } }
+        { FieldAnalyzePanel, { client,  web }, {  }, class, Panel, {  } }
+        
+        { Common "工具方法", { client,  web }, {  }, class, , {  } }
+        
+        
+        { NameHelper "常量名称", { client, server, web }, {  }, class, , {  } }
+        { TextHelper "字段身份", { client, server, web }, {  }, class, , {  } }
+        { ValueHelper "数值常量", { client,server,  web }, {  }, class, , {  } }
+        { CssClassNameHelper "css样式类名", { client, server, web }, {  }, class, , {  } }
+        
+    }
+}

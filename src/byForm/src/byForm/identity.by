@@ -1,0 +1,32 @@
+﻿ku byForm
+{
+    system biao identity "身份类型表" (
+    string name "名称"
+    , string[] scenes "场景"
+    , string[] modifiers "修饰符"
+    , string kind "类型类别"
+    , string inheritance "继承项"
+    , string[] implementations "实现接口"
+    , string[] constraints "约束")
+    {
+        { formSys "表单系统", { client, server, web }, {  }, identity, by.identity.Sys, {  }, {  } } 
+        { form "表单主身份", { client, server, web }, {  }, identity, by.identity.Table, {  }, { primaryKey(iID),index(iUserID) } }
+        { formField "表单字段明细身份", { client, server, web }, {  }, identity, by.identity.Table, {  }, { primaryKey(iID),index(iFormID),index(iUserID) } }
+        { formData "值数据", { client, server, web }, {  }, identity, Table, {  }, { primaryKey(iID),index(iFormID),index(iUserID) } } 
+        { fieldTemplate "字段模板", { client, server, web }, {  }, identity, byBase.identity.dic , {  }, { primaryKey(iID) } }
+        { formTemplate "表单模板", { client, server, web }, {  }, identity, by.identity.Table, {  }, { primaryKey(iID),index(iUserID) } }
+        
+
+        { formFilling "表单填写页面", { web}, {  }, identity, by.identity.Page, {  }, {  } }
+        { previewFormFilling "表单填写预览", { web }, {  }, identity,  formFilling, { }, {  } }
+        { formResult "表单结果页面", { web }, {  }, identity, by.identity.Page, {  }, {  } }
+        { formAnalyzer "表单分析统计页面", { web }, {  }, identity, by.identity.Page, {  }, {  } }
+        
+        
+        
+       // { structureForm "表单及定义的明细数据", { client, server, web }, {  }, identity, Table, {  }, { primaryKey(iID) } }
+
+        
+        
+    }
+}

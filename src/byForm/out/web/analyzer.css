@@ -1,0 +1,154 @@
+﻿html {
+    width: 80%;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    height: 72px;
+    line-height: 72px;
+    box-shadow: 0 .05rem 0.05rem rgba(0, 0, 0, .08);
+    margin: 0 auto 20px;
+}
+
+.login a {
+    color: #0B7DFF;
+    text-decoration: none;
+}
+
+.form-name-valueLabel label {
+    margin: 0 auto;
+}
+
+#init-chart {
+    margin: 0 auto;
+}
+
+.analyzer-field-buttonContainer {
+    margin-bottom: 20px;
+}
+
+.analyzer-chart-canvas {
+    margin: 0 auto;
+}
+
+.form-name-valueLabel {
+    border-bottom: 1px solid #ddd;
+    width: 100%;
+    margin-bottom: 20px;
+    padding: 6px 0 0 6px;
+    background: #f5f5f5;
+}
+
+#form-info span {
+    font-size: 18px;
+    font-weight: bold;
+    padding: 6px 10px;
+}
+
+.form-name-valueLabel span {
+    border-bottom: 2px solid #0B7DFF;
+}
+
+.label-visual {
+    padding: 0!important;
+}
+
+.analyzer-chart-createButton {
+    width: 160px !important;
+    height: 46px !important;
+    margin-bottom: 10px;
+}
+
+.general-field-deleteButton button {
+    background: none!important;
+    width: 60px!important;
+}
+
+.analyzer-chart-createButton span {
+    font-size: 16px !important;
+    font-weight: 500;
+}
+
+.by-button {
+    width: fit-content;
+    display: inline-block !important;
+}
+
+.analyzer-fieldSelector {
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.button-visual {
+    color: #409eff !important;
+    border-color: #409eff !important;
+    background-color: #ecf5ff !important;
+    z-index: 9999
+}
+
+.button-visual:hover {
+    color: none!important;
+    border-color: none!important;
+    background-color: none!important;
+}
+
+.general-field-deleteButton button {
+    margin-left: 10px;
+    height: 32px !important;
+    background: none!important;
+    border-radius: 4px;
+    color: #333!important;
+    border: 0!important;
+    z-index: 99;
+}
+
+.general-field-deleteButton button:before {
+    display: block;
+    content: "";
+    width: 18px;
+    height: 18px;
+    background: url(image/delete_icon.svg) no-repeat 0px 0px;
+    margin-right: 4px;
+}
+
+.general-field-deleteButton button:hover {
+    background: none!important;
+    color: #333 !important;
+    outline: none!important;
+    z-index: 999;
+}
+
+div[data-tooltip="统计结果"] {
+    margin: 0 10px;
+}
+
+div[data-tooltip="在当前统计图表增加新的字段项组成复合图表"] button {
+    background: orange !important;
+    border: none;
+    color: #fff !important;
+    height: 34px !important;
+}
+
+div[data-tooltip="统计结果"] button {
+    background: #22bf77!important;
+    border: none;
+    color: #fff !important;
+    height: 34px !important;
+}
+
+div[data-tooltip="删除图表"] button {
+    background: #ec5050!important;
+    border: none;
+    color: #fff !important;
+    height: 34px !important;
+}
+
+#init-container,
+.analyzer-chart-container {
+    border: 1px solid #ddd;
+    padding: 30px;
+    margin-bottom: 20px;
+}

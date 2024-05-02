@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <dialog ClassAndFileName="popupTree" ku="byCommon" identity="relatedDialog" dialog="popupTree" path="byCommon\dialog\relatedDialog\popupTree" namespace="byCommon.dress.relatedDialog">
+    <field name="cTree" alias="cTree" />
+    <field name="cBtnOk" alias="cBtnOk" />
+    <field name="cBtnCancel" alias="cBtnCancel" />
+  </dialog>
+</root>

@@ -1,0 +1,23 @@
+﻿ku byForm
+{
+    system biao enum "枚举类型表" (
+    string name "名称"
+    , string[] values "枚举值")
+    {
+        { memberMode "身份实例分类", { 
+            structureForm "表单字典",
+            structureData64 "表数据64长度",
+            structureData256 "表数据256长度",
+            structureData1024 "表数据1024长度",
+            structureData4000 "表数据4000长度"
+        } } 
+       
+        { ctrType "控件类型", { 
+            textbox "文本框",muiltTextbox"多行文本",dropdownList"下拉选择框",
+            radbutton"单选",checkBox "判定框",checkBoxList "多选框",slider"滑块控件",
+            dateTimePicker "时间日期选择框",datePicker"日期选择框",timePicker "时间选择框" } }
+        { DraggingItemType, { termLabel "左侧的标签项",termPanel "由标签生成的实例项" } }
+    
+        
+    }
+}

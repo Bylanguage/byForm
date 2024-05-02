@@ -1,0 +1,79 @@
+.publish-form-panel {
+    width: 80%;
+    margin: 0 auto;
+    text-align: center;
+    border: none !important;
+}
+
+.publish-form-panel {
+    padding: 40px;
+}
+
+.publish-field-orderLabel,
+.publish-field-titleLabel {
+    font-weight: 600!important;
+}
+
+.publish-field-titleLabel span:nth-child(2):after {
+    display: inline-block;
+    content: "*";
+    width: 5px;
+    height: 5px;
+    color: red;
+    margin-top: -10px;
+    margin: left 4px;
+    ;
+}
+
+.publish-form-nameLabel label {
+    padding: 0.27rem 0.4rem 0!important;
+}
+
+.publish-form-nameLabel label span {
+    font-size: 20px;
+    font-weight: bold;
+    padding: 0 10px;
+    border-bottom: 2px solid #0B7DFF;
+    padding-bottom: 8px;
+}
+
+.publish-form-namePanel {
+    background: #f5f5f5 !important;
+    border-bottom: 1px solid #6c6c6c !important;
+    font-size: 18px !important;
+    margin-bottom: 30px;
+    padding-top: 6px;
+}
+
+.publish-form-summaryPanel-inner {
+    border-bottom: 1px dashed #acacac !important;
+    margin-bottom: 20px;
+    padding-bottom: 5px;
+}
+
+.publish-field-fieldPanel input {
+    width: 600px !important;
+}
+
+.publish-field-fieldPanel textarea {
+    width: 600px !important;
+}
+
+.publish-form-contentPanel {
+    width: fit-content;
+    margin: 0 auto;
+    text-align: left;
+}
+
+.publish-form-submitButton button {
+    background: #4595ff !important;
+    border: 0 !important;
+    color: #fff;
+    width: 140px;
+}
+
+.publish-form-operatePanel {
+    background: #4150654d !important;
+    margin-top: 20px;
+    padding: 10px 0;
+}

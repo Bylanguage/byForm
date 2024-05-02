@@ -1,0 +1,4 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <dialog ClassAndFileName="diUploadICO" ku="byUser" identity="userICO" dialog="diUploadICO" path="byUser\dialog\userICO\diUploadICO" namespace="byUser.dress.userICO" />
+</root>

@@ -1,0 +1,21 @@
+﻿ku byFormNew
+{
+    new biao identity "身份实例表" (
+    string name "名称"
+    , string type "身份类型"
+    , string to "标记项")
+    {
+        { home "网页身份", byFormNew.identity.home, "index.html" }
+        { formSys "表单系统", byForm.identity.formSys,  }
+        { form "表单主身份", byForm.identity.form, form }
+        { formField "表单字段明细身份", byForm.identity.formField, formField }
+        { formData "值数据", byForm.identity.formData, formData }
+        { fieldTemplate "字段模板", byForm.identity.fieldTemplate, fieldTemplate }
+        {formTemplate "表单模板", byForm.identity.formTemplate,formTemplate}
+        
+        { formFilling "表单填写页面，给表单设计者预览或发送给要填写表单的人", byForm.identity.formFilling, "form.html" }
+        { previewFormFilling "表单填写页面预览", byForm.identity.previewFormFilling, "preview.html" }
+        { formResult "表单填写结果展示页面", byForm.identity.formResult, "result.html" }
+        { formAnalyzer "表单结果分析统计页面", byForm.identity.formAnalyzer, "analyzer.html" }
+    }
+}

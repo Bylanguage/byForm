@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <dialog ClassAndFileName="notice" ku="byCommon" identity="relatedDialog" dialog="notice" path="byCommon\dialog\relatedDialog\notice" namespace="byCommon.dress.relatedDialog">
+    <field name="lblTitle" alias="lblTitle" />
+    <field name="lblContent" alias="lblContent" />
+  </dialog>
+</root>

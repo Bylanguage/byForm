@@ -1,0 +1,4 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <dialog ClassAndFileName="IMaster" ku="byInterface" identity="IBy" dialog="IMaster" path="byInterface\dialog\IBy\IMaster" namespace="byInterface.dress.IBy" />
+</root>

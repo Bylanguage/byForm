@@ -1,0 +1,4 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <dialog ClassAndFileName="ISlave" ku="byInterface" identity="IBy" dialog="ISlave" path="byInterface\dialog\IBy\ISlave" namespace="byInterface.dress.IBy" />
+</root>

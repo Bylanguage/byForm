@@ -1,0 +1,20 @@
+﻿ku byForm
+{
+    system biao identity.dialog "身份窗体表" (
+    string belong "所属类型"
+    , string name "名称"
+    , string[] scenes "场景"
+    , string kind "类型类别"
+    , string inheritance "继承项"
+    , string[] implementations "实现接口")
+    {
+        { form ,  manage "表单编辑,可从左边拖动元素到中间区域  --基于拜语言技术构建", { client, web }, dialog, , {  } }
+        { form,  formsManager "管理用户的所有表单", { client, web }, dialog, , {  } }
+        { form, querySaveDialog "询问是否保存的弹窗", {client, web }, dialog, , {  } }
+        { form, queryDeleteDialog "询问是否删除的弹窗", {client, web }, dialog, , {  } }
+        { form, queryExitDialog "询问是否退出的弹窗", { client, web }, dialog, , {  } }
+        { form, displayDialog "展示表单的容器", { client }, dialog, , {  } }
+        { form, formCreateDialog "创建新表单的弹窗", { client, web }, dialog, , {  } }
+        { form, publishDialog "发布问卷的弹窗", { client, web }, dialog, , {  } }
+    }
+}

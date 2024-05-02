@@ -1,0 +1,18 @@
+﻿ku byForm
+{
+    system biao identity.property "身份属性表" (
+    string belong "所属类型"
+    , string name "名称"
+    , string[] scenes "场景"
+    , string[] modifiers "修饰符"
+    , string type "类型"
+    , OBJECT value "值")
+    {
+        { form, pCacheDic "缓存字典<FormID,{FormRow,vDataRow...}>", { server }, {  }, Dictionary<string,List<Row~Table>[]>,new Dictionary<string, List<Row~Table>[]>()  }
+        { form, pCacheDicCount "缓存数量最大值，超过这个值就不再缓存，默认1000条", { server }, {  }, int, 1000 }
+        { fieldTemplate, pList"缓存列表", {  }, {  }, List<Row~fieldTemplate>,  }
+        
+        { formFilling, isPreview "当前页面是供预览还是可填写", {  }, {  }, bool, false }
+
+    }
+}

@@ -1,0 +1,481 @@
+﻿ku byForm
+{
+    system biao object.property "面向对象属性表" (
+    string belong "所属类型"
+    , string name "名称"
+    , string[] scenes "场景"
+    , string[] modifiers "修饰符"
+    , string type "类型"
+    , OBJECT value "值")
+    {
+        
+        { FieldTermPanel, fieldTermOrderLabel "字段项序号", {  }, {  }, Label, new Label() }
+        { FieldTermPanel, fieldTermLabel "字段项标题", {  }, {  }, Label,new Label()  }
+        { FieldTermPanel, fieldTermDisplayArea "字段项展示部分",  {  }, {  }, FieldTermDisplayArea,new FieldTermDisplayArea(){hasBorder=false}  }
+        { FieldTermPanel, fieldTermEditArea "字段项编辑部分", {  }, {  }, Panel,new Panel(){hasBorder = false}  }
+        
+
+        { FieldTermPanel, fieldInfo , {  }, {  }, Row~formField,   }
+        
+        { FieldTermPanel, editButton "编辑按钮", {  }, {  }, Button, new Button(){text=TextHelper.edit} }
+        { FieldTermPanel, deleteButton "删除按钮", {  }, {  }, Button, new Button(){text=TextHelper.delete} }
+        { FieldTermPanel, coreControl "字段项核心控件", {  }, {  }, Control,  }
+
+        
+        { FieldControlEditor, titleEditor "字段标题编辑区", {  }, {  }, Panel, new Panel(){hasBorder = false} }
+        { FieldControlEditor, contentEditor "字段内容编辑区(选项等)", {  }, {  }, Panel, new Panel(){hasBorder = false}}
+        { FieldControlEditor, propertyEditor "字段属性编辑区", {  }, {  }, Panel, new Panel(){hasBorder=false} }
+        { FieldControlEditor, contentOperateEditor "字段内容操作区", {  }, {  }, Panel, new Panel(){hasBorder =false} }
+        { FieldControlEditor, saveEditor "字段保存区", {  }, {  }, Panel,new Panel(){hasBorder=false}  }
+        
+        { FieldControlEditor, fieldInfo, {  }, {  }, Row~formField, }
+        { FieldControlEditor, selections, {  }, {  }, string[],  }
+        { FieldControlEditor, selectionDatas, {  }, {  }, List<SelectionData>, new List<SelectionData>() }
+        
+        //{ FieldControlEditor, orderLabel, {  }, {  }, Label, new Label() }
+        { FieldControlEditor, titleTextBox, {  }, {  }, TextBox,new TextBox()  }
+        { FieldControlEditor, addButton, {  }, {  }, Button,new Button(){text=TextHelper.add}  }
+        { FieldControlEditor, saveButton, {  }, {  }, Button, new Button(){text=TextHelper.save} }
+        { FieldControlEditor, closeButton, {  }, {  }, Button,new Button(){text=TextHelper.close}  }
+        { FieldControlEditor, messageLabel, {  }, {  }, Label, new Label() }
+        
+        { FieldControlEditor, selectionGrowOnlyCount, {  }, {static  }, int, 2 }
+        { FieldControlEditor, isModified, {  }, {  }, bool,  false}
+        
+        { FieldControlEditor, fieldNotNullPanel, {  }, {  }, Panel, new Panel() }
+        { FieldControlEditor, fieldNotNullCheckBox, {  }, {  }, CheckBox, new CheckBox(){isChecked=true,text=TextHelper.notNull} }
+        
+        
+        { FieldControlEditor, fieldMaxPanel, {  }, {  }, PropertyNumberBox, new PropertyNumberBox(TextHelper.fieldMax){restoreValue=4000}  }
+        { FieldControlEditor, fieldMinPanel, {  }, {  }, PropertyNumberBox, new PropertyNumberBox(TextHelper.fieldMin){restoreValue=0}  }
+        { FieldControlEditor, fieldRegPanel, {  }, {  }, PropertyInputBox, new PropertyInputBox(TextHelper.fieldRegex){} }
+        { FieldControlEditor, fieldRegMsgPanel, {  }, {  }, PropertyInputBox, new PropertyInputBox(TextHelper.fieldRegexMessage){} }
+        
+        { FieldSliderEditor, fieldSliderMaxPanel, {  }, {  }, PropertyNumberBox, new PropertyNumberBox(TextHelper.sliderMax){} }
+        { FieldSliderEditor, fieldSliderMinPanel, {  }, {  }, PropertyNumberBox,new PropertyNumberBox(TextHelper.sliderMin){}  }
+        { FieldSliderEditor, fieldSliderDeltaPanel, {  }, {  }, PropertyNumberBox, new PropertyNumberBox(TextHelper.sliderDelta){} }
+        
+        
+        { FieldCheckBoxListEditor, fieldCheckBoxListMinPanel, {  }, {  }, PropertyComboBox, new PropertyComboBox(TextHelper.checkMin){} }
+        { FieldCheckBoxListEditor, fieldCheckBoxListMaxPanel, {  }, {  }, PropertyComboBox, new PropertyComboBox(TextHelper.checkMax){} }
+        
+        
+        { SelectionEditor, selectionLabel, {  }, { private }, Label, new Label(){text = TextHelper.optionName} }
+        { SelectionEditor, selectionValueBox, {  }, { private }, TextBox, new TextBox() }
+        { SelectionEditor, addButton, {  }, {private  }, Button,new Button(){text=TextHelper.add}  }
+        { SelectionEditor, delButton, {  }, {private  }, Button,new Button(){text=TextHelper.delete}  }
+        { SelectionEditor, data, {  }, {  }, SelectionData,  }
+        
+
+        { SelectionData, text, {  }, {  }, string, "" }
+        { SelectionData, defaultText, {  }, {  }, string, "" }
+        { SelectionData, order, {  }, {  }, int,  }
+        
+        { FormItem~I, infoArea, {  }, {  }, Panel, new Panel() }
+        { FormItem~I, operateArea, {  }, {  }, Panel, new Panel() }
+        { FormItem~I, idLabel, {  }, {  }, Label, new Label(){} }
+        { FormItem~I, nameLabel, {  }, {  }, Label,new Label(){fontSize=ValueHelper.formItemNameLabelFontSize}  }
+        { FormItem~I, statePanel, {  }, {  }, Panel, new Panel() }
+        { FormItem~I, createDateLabel, {  }, {  }, Label, new Label() }
+        { FormItem~I, editButton, {  }, {private  }, Button, new Button(){text=TextHelper.edit,foreColor=ValueHelper.grayColorForButton} }
+        { FormItem~I, sendButton, {  }, {private  }, Button, new Button(){text=TextHelper.publish,foreColor=ValueHelper.grayColorForButton} }
+        { FormItem~I, deleteButton, {  }, {private  }, Button, new Button(){text=TextHelper.delete,foreColor=ValueHelper.grayColorForButton} }
+        { FormItem~I, viewResultButton, {  }, { private }, Button, new Button(){text=TextHelper.viewResult,foreColor = ValueHelper.grayColorForButton} }
+        { FormItem~I, statisticsButton, {  }, { private }, Button, new Button(){text=TextHelper.statisticsResult,foreColor=ValueHelper.grayColorForButton} }
+        { FormItem~I, relativeRow, {  }, {  }, Row~form,  }
+
+        
+        { FormNameEditor, formNamePanel "表单名称编辑", {  }, { private }, PropertyInputBox, new PropertyInputBox(TextHelper.formName) }
+        { FormNameEditor, formSummaryPanel "表单说明编辑", {  }, { private }, PropertyMultilineInputBox, new PropertyMultilineInputBox(TextHelper.formSummary) }
+        { FormNameEditor, formSuccessMessagePanel "表单提交成功消息编辑", {  }, { private }, PropertyInputBox, new PropertyInputBox(TextHelper.successMessage) }
+        { FormNameEditor, formSubmitButtonTextPanel "表单提交按键文本编辑", {  }, { private }, PropertyInputBox, new PropertyInputBox(TextHelper.submitButtonText) }
+        { FormNameEditor, saveEditor, {  }, {  }, Panel, new Panel() }
+        { FormNameEditor, saveButton, {  }, {  }, Button, new Button(){text=TextHelper.save} }
+        { FormNameEditor, cancelButton, {  }, {  }, Button, new Button(){text=TextHelper.cancel} }
+        { FormNameEditor, formRow, {  }, {  }, Row~form,  }
+        
+        { EditorManager, formNameEditor, {  }, {  }, FormNameEditor,  }
+        { EditorManager, fieldControlEditor, {  }, {  }, FieldControlEditor,  }
+        
+        { ResultPanel, headPanel, {  }, {private  }, Panel, new Panel(){hasBorder = false} }
+        { ResultPanel, contentPanel, {  }, { private }, Panel, new Panel(){hasBorder  =false} }
+        { ResultPanel, headLabel, {  }, {private  }, Label, new Label(){hasBorder = false} }
+        
+        { FieldResultPanel, fieldNameValueLabel, {  }, {  }, Label, new Label(){hasBorder=false} }
+        { FieldResultPanel, fieldValueValueLabel, {  }, {  }, Label, new Label(){hasBorder=false} }
+        
+        { FieldResultPanel, analyzeButton, {  }, {  }, Button, new Button(){text="统计"} }
+    
+        { FormInstancePanel, headPanel, {  }, { private }, Panel, new Panel(){hasBorder=false} }
+        { FormInstancePanel, namePanel, {  }, {  private}, Panel, new Panel(){hasBorder=false} }
+        { FormInstancePanel, summaryPanel, {  }, { private }, Panel, new Panel(){hasBorder = false} }
+        { FormInstancePanel, contentPanel, {  }, { private }, Panel, new Panel(){hasBorder=false} }
+        { FormInstancePanel, operatePanel, {  }, { private }, Panel, new Panel(){hasBorder=false} }
+        { FormInstancePanel, nameLabel, {  }, { private }, Label, new Label(){hasBorder=false} }
+        { FormInstancePanel, summaryLabel, {  }, { private }, Label, new Label(){hasBorder = false} }
+        { FormInstancePanel, submitButton, {  }, { private }, Button, new Button(){text=TextHelper.defaultSubmitButtonText} }
+        { FormInstancePanel, cancelButton, {  }, { private }, Button, new Button(){text=TextHelper.cancel} }
+        
+    
+        { FieldControl, titlePanel, {  }, {  }, Panel, new Panel(){hasBorder=false} }
+        { FieldControl, orderLabel, {  }, {  }, Label, new Label(){hasBorder=false} }
+        { FieldControl, titleLabel, {  }, {  }, Label, new Label(){} }
+        { FieldControl, notNullLabel, {  }, {  }, Label, new Label(){hasBorder=false,text="*",foreColor=Color.RED} }
+        { FieldControl, summaryPanel, {  }, {  }, Panel, new Panel(){hasBorder=false} }
+        { FieldControl, summaryLabel, {  }, {  }, Label, new Label(){hasBorder=false} }
+        { FieldControl, contentPanel, {  }, {  }, Panel, new Panel(){hasBorder=false} }
+        { FieldControl, fieldPanel, {  }, {  }, Panel, new Panel(){hasBorder=false} }
+        { FieldControl, messageLabel, {  }, {  }, Label, new Label(){hasBorder=false} }
+        { FieldControl, fieldRow, {  }, {  }, Row~formField,  }
+        { FieldControl, isLegal, {  }, {  }, bool, false }
+        
+        { FieldTextBox, inputBox, {  }, {  }, TextBox, new TextBox(){} }
+        { FieldTextBox, lengthCountLabel, {  }, {  }, Label, new Label(){hasBorder=false} }
+        
+        { FieldSlider, slider, {  }, {  }, Slider, new Slider() }
+        { FieldCheckBox, checkBox, {  }, {  }, CheckBox, new CheckBox() }
+        { FieldCheckBoxList, checkBoxList, {  }, {  }, Panel, new Panel(){hasBorder =false} }
+        { FieldCheckBoxList, selectionCount, {  }, {  }, int,  }
+        { FieldComboBox, comboBox, {  }, {  }, ComboBox, new ComboBox(){} }
+        { FieldRadioButtonGroup, radioButtonGroup, {  }, {  }, RadioButtonGroup, new RadioButtonGroup() }
+        { FieldDateTimePicker, dateTimePicker, {  }, {  }, DateTimePicker, new DateTimePicker() }
+        
+        //统计
+        { AnalyzeConfigInfo, fieldID, {  }, {  }, string,  }
+        { AnalyzeConfigInfo, chartType, {  }, {  }, enum.chartType,  }
+        
+        { FormInfoArea, formInfoLabel, {  }, { private }, Label,  new Label()}
+        { FormInfoArea, createChartButton, {  }, { private }, Button, new Button(){text=TextHelper.createChart,toolTip=TextHelper.createChartTip} }
+        
+        { FormDataAnalyzeArea, fieldSelectionsPanel, {  }, { private }, Panel, new Panel(){hasBorder = false} }
+        { FormDataAnalyzeArea, buttonContainer, {  }, { private }, Panel, new Panel(){hasBorder=false} }
+        { FormDataAnalyzeArea, displayButton, {  }, { private }, Button, new Button(){text=TextHelper.statisticsResult,toolTip=TextHelper.statisticsResult} }
+        { FormDataAnalyzeArea, appendButton, {  }, { private }, Button, new Button(){text=TextHelper.appendChart,toolTip=TextHelper.appendChartTip} }
+        { FormDataAnalyzeArea, deleteButton, {  }, { private }, Button, new Button(){text=TextHelper.delete,toolTip=TextHelper.deleteChartContainer} }
+        
+        { FieldAnalyzePanel, fields, {  }, { private }, List<Row~formField>, new List<Row~formField>() }
+        { FieldAnalyzePanel, fieldSelector, {  }, { private }, ComboBox, new ComboBox() }
+        { FieldAnalyzePanel, chartSelector, {  }, { private }, ComboBox, new ComboBox() }
+        { FieldAnalyzePanel, deleteButton, {  }, { private }, Button, new Button(){text=TextHelper.delete} }
+        
+        
+        { PropertyInputBox, propertyLabel, {  }, {  }, Label, new Label() }
+        { PropertyInputBox, propertyBox, {  }, {  }, TextBox, new TextBox() }
+        
+        { PropertyNumberBox, propertyLabel, {  }, {  }, Label, new Label() }
+        { PropertyNumberBox, propertyBox, {  }, {  }, NumberBox, new NumberBox() }
+        { PropertyNumberBox, restoreValue, {  }, {  }, Decimal, 0 }
+        
+        { PropertyComboBox, propertyLabel, {  }, {  }, Label, new Label() }
+        { PropertyComboBox, propertyComboBox, {  }, {  }, ComboBox, new ComboBox() }
+        
+        
+        
+        //名称常量
+        { NameHelper, draggingItemType, {  }, {readonly, static }, string, "draggingItemType" }
+        { NameHelper, draggingItemOrder, {  }, {readonly, static  }, string, "draggingItemOrder" }
+        { NameHelper, screenY, {  }, {readonly, static }, string, "screenY" }
+
+        { NameHelper, formID, {  }, {readonly, static }, string, "formid" }
+        { NameHelper, fieldID, {  }, { readonly,static }, string, "fieldid" }
+        { NameHelper, fieldTemplateID, {  }, {readonly, static }, string,  "fieldTemplateID"}
+        { NameHelper, canvasID, {  }, { readonly,static }, string, "init-chart" }
+        { NameHelper, formInfoID, {  }, { readonly,static }, string, "form-info" }
+        { NameHelper, operateAreaID, {  }, { readonly,static }, string, "init-operate-area" }
+        { NameHelper, containerID, {  }, { readonly,static }, string, "init-container" }
+        { NameHelper, chartsContainerID, {  }, { readonly,static }, string, "charts" }
+        { NameHelper, placeHolderTag "可设置placeHolder的标签名称", {  }, { readonly,static }, string, "input" }
+        { NameHelper, placeholderAttributeName, {  }, { readonly,static }, string, "placeholder" }
+        { NameHelper, unlimit, {  }, {readonly, static }, string, "无限制" }
+        
+        
+        //数值常量
+        { ValueHelper, popupWindowWidth, {  }, { readonly,static }, int, 350 }
+        { ValueHelper, popupWindowHeight, {  }, { readonly,static }, int, 200 }
+        { ValueHelper, formListLabelFontSize, {  }, { readonly,static }, int, 20 }
+        { ValueHelper, formItemNameLabelFontSize, {  }, { readonly,static }, int, 20 }
+        { ValueHelper, selectionInitCount, {  }, {readonly,static  }, int,  2}
+        { ValueHelper, grayColorForButton, { client,web }, { readonly,static }, Color, new Color(102,102,102) }
+        { ValueHelper, summaryValueBoxWidth, {  }, { readonly,static }, int, 300 }
+        { ValueHelper, summaryValueBoxHeight, {  }, { readonly,static }, int, 150 }
+        { ValueHelper, summaryInputBoxWidth, {  }, { readonly,static }, int, 200 }
+        { ValueHelper, summaryInputBoxHeight, {  }, { readonly,static }, int, 100 }
+        { ValueHelper, multiTextboxWidth, {  }, { readonly,static }, int, 400 }
+        { ValueHelper, multiTextboxHeight, {  }, { readonly,static }, int, 100 }
+        { ValueHelper, defaultSliderMin, {  }, { readonly,static }, int, 0 }
+        { ValueHelper, defaultSliderMax, { }, { readonly,static }, int, 10 }
+        { ValueHelper, defaultSliderDelta, {  }, { readonly,static }, int, 1 }
+        { ValueHelper, defaultCheckBoxListMin "多选默认最少选择数，-1表示无限制", {  }, { readonly,static }, int, -1 }
+        { ValueHelper, defaultCheckBoxListMax "多选默认最多选择数，-1表示无限制", { client, web }, { readonly,static }, int, -1 }
+        { ValueHelper, resultPanelPaddingTop "单个结果", {  }, { readonly,static }, int, 10 }
+        { ValueHelper, resultPanelPaddingBottom, {  }, {readonly,static  }, int, 10 }
+        
+        { ValueHelper, initChartWidth, {  }, { readonly,static }, int, 0 }
+        { ValueHelper, initChartHeight, {  }, { readonly,static }, int, 0 }
+        { ValueHelper, chartWidth, {  }, { readonly,static }, int, 300 }
+        { ValueHelper, chartHeight, {  }, { readonly,static }, int, 300 }
+        { ValueHelper, publishDialogWidth, {  }, { readonly,static }, int, 880 }
+        { ValueHelper, publishDialogHeight, {  }, { readonly,static }, int, 500 }
+        { ValueHelper, publishSaasBoxWidth, {  }, { readonly,static }, int, 880 }
+        { ValueHelper, publishSaasSampleBoxHeight, {  }, { readonly,static }, int, 220 }
+        { ValueHelper, publishSaasBoxHeight, {  }, { readonly,static }, int, 70 }
+        { ValueHelper, cFieldPanelPaddingBottom "向下空出一定空间，使字段可被拖到最下面", {  }, { readonly,static }, int, 100 }
+        
+        { ValueHelper, numberBase "问卷编号起始 暂未使用", {  }, { readonly,static }, int, 1000000 }
+        { ValueHelper, formDataCellMax "答卷填写文本的最大长度", {  }, { readonly,static }, int, 4000 }
+        { ValueHelper, selectionsLengthMax "某字段所有选项总长度最大值", {  }, { readonly,static }, int, 1000 }
+        { ValueHelper, generalTextMax "一般文本最大长度", {  }, { readonly,static }, int, 200 }
+        
+        //文本常量
+        { TextHelper, invalidFieldTemplateID, {  }, { readonly,static }, string, "错误的字段模板ID" }
+        { TextHelper, invalidFieldID, {  }, { readonly,static }, string, "错误的字段ID" }
+        { TextHelper, misssingListData, {  }, { readonly,static }, string, "无效数据，列表中没有数据！" }
+        { TextHelper, illegalInjection, {  }, { readonly,static }, string, "非法注入，不支持的表源身份行！" }
+        { TextHelper, unexpectedControl, {  }, { readonly,static }, string, "未定义的控件类型" }
+        { TextHelper, formTemplateNotFound, {  }, { readonly,static }, string, "未找到对应的表单模板" }
+        { TextHelper, formNotFound, {  }, { readonly,static }, string, "未找到对应表单" }
+        { TextHelper, illegalMaxCount, {  }, { readonly,static }, string, "要求最多选中数量不合法" }
+        { TextHelper, sliderMinMaxCountError, {  }, { readonly,static }, string, "滑块最大值应当大于最小值" }
+        { TextHelper, fieldMinMaxCountError, {  }, { readonly,static }, string, "最大长度应当大于最小长度" }
+        { TextHelper, negativeMinMaxError, {  }, { readonly,static }, string, "最小长度和最大长度应当大于等于零" }
+        { TextHelper, dataLengthMaxError, {  }, { readonly,static }, string, "文本最大长度错误，允许的最大长度为" }
+        { TextHelper, lengthMaxError, {  }, { readonly,static }, string, "长度不能超过" }
+        { TextHelper, invalidValueError, {  }, { readonly,static }, string, "无效的值!" }
+        { TextHelper, formIdLoss, {  }, { readonly,static }, string, "缺少formid,请检查链接是否正确" }
+        { TextHelper, formIdError, {  }, { readonly,static }, string, "请检查参数formID是否正确" }
+        { TextHelper, unsupportedChart, {  }, { readonly,static }, string, "字段类型与图表类型不匹配 或 尚未支持的图表/字段类型" }
+        { TextHelper, formUserLoss, {  }, { readonly,static }, string, "用户未登录或身份验证失败" }
+        { TextHelper, stasticsFieldLess, {  }, { readonly,static }, string, "当前表单缺少字段,无法统计" }
+        { TextHelper, formOutdateError, {  }, { readonly,static }, string, "未知(由于表单版本过时)" }
+        { TextHelper, sheetSubmittedLoss, {  }, { readonly,static }, string,  "不存在的信息，这条信息可能已经被删除！"}
+        
+        { TextHelper, labelEventError, {  }, { readonly,static }, string, "错误的标签事件绑定" }
+        { TextHelper, templateLabelRowLossError, {  }, { readonly,static }, string, "标签控件未绑定到字段模板数据行" }
+        { TextHelper, fieldCreatedLossError, {  }, {readonly,static  }, string, "拖拽生成的字段信息为空" }
+        
+        { TextHelper, restored, {  }, { readonly,static }, string, "已恢复到修改前" }
+        
+        { TextHelper, saveSuccess, {  }, {readonly,static  }, string, "保存成功!" }
+        { TextHelper, saveFail, {  }, { readonly,static }, string, "保存失败!" }
+        { TextHelper, remainError, {  }, { readonly,static }, string, "存在未解决的错误:" }
+        { TextHelper, saveFormFailed, {  }, { readonly,static }, string, "保存表单信息错误!" }
+        { TextHelper, emptyFieldPanel, {  }, { readonly,static }, string, "字段面板为空" }
+        { TextHelper, unexpectedControlInFieldPanel, {  }, { readonly,static }, string, "字段面板中存在未预料的控件类型，预期类型：FieldTermPanel" }
+        { TextHelper, notLoggedIn, {  }, { readonly,static }, string, "当前用户还没有登录！" }
+        { TextHelper, pleaseLogIn, {  }, { readonly,static }, string, "请先登录!" }
+        { TextHelper, insufficientPermissions, {  }, { readonly,static }, string, "当前用户权限不足" }
+        { TextHelper, formNameNull, {  }, { readonly,static }, string, "表单名称不能为空" }
+        { TextHelper, previewOnly, {  }, { readonly,static }, string, "此页面仅供预览,无法提交!" }
+        { TextHelper, defaultSubmitSuccessMessage, {  }, { readonly,static }, string, "谢谢,我们会尽快处理！" }
+        { TextHelper, defaultSubmitButtonText, {  }, { readonly,static }, string, "确认提交" }
+        
+        { TextHelper, edit, {  }, { readonly,static }, string, "编辑" }
+        { TextHelper, delete, {  }, { readonly,static }, string, "删除" }
+        { TextHelper, add, {  }, { readonly,static }, string, "增加" }
+        { TextHelper, save, {  }, { readonly,static }, string, "保存" }
+        { TextHelper, notSave, {  }, { readonly,static }, string, "不保存" }
+        { TextHelper, cancel, {  }, { readonly,static }, string, "取消" }
+        { TextHelper, close, {  }, { readonly,static }, string, "关闭" }
+        { TextHelper, publish, {  }, { readonly,static }, string, "发布" }
+        { TextHelper, viewResult, {  }, {readonly,static  }, string, "查看答卷" }
+        { TextHelper, statisticsResult, {  }, { readonly,static }, string, "统计结果" }
+        { TextHelper, statisticsResultTip, {  }, { readonly,static }, string, "统计并展示图表" }
+        { TextHelper, appendChart, {  }, { readonly,static }, string, "增加字段" }
+        { TextHelper, appendChartTip, {  }, { readonly,static }, string, "在当前统计图表增加新的字段项组成复合图表" }
+        { TextHelper, deleteChartContainer, {  }, { readonly,static }, string, "删除图表" }
+        { TextHelper, createChart, {  }, { readonly,static }, string, "创建新图表" }
+        { TextHelper, createChartTip, {  }, { readonly,static }, string, "创建一个新的空白图表" }
+        { TextHelper, exit, {  }, { readonly,static }, string, "退出" }
+        
+        { TextHelper, queryDeleteField, {  }, { readonly,static }, string, "检查到已在编辑区打开，请选择是否删除?" }
+        { TextHelper, querySave, {  }, { readonly,static }, string, "可能有未保存的修改,请问是否保存?" }
+        { TextHelper, formSaveSuccessMessage, {  }, { readonly,static }, string, "保存成功，请问是否退出当前表单编辑界面?" }
+        { TextHelper, queryDeleteForm, {  }, { readonly,static }, string, "您确认删除问卷\"{0}\"吗？" }
+        
+        { TextHelper, notNull, {  }, { readonly,static }, string, "必填" }
+        { TextHelper, sliderMax, {  }, {readonly,static  }, string, "最大值" }
+        { TextHelper, sliderMin, {  }, {readonly,static  }, string, "最小值" }
+        { TextHelper, sliderDelta, {  }, {readonly,static  }, string, "间隔" }
+        { TextHelper, checkMin, {  }, {readonly,static  }, string, "最少选择数" }
+        { TextHelper, checkMax, {  }, {readonly,static  }, string, "最多选择数" }
+        
+        { TextHelper, fieldMax, {  }, {readonly,static  }, string, "最大长度" }
+        { TextHelper, fieldMin, {  }, {readonly,static  }, string, "最小长度" }
+        { TextHelper, valueMax, {  }, { readonly,static }, string, "最大值" }
+        { TextHelper, valueMin, {  }, { readonly,static }, string, "最小值" }
+        { TextHelper, fieldRegex, {  }, { readonly,static }, string, "正则验证表达式"  }
+        { TextHelper, fieldRegexMessage, {  }, {readonly,static  }, string, "正则验证消息" }
+        { TextHelper, optionName, {  }, { readonly,static }, string, "选项名称" }
+        { TextHelper, formName, {  }, { readonly,static }, string, "表单名称" }
+        { TextHelper, formSummary, {  }, { readonly,static }, string, "表单说明" }
+        { TextHelper, successMessage, {  }, { readonly,static }, string, "保存成功的信息提示" }
+        { TextHelper, submitButtonText, {  }, { readonly,static }, string, "提交按钮的文本" }
+        { TextHelper, defaultFormName, {  }, { readonly,static }, string, "新建未命名表单" }
+        { TextHelper, defaultFormSummary, {  }, { readonly,static }, string, "" }
+        { TextHelper, fieldName, {  }, { readonly,static }, string, "字段名称" }
+        
+        { TextHelper, formListLabelText, {  }, { readonly,static }, string, "表单列表" }
+        { TextHelper, createFormButtonText, {  }, { readonly,static }, string, "新建表单" }
+        { TextHelper, summary, {  }, { readonly,static }, string, "说明" }
+        { TextHelper, createButtonText, {  }, { readonly,static }, string, "创建" }
+        { TextHelper, saveForm, {  }, { readonly,static }, string, "保存到表单" }
+        { TextHelper, preview, {  }, { readonly,static }, string, "预览" }
+        { TextHelper, saasInfo, {  }, { readonly,static }, string, "saas服务调用代码" }
+        { TextHelper, saasSample, {  }, { readonly,static }, string, "saas服务调用示例" }
+        
+        { TextHelper, defaultCheckItem, {  }, { readonly,static }, string, "判断项" }
+        { TextHelper, defaultCheckItemOne, {  }, { readonly,static }, string, "选项1" }
+        { TextHelper, defaultCheckItemTwo, {  }, { readonly,static }, string, "选项2" }
+        { TextHelper, defaultSelectValues, {  }, { readonly,static }, string,  TextHelper.defaultCheckItemOne+ "\n"+TextHelper.defaultCheckItemTwo }
+        { TextHelper, defaultSliderSelectValue, { }, { readonly,static }, string, "0\n10\n1" }
+        { TextHelper, defaultTextboxText, {  }, { readonly,static }, string, "" }
+        
+        { TextHelper, formNameEditTip, {  }, { readonly,static }, string, "点击可编辑" }
+        { TextHelper, draggableTip, {  }, { readonly,static }, string, "可拖动当前元素到中间区域" }
+        { TextHelper, saasDivTip, {  }, { readonly,static }, string, "本div如果存在则会把生成表单放入其中，本项可以没有" }
+        
+        //表单
+        { CssClassNameHelper, formManageDialog, {  }, { readonly,static }, string,  "form-manage-dialog"}
+        { CssClassNameHelper, formNamePanel, {  }, { readonly,static }, string, "form-name-Panel" }
+        { CssClassNameHelper, formNameValueLabel, {  }, { readonly,static }, string, "form-name-valueLabel" }
+        { CssClassNameHelper, formPanel, {  }, { readonly,static }, string, "form-panel" }
+        { CssClassNameHelper, formManagePanel, {  }, { readonly,static }, string, "form-manage-panel" }
+        { CssClassNameHelper, formButtonContainer, {  }, { readonly,static }, string, "form-button-container" }
+        { CssClassNameHelper, formFieldContainer, {  }, {readonly,static  }, string,  "form-field-contianer"}
+        { CssClassNameHelper, formFieldDetailContainer, {  }, { readonly,static }, string, "form-fieldDetail-container" }
+        { CssClassNameHelper, formManageNameValueLabel, {  }, {readonly,static  }, string,  "form-manage-name-value-label"}
+        { CssClassNameHelper, formManageSummaryValueLabel, {  }, {readonly,static  }, string, "form-manage-summary-value-label" }
+        
+        { CssClassNameHelper, formManageButtonContainer, {  }, {readonly,static  }, string, "form-manage-button-container" }
+        { CssClassNameHelper, formPreviewButton, {  }, { readonly,static }, string,"form-previewButton"  }
+        { CssClassNameHelper, formPublishButton, {  }, { readonly,static }, string, "form-publishButton" }
+        
+        { CssClassNameHelper, formFieldTemplateContainer, {  }, { readonly,static }, string, "form-fieldTemplate-container" }
+        { CssClassNameHelper, generalFieldTemplateLabel, {  }, { readonly,static }, string,  "general-field-template-label"}
+        { CssClassNameHelper, generalFieldTemplateInnerLabel, {  }, { readonly,static }, string,  "general-field-template-inner-label"}
+        
+        { CssClassNameHelper, queryDialog, {  }, { readonly,static }, string,  "query-dialog"}
+        { CssClassNameHelper, querySaveTextLabel, {  }, { readonly,static }, string, "query-save-textLabel" }
+        { CssClassNameHelper, querySaveNotSaveButton, {  }, { readonly,static }, string, "query-save-notSaveButton" }
+
+        { CssClassNameHelper, queryDeleteTextLabel, {  }, { readonly,static }, string, "query-delete-textLabel" }
+        { CssClassNameHelper, queryDeleteButtonContainer, {  }, { readonly,static }, string, "query-delete-buttonContainer" }
+        
+        { CssClassNameHelper, generalFieldPanel, {  }, { readonly,static }, string,  "general-field-panel"}
+        { CssClassNameHelper, generalFieldOrderLabel, {  }, { readonly,static }, string, "general-field-orderLabel" }
+        { CssClassNameHelper, generalFieldTitleLabel, {  }, { readonly,static }, string,  "general-field-titleLabel"}
+        { CssClassNameHelper, generalFieldDisplayArea, {  }, { readonly,static }, string, "general-field-displayArea" }
+        { CssClassNameHelper, generalFieldEditArea, {  }, { readonly,static }, string, "general-field-editArea" }
+        { CssClassNameHelper, generalFieldCoreControl, {  }, { readonly,static }, string, "general-field-coreControl" }
+        { CssClassNameHelper, generalFieldEditButton, {  }, { readonly,static }, string,  "general-field-editButton"}
+        { CssClassNameHelper, generalFieldDeleteButton, {  }, { readonly,static }, string, "general-field-deleteButton" }
+        
+        { CssClassNameHelper, generalDetail , {  }, { readonly,static }, string,  "general-detail"}
+        { CssClassNameHelper, generalDetailTitleEditor, {  }, { readonly,static }, string,"general-detail-titleEditor"  }
+        { CssClassNameHelper, generalDetailTitleTextBox, {  }, { readonly,static }, string, "general-detail-titleTextBox" }
+        { CssClassNameHelper, generalDetailContentEditor, {  }, { readonly,static }, string, "general-detail-contentEditor"}
+        { CssClassNameHelper, generalDetailContentOperateEditor, {  }, { readonly,static }, string, "general-detail-contentOperateEditor" }
+        { CssClassNameHelper, generalDetailSaveButton, {  }, { readonly,static }, string, "general-detail-saveButton" }
+        { CssClassNameHelper, generalDetailCancelButton, {  }, { readonly,static }, string, "general-detail-cancelButton" }
+        { CssClassNameHelper, generalDetailAddButton, {  }, { readonly,static }, string,"general-detail-addButton" }
+        
+        { CssClassNameHelper, generalDetailSelectionLabel, {  }, { readonly,static }, string, "general-detail-selection-label" }
+        { CssClassNameHelper, generalDetailSelectionValueBox, {  }, { readonly,static }, string,"general-detail-selection-valueBox"  }
+        { CssClassNameHelper, generalDetailSelectionAddButton, {  }, { readonly,static }, string, "general-detail-selection-addButton" }
+        { CssClassNameHelper, generalDetailSelectionDelButton, {  }, { readonly,static }, string, "general-detail-selection-delButton" }
+        
+        //表单管理页面
+        { CssClassNameHelper, formsManagerOperateArea "操作区，包含新建表单", {  }, { readonly,static }, string, "forms-operateArea" }
+        { CssClassNameHelper, formsManagerDisplayArea "展示区，展示当前用户的表单信息", {  }, { readonly,static }, string,  "forms-displayArea"}
+        { CssClassNameHelper, formsManagerHeadMenuBar "页面顶部的菜单栏，含用户管理菜单", {  }, { readonly,static }, string,  "forms-head-menuBar"}
+        { CssClassNameHelper, formsManagerFormsHeader "排列表单上方的横条，可以在此切换排列方式,位于展示区顶部", {  }, {readonly,static  }, string, "forms-list-header" }
+        { CssClassNameHelper, formsManagerFormListLabel "标签 text=表单列表", {  }, {readonly,static  }, string, "forms-list-label" }
+        { CssClassNameHelper, formsManagerFormListPanel "在此陈列表单信息", {  }, { readonly,static }, string, "forms-list-panel" }
+        { CssClassNameHelper, formsManagerCreateFormButton "新建表单键, 位于操作区", {  }, {readonly,static  }, string, "forms-add-form-button" }
+        
+        { CssClassNameHelper, formItemInfoArea "表单项信息区", {  }, { readonly,static }, string, "form-item-infoArea"  }
+        { CssClassNameHelper, formItemOperateArea "表单项操作区", {  }, { readonly,static  }, string, "form-item-operateArea" }
+        { CssClassNameHelper, formItemIDLabel "展示表单id", {  }, { readonly,static }, string, "form-item-id-valueLabel" }
+        { CssClassNameHelper, formItemNameLabel , {  }, { readonly,static }, string, "form-item-name-valueLabel" }
+        { CssClassNameHelper, formItemStatePanel, {  }, { readonly,static }, string, "form-item-statePanel" }
+        { CssClassNameHelper, formItemCreateDateLabel, {  }, { readonly,static }, string, "form-item-dateLabel" }
+        { CssClassNameHelper, formItemEditButton, {  }, { readonly,static }, string, "form-item-editButton" }
+        { CssClassNameHelper, formItemSendButton, {  }, { readonly,static }, string, "form-item-sendButton" }
+        { CssClassNameHelper, formItemDeleteButton, {  }, { readonly,static }, string, "form-item-deleteButton" }
+        { CssClassNameHelper, formItemViewResultButton, {  }, {readonly,static  }, string, "form-item-viewResultButton" }
+        { CssClassNameHelper, formItemStatisticsButton, {  }, { readonly,static }, string, "form-item-statisticsButton" }
+        
+        //创建问卷窗口
+        { CssClassNameHelper, formCreateDialog, {  }, { readonly,static }, string, "form-create-dialog" }
+        { CssClassNameHelper, formCreateHeadPanel, {  }, {readonly,static  }, string,  "form-create-headPanel"}
+        { CssClassNameHelper, formCreateBodyPanel, {  }, {readonly,static  }, string, "form-create-bodyPanel" }
+        { CssClassNameHelper, formCreateContentPanel, {  }, {readonly,static  }, string,  "form-create-contentPanel"}
+        { CssClassNameHelper, formCreateOperatePanel, {  }, {readonly,static  }, string, "form-create-operatePanel" }
+        { CssClassNameHelper, formCreateNamePanel, {  }, {readonly,static  }, string, "form-create-namePanel" }
+        { CssClassNameHelper, formCreateNameLabel, {  }, {readonly,static  }, string, "form-create-nameLabel" }
+        { CssClassNameHelper, formCreateNameBox, {  }, {readonly,static  }, string, "form-create-nameBox" }
+        { CssClassNameHelper, formCreateSummaryPanel, {  }, {readonly,static  }, string,  "form-create-summaryPanel"}
+        { CssClassNameHelper, formCreateSummaryLabel, {  }, {readonly,static  }, string,  "form-create-summaryLabel"}
+        { CssClassNameHelper, formCreateSummaryBox, {  }, {readonly,static  }, string, "form-create-summaryBox" }
+        
+        //向外发布的问卷
+        { CssClassNameHelper, publishFormPanel, {  }, { readonly,static }, string, "publish-form-panel" }
+        { CssClassNameHelper, publishFormHeadPanel, {  }, { readonly,static }, string, "publish-form-headPanel" }
+        { CssClassNameHelper, publishFormNamePanel, {  }, { readonly,static }, string, "publish-form-namePanel" }
+        { CssClassNameHelper, publishFormSummaryPanel, {  }, {readonly,static  }, string, "publish-form-summaryPanel" }
+        { CssClassNameHelper, publishFormSummaryPanelInner, {  }, {readonly,static  }, string, "publish-form-summaryPanel-inner" }
+        { CssClassNameHelper, publishFormSummaryLabelInner, {  }, {readonly,static  }, string, "publish-form-summaryLabel-inner" }
+        { CssClassNameHelper, publishFormContentPanel, {  }, { readonly,static }, string, "publish-form-contentPanel" }
+        { CssClassNameHelper, publishFormOperatePanel, {  }, { readonly,static }, string, "publish-form-operatePanel" }
+        { CssClassNameHelper, publishFormNameLabel, {  }, { readonly,static }, string, "publish-form-nameLabel" }
+        { CssClassNameHelper, publishFormSummaryLabel, {  }, { readonly,static }, string, "publish-form-summaryLabel" }
+        { CssClassNameHelper, publishFormSubmitButton, {  }, { readonly,static }, string, "publish-form-submitButton" }
+        { CssClassNameHelper, publishFormCancelButton, {  }, { readonly,static }, string, "publish-form-cancelButton" }
+        
+        
+        //向外发布的问卷字段项
+        { CssClassNameHelper, publishFieldTitlePanel, {  }, { readonly,static }, string, "publish-field-titlePanel" }
+        { CssClassNameHelper, publishFieldOrderLabel, {  }, { readonly,static }, string, "publish-field-orderLabel" }
+        { CssClassNameHelper, publishFieldTitleLabel, {  }, { readonly,static }, string, "publish-field-titleLabel" }
+        { CssClassNameHelper, publishFieldNotNullLabel, {  }, { readonly,static }, string, "publish-field-notNullLabel" }
+        { CssClassNameHelper, publishFieldSummaryPanel, {  }, {readonly,static  }, string, "publish-field-summaryPanel" }
+        { CssClassNameHelper, publishFieldSummaryLabel, {  }, {readonly,static  }, string, "publish-field-summaryLabel" }
+        { CssClassNameHelper, publishFieldContentPanel, {  }, { readonly,static }, string, "publish-field-contentPanel" }
+        { CssClassNameHelper, publishFieldFieldPanel, {  }, {readonly,static  }, string, "publish-field-fieldPanel" }
+        { CssClassNameHelper, publishFieldMessageLabel, {  }, { readonly,static }, string, "publish-field-messageLabel" }
+        { CssClassNameHelper, publishFieldNotNull, {  }, { readonly,static }, string, "publish-field-not-null" }
+        
+        //问卷结果
+        { CssClassNameHelper, resultsPanel, {  }, { readonly,static }, string, "results-panel" }
+        { CssClassNameHelper, resultsHeadPanel, {  }, {readonly,static  }, string, "results-head-panel" }
+        { CssClassNameHelper, resultsContentPanel, {  }, {readonly,static  }, string, "results-content-panel" }
+        { CssClassNameHelper, resultsTitleLabel, {  }, {readonly,static  }, string, "results-title-label" }
+        { CssClassNameHelper, resultsSummaryLabel, {  }, {readonly,static  }, string, "results-summary-label" }
+        { CssClassNameHelper, resultPanel, {  }, { readonly,static }, string, "result-panel" }
+        { CssClassNameHelper, resultHeadPanel, {  }, { readonly,static }, string, "result-head-panel" }
+        { CssClassNameHelper, resultHeadLabel, {  }, { readonly,static }, string, "result-head-label" }
+        { CssClassNameHelper, resultContentPanel, {  }, { readonly,static }, string, "result-content-panel" }
+        { CssClassNameHelper, resultFieldPanel, {  }, { readonly,static }, string, "result-field-panel" }
+        { CssClassNameHelper, resultFieldNameLabel, {  }, { readonly,static }, string, "result-field-nameLabel" }
+        { CssClassNameHelper, resultFieldValueLabel, {  }, { readonly,static }, string, "result-field-valueLabel" }
+        
+        //问卷统计
+        { CssClassNameHelper, analyzeFieldSelector, {  }, { readonly,static }, string, "analyzer-fieldSelector" }
+        { CssClassNameHelper, analyzerChartSelector, {  }, { readonly,static }, string,  "analyzer-ChartSelector"}
+        { CssClassNameHelper, analyzerChartCreateButton, {  }, { readonly,static }, string, "analyzer-chart-createButton" }
+        { CssClassNameHelper, analyzerFieldButtonContainer, {  }, { readonly,static }, string, "analyzer-field-buttonContainer" }
+        { CssClassNameHelper, analyzerFieldAddButton, {  }, { readonly,static }, string, "analyzer-field-addButton" }
+        { CssClassNameHelper, analyzerFieldDisplayButton, {  }, { readonly,static }, string, "analyzer-field-displayButton" }
+        { CssClassNameHelper, analyzerFieldDeleteButton, {  }, { readonly,static }, string, "analyzer-field-deleteButton" }
+        { CssClassNameHelper, analzyerFormInfoArea, {  }, { readonly,static }, string, "analyzer-form-infoArea" }
+        { CssClassNameHelper, analyzerChartContainer, {  }, { readonly,static }, string, "analyzer-chart-container" }
+        { CssClassNameHelper, analyzerChartCanvas, {  }, { readonly,static }, string, "analyzer-chart-canvas" }
+        //{ CssClassNameHelper, , {  }, { readonly,static }, string,  }
+        //{ CssClassNameHelper, , {  }, { readonly,static }, string,  }
+        
+        //初始页面
+        { CssClassNameHelper, indexUserMenuBar, {  }, { readonly,static }, string, "index-user-MenuBar" }
+        
+        
+    }
+}

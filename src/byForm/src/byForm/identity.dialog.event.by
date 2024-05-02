@@ -1,0 +1,31 @@
+﻿ku byForm
+{
+    system biao identity.dialog.event "身份窗体事件表" (
+    string belong "所属类型"
+    , string name "名称"
+    , string[] scenes "场景"
+    , string[] modifiers "修饰符"
+    , string[] parameters "参数")
+    {
+        //{ structureForm.manage, myEvent, {  }, {  }, {  } }
+        { form.manage, formNameClick, {  }, {  }, {Object sender,EventArgs args  } }
+        { form.manage, saveButtonClick, {  }, {  }, { Object sender,EventArgs args } }
+        { form.manage, modified, {  }, {  }, {  } }
+        
+        { form.manage, insertFormRow, {  }, {  }, {Object sender,EventArgs args  } }
+
+        { form.querySaveDialog, saveButtonClick, {  }, {  }, { Object sender,EventArgs args } }
+        { form.querySaveDialog, notSaveButtonClick, {  }, {  }, { Object sender,EventArgs args } }
+        { form.querySaveDialog, cancelButtonClick, {  }, {  }, {Object sender,EventArgs args  } }
+        
+        { form.queryDeleteDialog, deleteButtonClick, {  }, {  }, {Object sender,EventArgs args  } }
+        { form.queryDeleteDialog, cancelButtonClick, {  }, {  }, { Object sender,EventArgs args } }
+        
+        { form.queryExitDialog, exitButtonClick, {  }, {  }, {Object sender,EventArgs args  } }
+        { form.queryExitDialog, cancelButtonClick, {  }, {  }, {Object sender,EventArgs args  } }
+        
+        { form.formCreateDialog, createButtonClick, {  }, {  }, {Object sender,EventArgs args  } }
+        { form.formCreateDialog, cancelButtonClick, {  }, {  }, {Object sender,EventArgs args  } }
+        
+    }
+}

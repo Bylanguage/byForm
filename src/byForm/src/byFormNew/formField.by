@@ -1,0 +1,108 @@
+﻿ku byFormNew
+{
+    data biao formField [primaryKey(iD)] (
+    string iD "编号" [by.identity.ID, notNull, max: 32]
+    , string form "表单ID" [by.identity.Reference, ref: :table form:.iD]
+    , string fieldNO "系统自动编号" [by.identity.Attribute]
+    , string fieldName "字段名" [by.identity.Attribute]
+    , string fieldType "字段类型，int string" [by.identity.Attribute]
+    , ctrType fieldCtrl "显示为文本框、下拉框、单选、多选" [by.identity.Attribute]
+    , string selectValue "单选、多选、下拉列表值" [by.identity.Attribute,max:1024]
+    , int fieldMin "字段最小值" [by.identity.Attribute]
+    , int fieldMax "字段最大值，最大值为 4000即表的最大长度 " [by.identity.Attribute]
+    , string fieldReg "正则验证" [by.identity.Attribute]
+    , string fieldRegMsg "正则验证提示消息文本" [by.identity.Attribute]
+    , string fieldDefault "默认值" [by.identity.Attribute]
+    , int order "排序" [by.identity.Attribute]
+    , bool notNull "必填,true=必填" [by.identity.Attribute]
+    , int vDataValue "数据保存的位置表(vData)ID" [by.identity.Attribute]
+    , string userID "用户ID" [by.identity.Attribute]
+    , string summary "说明" [by.identity.ID, max: 256])
+    {
+        
+        { "sign-0-0", "form-sign-0", "0", "姓名", "string",textbox, "", 0, 64, "^[\u4e00-\u9fa5_a-zA-Z0-9]+$", "仅支持字母、数字及中文", "", 0, true, 0, "", "姓名"}
+        { "sign-0-1", "form-sign-0", "1", "性别", "string",radbutton, "男\n女", 0, 64, "", "", "", 0, true, 0, "", "单选"}
+        { "sign-0-2", "form-sign-0", "2", "年龄", "int",textbox, "", 0, 120, "^[1-9]\\d*$", "年龄应当为正整数", "", 0, true, 0, "", "单行文本"}
+        { "sign-0-3", "form-sign-0", "3", "手机", "string",textbox, "", 0, 64, "(^\\d{11}$)", "非法的手机号码", "", 0, true, 0, "", "电话"}
+        { "sign-0-4", "form-sign-0", "4", "邮箱", "string",textbox, "", 0, 64, "^[\\-_\\w]{1,}@[\\w]{1,}\\.[\\-_\\w\\.]+$", "邮箱格式非法", "", 0, true, 0, "", "邮箱"}
+        { "sign-0-5", "form-sign-0", "5", "身份证号码", "string",textbox, "", 18, 18, "^[1-9]\\d{5}(19|20)\\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\\d|3[01])\\d{3}(\\d|X|x)$", "身份证号格式错误，请输入中国18位身份证号，最后位x不区分大小写", "", 0, true, 0, "", "单行文本"}
+        { "register-0-0", "form-register-0", "0", "姓名", "string",textbox, "", 0, 64, "^[\u4e00-\u9fa5_a-zA-Z0-9]+$", "仅支持字母、数字及中文", "", 0, true, 0, "", "单行文本"}
+        { "register-0-1", "form-register-0", "1", "性别", "string",radbutton, "男\n女", 0, 64, "", "", "", 0, true, 0, "", "单选"}
+        { "register-0-2", "form-register-0", "2", "年龄", "int",textbox, "", 0, 120, "^[1-9]\\d*$", "年龄应当为正整数", "", 0, true, 0, "", "单行文本"}
+        { "register-0-3", "form-register-0", "3", "手机", "string",textbox, "", 0, 64, "(^\\d{11}$)", "非法的手机号码", "", 0, true, 0, "", "电话"}
+        { "register-0-4", "form-register-0", "4", "邮箱", "string",textbox, "", 0, 64, "^[\\-_\\w]{1,}@[\\w]{1,}\\.[\\-_\\w\\.]+$", "邮箱格式非法", "", 0, true, 0, "", "邮箱"}
+        { "collect-0-0", "form-collect-0", "0", "反馈人姓名", "string",textbox, "", 0, 64, "^[^\"\"\"\"]*$", "不能输入单引号 及双引号", "", 0, true, 0, "", "单行文本"}
+        { "collect-0-1", "form-collect-0", "1", "联系电话", "string",textbox, "", 0, 64, "(^\\d+[\\-]\\d{5,11}$)|(^\\d{11}$)", "非法的手机号或固定电话号码", "", 0, false, 0, "", "电话"}
+        { "collect-0-2", "form-collect-0", "2", "反馈内容", "string",muiltTextbox, "", 0, 1000, "^[^\"\"]*$", "不能输入单引号", "", 0, true, 0, "", "多行文本"}
+        { "appointment-0-0", "form-appointment-0", "0", "预约人姓名", "string",textbox, "", 0, 64, "^[\u4e00-\u9fa5_a-zA-Z0-9]+$", "仅支持字母、数字及中文", "", 0, true, 0, "", "姓名"}
+        { "appointment-0-1", "form-appointment-0", "1", "预约人部门", "string",dropdownList, "开发部\n研发部\n销售部\n人事部", 0, 64, "", "", "", 0, true, 0, "", "下拉"}
+        { "appointment-0-2", "form-appointment-0", "2", "会议主题", "string",textbox, "", 0, 64, "^[^\"\"\"\"]*$", "不能输入单引号 及双引号", "", 0, true, 0, "", "单行文本"}
+        { "appointment-0-3", "form-appointment-0", "3", "会议开始时间", "string",dateTimePicker, "", 0, 64, "", "", "", 0, true, 0, "", "日期时间"}
+        { "appointment-0-4", "form-appointment-0", "4", "会议持续时间", "string",dropdownList, "30分钟\n1小时\n2小时\n3小时", 0, 64, "", "", "", 0, true, 0, "", "下拉"}
+        { "appointment-0-5", "form-appointment-0", "5", "参会人数", "int",textbox, "", 1, 3000, "^[1-9]\\d*$", "请输入正整数", "", 0, true, 0, "", "单行文本"}
+        { "appointment-0-6", "form-appointment-0", "6", "备注信息", "string",muiltTextbox, "", 0, 64, "^[^\"\"]*$", "不能输入单引号", "", 0, true, 0, "", "多行文本"}
+        { "order-0-0", "form-order-0", "0", "客户姓名", "string",textbox, "", 0, 64, "^[\u4e00-\u9fa5_a-zA-Z0-9]+$", "仅支持字母、数字及中文", "", 0, true, 0, "", "姓名"}
+        { "order-0-1", "form-order-0", "1", "联系电话", "string",textbox, "", 0, 64, "(^\\d+[\\-]\\d{5,11}$)|(^\\d{11}$)", "非法的手机号或固定电话号码", "", 0, true, 0, "", "电话"}
+        { "order-0-2", "form-order-0", "2", "订购产品名称", "string",dropdownList, "产品A\n产品B\n产品C", 0, 64, "", "", "", 0, true, 0, "", "下拉"}
+        { "order-0-3", "form-order-0", "3", "订购数量", "int",textbox, "", 1, 500000, "^[1-9]\\d*$", "订购数量需要为正整数", "", 0, true, 0, "", "单行文本"}
+        { "order-0-4", "form-order-0", "4", "收货地址", "string",muiltTextbox, "", 0, 64, "^[^\"\"\"\"]*$", "不能输入单引号 及双引号", "", 0, true, 0, "", "地址"}
+        { "order-0-5", "form-order-0", "5", "付款方式", "string",dropdownList, "微信支付\n支付宝\n信用卡", 0, 64, "", "", "", 0, true, 0, "", "下拉"}
+        //{ "order-0-6", "form-order-0", "6", "订单编号", "string",textbox, "", 0, 64, "^[^\"\"\"\"]*$", "不能输入单引号 及双引号", "", 0, true, 0, "", "单行文本"}
+        { "statistics-0-0", "form-statistics-0", "0", "姓名", "string",textbox, "", 0, 64, "^[\u4e00-\u9fa5_a-zA-Z0-9]+$", "不能输入单引号 及双引号", "", 0, true, 0, "", "单行文本"}
+        { "statistics-0-1", "form-statistics-0", "1", "性别", "string",radbutton, "男\n女", 0, 64, "", "", "", 0, true, 0, "", "单选"}
+        { "statistics-0-2", "form-statistics-0", "2", "年龄", "int",textbox, "", 0, 120, "^[1-9]\\d*$", "年龄应当为正整数", "", 0, true, 0, "", "单行文本"}
+        { "statistics-0-3", "form-statistics-0", "3", "身高(cm)", "int",textbox, "", 50, 250, "^[1-9]\\d*$", "年龄应当为正整数", "", 0, true, 0, "", "单行文本"}
+        { "statistics-0-4", "form-statistics-0", "4", "体重(kg,取整数)", "int",textbox, "", 0, 250, "^[1-9]\\d*$", "体重请取正整数", "", 0, true, 0, "", "单行文本"}
+        { "statistics-0-5", "form-statistics-0", "5", "健康状况", "string",dropdownList, "健康\n良好\n不良", 0, 64, "", "", "", 0, true, 0, "", "下拉"}
+        { "statistics-0-6", "form-statistics-0", "6", "运动频率 ", "string",dropdownList, "每天\n经常\n偶尔\n从不", 0, 64, "", "", "", 0, true, 0, "", "下拉"}
+        { "statistics-0-7", "form-statistics-0", "7", "球类爱好", "string",checkBoxList, "篮球\n足球\n羽毛球\n乒乓球\n排球\n棒球\n台球", -1,-1, "", "", "", 0, true, 0, "", "多选"}
+        
+    }
+
+    config biao formField.source "数据源配置表。必须配置 SQL 后才有效，例 select [config 配置名], a.* from this, 直接写 select a.* from this 则相关配置无效" (
+    string name "名称"
+    , string mode "模式"
+    , string[] actions "动作"
+    , string fieldAccess "字段访问"
+    , string[] settings "设置")
+    {
+        { iD, user, { select, insert }, iD, { name: "iD", text: "编号" } } 
+        { form, user, { insert, delete, update, select }, form, { name: "form", text: "表单ID" } }
+        { fieldNO, user, { insert, delete, update, select }, fieldNO, { name: "fieldNO", text: "系统自动编号" } }
+        { fieldName, user, { insert, delete, update, select }, fieldName, { name: "fieldName", text: "字段名" } }
+        { fieldType, user, { insert, delete, update, select }, fieldType, { name: "fieldType", text: "字段类型，int string" } }
+        { fieldCtrl, user, { insert, delete, update, select }, fieldCtrl, { name: "fieldCtrl", text: "显示为文本框、下拉框、单选、多选" } }
+        { selectValue, user, { insert, delete, update, select }, selectValue, { name: "fieldDropDown", text: "单选、多选、下拉列表值" } }
+        { fieldMin, user, { insert, delete, update, select }, fieldMin, { name: "fieldMin", text: "字段最小值" } }
+        { fieldMax, user, { insert, delete, update, select }, fieldMax, { name: "fieldMax", text: "字段最大值，最大值为 4000即表的最大长度 " } }
+        { fieldReg, user, { insert, delete, update, select }, fieldReg, { name: "fieldReg", text: "正则验证" } }
+        { fieldRegMsg, user, { insert, delete, update, select }, fieldRegMsg, { name: "fieldRegMsg", text: "正则验证提示消息文本" } }
+        { fieldDefault, user, { insert, delete, update, select }, fieldDefault, { name: "fieldDefault", text: "默认值" } }
+        { vDataValue, user, { insert, delete, update, select }, vDataValue, { name: "toDateTableID", text: "数据保存的位置表(vData)ID" } }
+        { userID, user, { insert, delete, update, select }, userID, { name: "userID", text: "用户ID" } }
+        { summary, user, { select, insert }, summary, { name: "summary", text: "说明" } }
+        { order "获取目标表的一个自增长编号, 可以选择增长值", server, { insert, delete, update, select }, order, { name: "order", text: "排序", value: System.autoID(this, 1) } }
+        { notNull, client, { insert, delete, update, select }, notNull, { name: "notNull", text: "必填,true=必填", value: new bool[] { true, false } } }
+    }
+
+    config biao formField.flow "数据流配置表" (
+    string name "名称"
+    , string action "动作"
+    , string[] sources "数据源(source.name)")
+    {
+        { insert, insert, { iD, fieldNO, fieldName, fieldType, fieldCtrl, selectValue, fieldMin, fieldMax, fieldReg, fieldRegMsg, fieldDefault, vDataValue, form, userID, summary, order, notNull } }
+        { update, update, { fieldNO, fieldName, fieldType, fieldCtrl, selectValue, fieldMin, fieldMax, fieldReg, fieldRegMsg, fieldDefault, vDataValue, form, userID, order, notNull } }
+        { delete, delete, { iD, summary } }
+        { select, select, { iD, fieldNO, fieldName, fieldType, fieldCtrl, selectValue, fieldMin, fieldMax, fieldReg, fieldRegMsg, fieldDefault, vDataValue, form, userID, summary, order, notNull } }
+        { popup, select, { iD, form, userID, summary, order, notNull } }
+    }
+
+    config biao formField.control "控件配置表" (
+    string name "名称"
+    , string[] types "控件类型"
+    , string[] sources "数据源(source.name)")
+    {
+        { edit, { Grid, EditArea }, { fieldNO, fieldName, fieldType, fieldCtrl, selectValue, fieldMin, fieldMax, fieldReg, fieldRegMsg, fieldDefault, vDataValue, form, userID, summary, order, notNull } }
+        { popup, { Grid, QueryArea }, { iD, form, userID, summary, order, notNull } }
+    }
+}

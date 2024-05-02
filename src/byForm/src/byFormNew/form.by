@@ -1,0 +1,61 @@
+﻿ku byFormNew
+{
+    data biao form [primaryKey(iD)] (
+    string iD "编号" [by.identity.ID, notNull, max: 32]
+    , string name "表单名称" [by.identity.Name, notNull]
+    , string successMsg "用户保存成功后提示消息" [by.identity.Attribute, default: "谢谢，我们会尽快处理！"]
+    , string submitButton "提交按钮的文本说明" [by.identity.Attribute, default: "确认提交"]
+    , string summary "说明" [by.identity.ID, notNull, max: 256]
+    , string userID "用户ID" [by.identity.Attribute, ref: user.ID]
+    , datetime createDt "创建时间" [by.identity.Attribute]
+    , datetime currentModifyDt "最后修改时间" [by.identity.Attribute]
+    )
+    {
+        { "form-sign-0", "在线报名", "已收到您的报名信息，我们将在7个工作日内给您反馈！", "确认报名", "", "", "2024-04-28", "2024-04-28" }
+        { "form-register-0", "在线登记", "感谢！已收到您的登记信息。", "确认登记", "", "", "2024-04-28", "2024-04-28" }
+        { "form-collect-0", "意见反馈", "感谢您的宝贵意见,我们会尽快处理！", "确认提交", "", "", "2024-04-28", "2024-04-28" }
+        { "form-appointment-0", "会议预约", "已收到您的预约信息，我们将尽快给您反馈！", "确认预约", "", "", "2024-04-28", "2024-04-28" }
+        { "form-order-0", "在线订单", "谢谢,我们会尽快与您联系！", "确认订购", "", "", "2024-04-28", "2024-04-28" }
+        { "form-statistics-0", "调查统计", "收到，感谢您的参与", "确认提交", "", "", "2024-04-28", "2024-04-28" }
+        
+        
+    }
+
+    config biao form.source "数据源配置表。必须配置 SQL 后才有效，例 select [config 配置名], a.* from this, 直接写 select a.* from this 则相关配置无效" (
+    string name "名称"
+    , string mode "模式"
+    , string[] actions "动作"
+    , string fieldAccess "字段访问"
+    , string[] settings "设置")
+    {
+        { iD, user, { select, insert }, iD, { name: "iD", text: "编号" } }
+        { name, user, { insert, delete, update, select }, name, { name: "name", text: "表单名称" } }
+        { successMsg, user, { insert, delete, update, select }, successMsg, { name: "successMsg", text: "用户保存成功后提示消息" } }
+        { submitButton, user, { insert, delete, update, select }, submitButton, { name: "submitButton", text: "提交按钮的文本说明" } }
+        { summary, user, { insert, delete, update, select }, summary, { name: "summary", text: "说明" } }
+        { userID, user, { insert, delete, update, select }, userID, { name: "userID", text: "用户ID" } }
+        { createDt, server, { select }, createDt, { name: "createDt", text: "创建时间", value: datetime.getNow() } }
+        { currentModifyDt, server, { select }, currentModifyDt, { name: "currentModifyDt", text: "最后修改时间", value: datetime.getNow() } }
+    }
+
+    config biao form.flow "数据流配置表" (
+    string name "名称"
+    , string action "动作"
+    , string[] sources "数据源(source.name)")
+    {
+        { insert, insert, { iD, name, successMsg, submitButton, summary, userID,createDt,currentModifyDt } }
+        { update, update, { name, successMsg, submitButton, summary, userID,currentModifyDt } }
+        { delete, delete, { iD } }
+        { select, select, { iD, name, successMsg, submitButton, summary, userID,createDt,currentModifyDt } }
+        { popup, select, { iD, name } }
+    }
+
+    config biao form.control "控件配置表" (
+    string name "名称"
+    , string[] types "控件类型"
+    , string[] sources "数据源(source.name)")
+    {
+        { edit, { Grid, EditArea }, { name, successMsg, submitButton, summary, userID,currentModifyDt } }
+        { popup, { Grid, QueryArea }, { iD, name } }
+    }
+}

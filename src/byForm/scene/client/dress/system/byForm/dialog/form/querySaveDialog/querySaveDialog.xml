@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <dialog ClassAndFileName="querySaveDialog" ku="byForm" identity="form" dialog="querySaveDialog" path="byForm\dialog\form\querySaveDialog" namespace="byForm.dress.form">
+    <field name="textLabel" alias="textLabel" />
+    <field name="buttonContainer" alias="buttonContainer" />
+    <field name="saveButton" alias="saveButton" />
+    <field name="notSaveButton" alias="notSaveButton" />
+    <field name="cancelButton" alias="cancelButton" />
+  </dialog>
+</root>

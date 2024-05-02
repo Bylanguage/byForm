@@ -1,0 +1,76 @@
+﻿ku byForm
+{
+    system biao identity.dialog.property "身份窗体属性表" (
+    string belong "所属类型"
+    , string name "名称"
+    , string[] scenes "场景"
+    , string[] modifiers "修饰符"
+    , string type "类型"
+    , OBJECT value "值")
+    {
+        { form.manage, mainPanel "容纳全部的面板", {  }, {  }, Panel, new Panel() }
+        { form.manage, formManage "容纳三个面板的总面板", {  }, {  }, Panel, new Panel() }
+        { form.manage, cFieldTemplatePanel"模板列" , {  }, {  },Panel  , new Panel() }
+        { form.manage, cFormPanel "中间的整个面板", {  }, {  }, Panel, new Panel(){scrollable=false} }
+        { form.manage, cFormNamePanel "表单名称面板", {  }, {  }, Panel, new Panel(){scrollable=false} }
+        { form.manage, cFormNameValueLabel "当前编辑表单的名称", {  }, {  }, Label, new Label(){toolTip=TextHelper.formNameEditTip} }
+        { form.manage, cFieldPanel "字段" , {  }, {  }, Panel ,new Panel(){paddingBottom=ValueHelper.cFieldPanelPaddingBottom}  }
+        { form.manage, cDetailPanel "明细数据" , {  }, {  }, Panel , new Panel() }
+        
+        { form.manage, buttonContainer, {  }, {  }, Panel,new Panel()  }
+        { form.manage, saveButton "表单保存键", {  }, {  }, Button, new Button(){text = TextHelper.saveForm} }
+        { form.manage, previewButton "表单预览键", {  }, {  }, Button, new Button(){text = TextHelper.preview} }
+        { form.manage, publishButton "表单发布键", {  }, {  }, Button, new Button(){text=TextHelper.publish} }
+        
+        { form.manage, formRow, {  }, {  }, Row~form,  }
+        { form.manage, editorManager, {  }, {  }, EditorManager, new EditorManager() }
+        { form.manage, isModified, {  }, {  }, bool, false }
+        { form.manage, cFieldInfos, {  }, {  }, List<Row~formField>, new List<Row~formField>() }
+    
+        { form.querySaveDialog, textLabel , {  }, { private }, Label, new Label(){text=TextHelper.querySave} }
+        { form.querySaveDialog, buttonContainer, {  }, {private  }, Panel, new Panel(){} }
+        { form.querySaveDialog, saveButton, {  }, { private }, Button, new Button(){text=TextHelper.save} }
+        { form.querySaveDialog, notSaveButton, {  }, { private }, Button,new Button(){text=TextHelper.notSave}  }
+        { form.querySaveDialog, cancelButton, {  }, {private  }, Button, new Button(){text=TextHelper.cancel} }
+
+        { form.queryDeleteDialog, textLabel, {  }, {private  }, Label,new Label(){text=TextHelper.queryDeleteField}  }
+        { form.queryDeleteDialog, buttonContainer, {  }, {private  }, Panel, new Panel() }
+        { form.queryDeleteDialog, deleteButton, {  }, { private }, Button,new Button(){text=TextHelper.delete}  }
+        { form.queryDeleteDialog, cancelButton, {  }, { private }, Button,new Button(){text=TextHelper.cancel}  }
+        
+        { form.queryExitDialog, textLabel "退出窗体文本标签", {  }, {private  }, Label, new Label(){text=TextHelper.formSaveSuccessMessage} }
+        { form.queryExitDialog, buttonContainer "退出窗体按键容器", {  }, { private }, Panel, new Panel() }
+        { form.queryExitDialog, exitButton "退出窗体退出键", {  }, {private  }, Button, new Button(){text=TextHelper.exit} }
+        { form.queryExitDialog, cancelButton "退出窗体取消键", {  }, { private }, Button, new Button(){text=TextHelper.cancel} }
+
+        { form.displayDialog, displayPanel "展示表单容器", {  }, {  }, Panel, new Panel() }
+        
+        { form.formsManager, mainPanel "容纳全部的面板", {  }, {  }, Panel, new Panel() }
+        { form.formsManager, operateArea "左侧操作栏", {  }, {  }, Panel, new Panel(){} }
+        { form.formsManager, displayArea "表单展示栏", {  }, {  }, Panel, new Panel() }
+        { form.formsManager, formsHeader "表单列表标题栏", {  }, {  }, Panel, new Panel() }
+        { form.formsManager, formListLabel "表单列表标签", {  }, {  }, Label, new Label(){text=TextHelper.formListLabelText} }
+        { form.formsManager, formListPanel "表单列表", {  }, {  }, Panel, new Panel() }
+        { form.formsManager, createFormButton "创建表单键", {  }, {  }, Button, new Button(){text=TextHelper.createFormButtonText}  }
+        
+        { form.formCreateDialog, headPanel "标题面板", {  }, { private }, Panel, new Panel() }
+        { form.formCreateDialog, headLabel "标题标签", {  }, { private }, Label, new Label(){text=TextHelper.createFormButtonText} }
+        { form.formCreateDialog, bodyPanel "主体面板", {  }, { private }, Panel, new Panel() }
+        { form.formCreateDialog, contentPanel "内容面板", {  }, { private }, Panel, new Panel() }
+        { form.formCreateDialog, namePanel "表单标题名称面板", {  }, {private }, Panel ,new Panel()  }
+        { form.formCreateDialog, nameLabel "表单标题名称标签", {  }, { private }, Label, new Label(){text=TextHelper.formName} }
+        { form.formCreateDialog, nameInputBox "表单标题名称输入", {  }, { private }, TextBox,new TextBox(){}  }
+        { form.formCreateDialog, summaryPanel "表单说明面板", {  }, {private  }, Panel, new Panel() }
+        { form.formCreateDialog, summaryLabel "表单说明标签", {  }, { private }, Label, new Label(){text=TextHelper.summary} }
+        { form.formCreateDialog, summaryInputBox "表单说明输入", {  }, { private }, TextBox, new TextBox(){isMultiLine=true,width=ValueHelper.summaryInputBoxWidth,height=ValueHelper.summaryInputBoxHeight} }
+        { form.formCreateDialog, buttonContainer "按键容器", {  }, { private }, Panel, new Panel(){} }
+        { form.formCreateDialog, createButton "创建-按钮", {  }, { private }, Button, new Button(){text=TextHelper.createButtonText} }
+        { form.formCreateDialog, cancelButton "取消-按钮", {  }, { private }, Button, new Button(){text=TextHelper.cancel} }
+        
+        { form.publishDialog, saasPanel "展示saas代码的面板", {  }, { private }, Panel, new Panel(){} }
+        { form.publishDialog, saasSamplePanel "saas示例面板", {  }, { private }, Panel, new Panel() }
+        
+        
+        { form.publishDialog, urlLabel, {  }, { private }, Label, new Label() }
+    }
+}

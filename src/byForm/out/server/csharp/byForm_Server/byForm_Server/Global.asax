@@ -1,0 +1,1 @@
+<%@ Application Codebehind="Global.asax.cs" Inherits="byForm_Server.Global" Language="C#" %>

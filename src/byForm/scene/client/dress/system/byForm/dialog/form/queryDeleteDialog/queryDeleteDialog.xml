@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <dialog ClassAndFileName="queryDeleteDialog" ku="byForm" identity="form" dialog="queryDeleteDialog" path="byForm\dialog\form\queryDeleteDialog" namespace="byForm.dress.form">
+    <field name="textLabel" alias="textLabel" />
+    <field name="buttonContainer" alias="buttonContainer" />
+    <field name="deleteButton" alias="deleteButton" />
+    <field name="cancelButton" alias="cancelButton" />
+  </dialog>
+</root>

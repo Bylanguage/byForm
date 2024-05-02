@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <dialog ClassAndFileName="manage" ku="byBase" identity="Tree" dialog="manage" path="byBase\dialog\Tree\manage" namespace="byBase.dress.Tree">
+    <field name="cTree" alias="cTree" />
+    <field name="cEditArea" alias="cEditArea" />
+    <field name="cBtnAdd" alias="cBtnAdd" />
+    <field name="cBtnDelete" alias="cBtnDelete" />
+    <field name="cBtnModify" alias="cBtnModify" />
+    <field name="cBtnSave" alias="cBtnSave" />
+    <field name="cBtnCancel" alias="cBtnCancel" />
+  </dialog>
+</root>

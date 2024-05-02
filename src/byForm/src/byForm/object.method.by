@@ -1,0 +1,1582 @@
+﻿ku byForm
+{
+    system biao object.method "面向对象方法表" (
+    string belong "所属类型"
+    , string name "名称"
+    , string[] scenes "场景"
+    , string[] modifiers "修饰符"
+    , string[] parameters "参数"
+    , string returnType "返回类型"
+    , string body "方法体")
+    {
+        //问卷设计页面的问卷字段项
+        { FieldTermPanel, FieldTermPanel, , {  }, {Row~formField row,bool isAllInit}, , {
+            this.fieldInfo = row;
+            this.add(this.fieldTermOrderLabel);
+            this.add(this.fieldTermLabel);
+            this.GenerateFieldTermDisplayArea(isAllInit);
+            this.add(this.fieldTermDisplayArea);
+            this.fieldTermEditArea.add(this.editButton);
+            this.fieldTermEditArea.add(this.deleteButton);
+            this.add(this.fieldTermEditArea);
+
+            //在这里对字段项添加样式
+            scene(web){
+                
+                this.element.addClass(CssClassNameHelper.generalFieldPanel);
+                this.fieldTermOrderLabel.element.addClass(CssClassNameHelper.generalFieldOrderLabel);
+                this.fieldTermLabel.element.addClass(CssClassNameHelper.generalFieldTitleLabel);
+                this.fieldTermDisplayArea.element.addClass(CssClassNameHelper.generalFieldDisplayArea);
+                this.fieldTermEditArea.element.addClass(CssClassNameHelper.generalFieldEditArea);
+                this.coreControl.element.addClass(CssClassNameHelper.generalFieldCoreControl);
+                this.editButton.element.addClass(CssClassNameHelper.generalFieldEditButton);
+                this.deleteButton.element.addClass(CssClassNameHelper.generalFieldDeleteButton);
+                /*
+                //对不同控件分别的样式
+                this.element.addClass(this.fieldInfo.iFieldCtrl.toString()+"-field-panel");
+                this.fieldTermLabel.element.addClass(this.fieldInfo.iFieldCtrl.toString()+"-field-titleLabel");
+                this.fieldTermDisplayArea.element.addClass(this.fieldInfo.iFieldCtrl.toString()+"-field-displayArea");
+                this.fieldTermEditArea.element.addClass(this.fieldInfo.iFieldCtrl.toString()+"-field-editArea");
+                this.coreControl.element.addClass(this.fieldInfo.iFieldCtrl.toString()+"-field-coreControl");
+                this.editButton.element.addClass(this.fieldInfo.iFieldCtrl.toString()+"-field-editButton");
+                this.deleteButton.element.addClass(this.fieldInfo.iFieldCtrl.toString()+"-field-deleteButton");
+                */
+            };
+            this.setOrder(int.parse(this.fieldInfo.iFieldNO)+1);
+            
+            this.fieldTermLabel.text = this.fieldInfo.iFieldName.toString();
+            this.allowDrag = true;
+            this.allowDrop = true;
+            this.fieldTermLabel.click += (Object sender,EventArgs args){
+                this.generalClick(this,args);
+            };
+            this.fieldTermDisplayArea.click += (Object sender,EventArgs args){
+                this.generalClick(this,args);
+            };
+            this.click += (Object sender,EventArgs args){
+                this.generalClick(this,args);
+            };
+            this.editButton.click += (Object sender,EventArgs args){
+                this.generalClick(this,args);
+            };
+            this.deleteButton.click +=(Object sender, EventArgs args){
+                this.deleteButtonClick(this,args);
+            };
+            this.fieldTermEditArea.click +=(Object sender, EventArgs args){
+                this.generalClick(this,args);
+            };
+            
+        } }
+        { FieldTermPanel, GenerateFieldTermDisplayArea, , {  },{bool isAllInit  }, void, {
+            
+            if(isAllInit){
+                this.coreControl = generateCoreControl();
+            }
+            else{
+                this.coreControl = buildCoreControlFromFieldInfo();
+            }
+            this.coreControl.toolTip = this.fieldInfo.iSummary;
+            this.coreControl.click += (Object sender,EventArgs args){
+                this.generalClick(this,args);
+            };
+        
+            this.fieldTermDisplayArea.add(coreControl);
+        } }
+        { FieldTermPanel, generateControlField, {  }, { static }, {  Row~formField fieldRow }, Row~formField, {
+            switch(fieldRow.iFieldCtrl)
+            {
+                case ctrType.textbox:{
+                    fieldRow.iFieldType = "string";
+                    fieldRow.iFieldDefault = TextHelper.defaultTextboxText;
+                    return fieldRow;
+                }
+                case ctrType.checkBox:{
+                    fieldRow.iSelectValue = TextHelper.defaultCheckItem;
+                    return fieldRow;
+                }
+                case ctrType.dropdownList:{
+                    fieldRow.iSelectValue = TextHelper.defaultSelectValues;
+                    return fieldRow;
+                }
+                case ctrType.muiltTextbox:{
+                    fieldRow.iFieldType = "string";
+                    fieldRow.iFieldDefault = TextHelper.defaultTextboxText;
+                    return fieldRow;
+                }
+                case ctrType.radbutton:{
+                    fieldRow.iSelectValue =  TextHelper.defaultSelectValues;
+                    return fieldRow;
+                }
+                case ctrType.slider:{
+                    fieldRow.iSelectValue = TextHelper.defaultSliderSelectValue;
+                    return fieldRow;
+                }
+                case ctrType.checkBoxList:{
+                    fieldRow.iSelectValue = TextHelper.defaultSelectValues;
+                    fieldRow.iFieldMin = ValueHelper.defaultCheckBoxListMin;
+                    fieldRow.iFieldMax = ValueHelper.defaultCheckBoxListMax;
+                    return fieldRow;
+                }
+                case ctrType.datePicker:
+                case ctrType.timePicker:
+                case ctrType.dateTimePicker:
+                {
+                    return fieldRow;
+                }
+                default:{
+                    throw new Exception(TextHelper.unexpectedControl);
+                }   
+            }
+        } }
+        
+        { FieldTermPanel, generateCoreControl, {  }, {  }, {  }, Control, {
+            switch(this.fieldInfo.iFieldCtrl)
+            {
+                case ctrType.textbox:{
+                    this.fieldInfo.iFieldType = "string";
+                    this.text = this.fieldInfo.iFieldDefault;
+                    return new TextBox();
+                }
+                case ctrType.checkBox:{
+                    this.fieldInfo.iSelectValue = TextHelper.defaultCheckItem;
+                    return new CheckBox(){text=TextHelper.defaultCheckItem};
+                }
+                case ctrType.dropdownList:{
+                    this.fieldInfo.iSelectValue = TextHelper.defaultSelectValues;
+                    ComboBox comboBox = new ComboBox();
+                    comboBox.add(TextHelper.defaultCheckItemOne);
+                    comboBox.add(TextHelper.defaultCheckItemTwo);
+                    return comboBox;
+                }
+                case ctrType.muiltTextbox:{
+                    this.fieldInfo.iFieldType = "string";
+                    this.fieldInfo.iFieldDefault = this.fieldInfo.iFieldDefault;
+                    
+                    TextBox multiTextBox = new TextBox(){isMultiLine = true,width=ValueHelper.multiTextboxWidth,height=ValueHelper.multiTextboxHeight};
+                    
+                    return multiTextBox;
+                }
+                case ctrType.radbutton:{
+                    this.fieldInfo.iSelectValue =  TextHelper.defaultSelectValues;
+                    RadioButtonGroup radioButtonGroup = new RadioButtonGroup();
+                    radioButtonGroup.add(new RadioButton(){text=TextHelper.defaultCheckItemOne});
+                    radioButtonGroup.add(new RadioButton(){text=TextHelper.defaultCheckItemTwo});
+                    return radioButtonGroup;
+                }
+                case ctrType.slider:{
+                    this.fieldInfo.iSelectValue = TextHelper.defaultSliderSelectValue;
+                    Slider slider = new Slider(){min=ValueHelper.defaultSliderMin,max=ValueHelper.defaultSliderMax,delta=ValueHelper.defaultSliderDelta};
+                    return slider;
+                }
+                case ctrType.checkBoxList:{
+                    this.fieldInfo.iSelectValue = TextHelper.defaultSelectValues;
+                    this.fieldInfo.iFieldMin = ValueHelper.defaultCheckBoxListMin;
+                    this.fieldInfo.iFieldMax = ValueHelper.defaultCheckBoxListMax;
+                    Panel checkBoxs = new Panel();
+                    checkBoxs.add(new CheckBox(){text=TextHelper.defaultCheckItemOne});
+                    checkBoxs.add(new CheckBox(){text=TextHelper.defaultCheckItemTwo});
+                    return checkBoxs;
+                }
+                case ctrType.datePicker:
+                case ctrType.timePicker:
+                case ctrType.dateTimePicker:
+                {
+                    DateTimePicker dateTimePicker = new DateTimePicker();
+                    Common.setDateTimePickerMode(dateTimePicker,this.fieldInfo.iFieldCtrl);
+                    return new DateTimePicker();
+                }
+                default:{
+                    throw new Exception(TextHelper.unexpectedControl);
+                }   
+            }
+
+        } }
+        { FieldTermPanel, buildCoreControlFromFieldInfo, {  }, {  }, {  }, Control, {
+            ctrType coreControlType = fieldInfo.iFieldCtrl;
+            switch(fieldInfo.iFieldCtrl){
+                case ctrType.textbox:{
+                    return new TextBox();
+                }
+                case ctrType.checkBox:{
+                    return new CheckBox(){text=this.fieldInfo.iSelectValue};
+                }
+                case ctrType.dropdownList:{
+                    ComboBox comboBox = new ComboBox();
+                    foreach(string selectValue in this.fieldInfo.iSelectValue.split('\n'))
+                    {
+                        comboBox.add(selectValue);
+                    }
+                    return comboBox;
+                }
+                case ctrType.muiltTextbox:
+                {
+                    string[] size = this.fieldInfo.iSelectValue.split('\n');
+                    TextBox multiTextBox = new TextBox(){isMultiLine = true,width=400,height=100};
+ 
+                    return multiTextBox;
+                }
+                case ctrType.radbutton:{
+                    RadioButtonGroup radioButtonGroup = new RadioButtonGroup();
+                    foreach(string selectValue in this.fieldInfo.iSelectValue.split('\n'))
+                    {
+                        radioButtonGroup.add(new RadioButton(){text = selectValue});
+                    }
+                    return radioButtonGroup;
+                }
+                case ctrType.slider:{
+                    string[] sliderProperty = this.fieldInfo.iSelectValue.split('\n');
+                    if(sliderProperty.length==3)
+                    {
+                        Slider slider = new Slider();
+                        slider.min = int.parse(sliderProperty[0]);
+                        slider.max = int.parse(sliderProperty[1]);
+                        slider.delta = int.parse(sliderProperty[2]);
+                    }
+                    return new Slider();
+                }
+                case ctrType.checkBoxList:{
+                    Panel checkBoxes = new Panel();
+                    foreach(string selectValue in this.fieldInfo.iSelectValue.split('\n'))
+                    {
+                        checkBoxes.add(new CheckBox(){text = selectValue});
+                    }
+                    return checkBoxes;
+                }
+                case ctrType.datePicker:
+                case ctrType.timePicker:
+                case ctrType.dateTimePicker:
+                {
+                    DateTimePicker dateTimePicker = new DateTimePicker();
+                    Common.setDateTimePickerMode(dateTimePicker,this.fieldInfo.iFieldCtrl);
+                    return dateTimePicker;
+                }
+                default:{
+                    throw new Exception(TextHelper.unexpectedControl);
+                }
+            }
+            return new TextBox();
+        } }
+        { FieldTermPanel, setOrder, {  }, {  }, { int order }, void, {
+            this.fieldTermOrderLabel.text = order.toString()+".";
+        } }
+        
+        //问卷字段编辑区
+        { FieldControlEditor, FieldControlEditor, , { }, {Row~formField  fieldInfo}, , {
+            this.fieldInfo = fieldInfo;
+            this.titleTextBox.text = fieldInfo.iFieldName;
+            this.titleEditor.add(this.titleTextBox);
+            
+            this.add(this.titleEditor);
+            
+
+            if(fieldInfo.iFieldCtrl == ctrType.checkBoxList || fieldInfo.iFieldCtrl == ctrType.radbutton || fieldInfo.iFieldCtrl == ctrType.dropdownList )
+            {
+                this.add(this.contentEditor);
+                this.add(this.contentOperateEditor);
+                this.contentOperateEditor.add(this.addButton);
+            }
+            if(fieldInfo.iFieldCtrl == ctrType.checkBox)
+            {
+                this.add(this.contentEditor);
+            }
+            this.add(this.propertyEditor);
+            this.buildGeneralPropertyEditor();
+            
+            this.saveEditor.add(this.saveButton);
+            this.saveEditor.add(this.closeButton);
+            this.add(this.saveEditor);
+            
+
+            //添加web样式类名
+            scene(web){
+                this.element.addClass(CssClassNameHelper.generalDetail);
+                this.titleEditor.element.addClass(CssClassNameHelper.generalDetailTitleEditor);
+                this.titleTextBox.element.addClass(CssClassNameHelper.generalDetailTitleTextBox);
+                this.contentEditor.element.addClass(CssClassNameHelper.generalDetailContentEditor);
+                this.contentOperateEditor.element.addClass(CssClassNameHelper.generalDetailContentOperateEditor);
+                this.saveButton.element.addClass(CssClassNameHelper.generalDetailSaveButton);
+                this.closeButton.element.addClass(CssClassNameHelper.generalDetailCancelButton);
+                this.addButton.element.addClass(CssClassNameHelper.generalDetailAddButton);
+            }
+            
+            this.addButton.click+=(OBJECT sender, EventArgs args){
+                SelectionData newSelectionData = new SelectionData()
+                {
+                    text = "",
+                    defaultText="选项"+this.getNextSelectionCount().toString(),
+                    order=this.selectionDatas.count
+                    };
+                this.selectionDatas.add(newSelectionData);
+                this.refreshSelectionDatas();
+                this.buildSelectionItems();
+                selectionGrowOnlyCount++;
+                
+                this.addButtonClick(this,args);
+                
+            };
+            this.saveButton.click +=(OBJECT sender, EventArgs args){
+                this.saveButtonClick(this,args);
+            };
+            this.closeButton.click +=(OBJECT sender, EventArgs args){
+                this.cancelButtonClick(this,args);
+            };
+
+        } }
+        { FieldControlEditor, getNextSelectionCount, {  }, {  }, {  }, int, {
+            return Math.max(selectionGrowOnlyCount,this.selectionDatas.count)+1;
+        } }
+        
+        { FieldControlEditor, getEditor, {  }, {static  }, {Row~formField fieldInfo  }, FieldControlEditor, {
+            switch(fieldInfo.iFieldCtrl)
+            {
+                case ctrType.textbox:
+                    return new FieldTextBoxEditor(fieldInfo);
+                case ctrType.checkBox:
+                    return new FieldCheckBoxEditor(fieldInfo);
+                case ctrType.radbutton:
+                    return new FieldRadioButtonGroupEditor(fieldInfo);
+                case ctrType.checkBoxList:
+                    return new FieldCheckBoxListEditor(fieldInfo);
+                case ctrType.dropdownList:
+                    return new FieldComboBoxEditor(fieldInfo);
+                case ctrType.muiltTextbox:
+                    return new FieldMultiTextBoxEditor(fieldInfo);
+                case ctrType.slider:
+                    return new FieldSliderEditor(fieldInfo);
+                case ctrType.datePicker:
+                case ctrType.timePicker:
+                case ctrType.dateTimePicker:
+                    return new FieldDateTimePickerEditor(fieldInfo);
+                default:
+                    throw new Exception(TextHelper.unexpectedControl);
+                    
+            }
+            
+            
+        } }
+        
+        { FieldControlEditor, refreshFieldInfo, {  }, {  }, {  }, Result, {
+            if(this.titleTextBox.text.length>ValueHelper.generalTextMax){
+                return new Result(){isOk=false,info=Common.getLengthMaxError(TextHelper.formName,ValueHelper.generalTextMax)};
+            }
+            int count=1;
+            StringBuilder selectValueBuilder = new StringBuilder();
+            foreach(Control selection in this.contentEditor.children )
+            {
+                string selectionText = (selection as SelectionEditor).getText();
+                if(selectionText.length > ValueHelper.generalTextMax){return new Result(){isOk=false,info=Common.getLengthMaxError("选项名称",ValueHelper.generalTextMax)};}
+                
+                selectValueBuilder.append(selectionText);
+                if(count<this.contentEditor.children.count){selectValueBuilder.append("\n");count++;} //用回车分隔
+            }
+            if(selectValueBuilder.length>ValueHelper.selectionsLengthMax){
+                return new Result(){isOk=false,info=Common.getLengthMaxError("选项名称总",ValueHelper.selectionsLengthMax)};
+            }
+            this.fieldInfo.iFieldName = this.titleTextBox.text;
+            this.fieldInfo.iSelectValue = selectValueBuilder.toString();
+            this.fieldInfo.iNotNull = this.fieldNotNullCheckBox.isChecked;
+            return new Result(){isOk=true};
+        } }
+        { FieldControlEditor, readSelections, {  }, {  }, { string[] selections }, void, {
+            foreach(string selectionText in selections)
+            {
+                SelectionData selectionData = new SelectionData(){text=selectionText,defaultText=selectionText,order=this.selectionDatas.count};
+                this.selectionDatas.add(selectionData);
+            }
+        } }
+        { FieldControlEditor, buildTextPropertyEditor, {  }, {  }, {  }, void, {
+            if(this.fieldInfo.iFieldType == "int"){
+                this.fieldMinPanel.setName(TextHelper.valueMin);
+                this.fieldMaxPanel.setName(TextHelper.valueMax);
+            }
+            this.propertyEditor.add(this.fieldMaxPanel);
+            this.propertyEditor.add(this.fieldMinPanel);
+            this.propertyEditor.add(this.fieldRegPanel);
+            this.propertyEditor.add(this.fieldRegMsgPanel);
+            this.fieldMaxPanel.setValue(this.fieldInfo.iFieldMax);
+            this.fieldMinPanel.setValue(this.fieldInfo.iFieldMin);
+            this.fieldRegPanel.setText(this.fieldInfo.iFieldReg.toString());
+            this.fieldRegMsgPanel.setText(this.fieldInfo.iFieldRegMsg.toString());
+
+            //this.fieldMaxPanel.propertyTextChanged+=(OBJECT sender, EventArgs args){
+            //    this.fieldInfo.iFieldMax = int.parse(this.fieldMaxPanel.getText());
+            //}; 
+            //this.fieldMinPanel.propertyTextChanged+=(OBJECT sender, EventArgs args){
+            //    this.fieldInfo.iFieldMin = int.parse(fieldMinPanel.getText());
+            //};
+            //this.fieldRegPanel.propertyTextChanged+=(OBJECT sender, EventArgs args){
+            //    this.fieldInfo.iFieldReg = fieldRegPanel.getText();
+            //};
+            //this.fieldRegMsgPanel.propertyTextChanged+=(OBJECT sender,EventArgs args){
+            //    this.fieldInfo.iFieldRegMsg = fieldRegMsgPanel.getText();
+            //};
+            
+        } }
+        { FieldControlEditor, buildGeneralPropertyEditor, {  }, {  }, {  }, void, {
+            this.propertyEditor.add(this.fieldNotNullPanel);
+            this.fieldNotNullPanel.add(this.fieldNotNullCheckBox);
+            this.fieldNotNullCheckBox.isChecked = this.fieldInfo.iNotNull;
+        } }
+        { FieldControlEditor, setMessage, {  }, { private }, { string message }, void, {
+            this.messageLabel.remove();
+            this.messageLabel.text = message;
+            this.add(this.messageLabel);
+        } }
+        { FieldControlEditor, clearMessage, {  }, { private }, { string message }, void, {
+            this.messageLabel.text = "";
+            this.messageLabel.remove();
+        } }
+        
+        
+        { FieldControlEditor, buildSelectionItems, {  }, {  }, {   }, void, {
+            this.contentEditor.clear();
+            foreach(SelectionData selectionData in this.selectionDatas)
+            {
+                SelectionEditor selectionEditor = new SelectionEditor(selectionData,this.fieldInfo.iFieldCtrl!=ctrType.checkBox);     
+                selectionEditor.addButtonClick += onSelectionAddButtonClick;
+                selectionEditor.delButtonClick += onSelectionDelButtonClick;
+                selectionEditor.textBoxTextChanged += onSelectionTextChanged;
+                this.contentEditor.add(selectionEditor);
+            }
+        } }
+        { FieldControlEditor, refreshSelectionDatas, {  }, {  }, {  }, void, {
+            int selectionCount = 0;
+            foreach(SelectionData selectionData in this.selectionDatas)
+            {
+                selectionData.order = selectionCount;
+                selectionCount++;
+            }
+        } }
+        { FieldControlEditor, onTitleTextChanged, {  }, {  }, {OBJECT sender,EventArgs args  }, void, {
+            this.fieldInfo.iFieldName = this.titleTextBox.text;
+        } }
+        { FieldControlEditor, onSelectionAddButtonClick, {  }, {  }, {OBJECT sender,EventArgs args  }, void, {
+            SelectionEditor selectionEditor = sender as SelectionEditor;
+            SelectionData newSelectionData = new SelectionData()
+            {
+                text  = "",
+                defaultText="选项"+this.getNextSelectionCount().toString(),
+                order=selectionEditor.data.order+1
+            };
+            this.selectionDatas.insert(selectionEditor.data.order+1,newSelectionData);
+            this.refreshSelectionDatas();
+            this.buildSelectionItems();
+            selectionGrowOnlyCount++;
+            
+            this.addButtonClick(this,args);
+        } }
+        { FieldControlEditor, onSelectionDelButtonClick, {  }, {  }, {OBJECT sender,EventArgs args  }, void, {
+            this.selectionDatas.removeAt((sender as SelectionEditor).data.order);
+            this.refreshSelectionDatas();
+            this.buildSelectionItems();
+        } }
+        { FieldControlEditor, onSelectionTextChanged, {  }, {  }, {OBJECT sender,EventArgs args  }, void, {
+            this.selectionDatas[(sender as SelectionEditor).data.order].text = (sender as SelectionEditor).getText();
+            this.refreshFieldInfo();
+            
+        } }
+        
+        
+        
+        { FieldCheckBoxEditor, FieldCheckBoxEditor, , {  }, {Row~formField fieldInfo  }, , {
+            base(fieldInfo);
+            //string defaultSelectionText = Common.isEmptyString(fieldInfo.iSelectValue)?
+            SelectionData selectionData  = new SelectionData(){text=fieldInfo.iSelectValue,order=0};
+            this.selectionDatas.add(selectionData);
+            this.buildSelectionItems();
+ 
+        } }
+        { FieldCheckBoxListEditor, FieldCheckBoxListEditor, , {  }, {Row~formField fieldInfo  }, , {
+            base(fieldInfo);
+            this.readSelections(fieldInfo.iSelectValue.split('\n'));
+            this.buildSelectionItems();
+            this.buildOptionalNumberEditor();
+        } }
+        { FieldCheckBoxListEditor, buildOptionalNumberEditor, {  }, {  }, {  }, void, {
+            this.propertyEditor.add(this.fieldCheckBoxListMinPanel);
+            this.propertyEditor.add(this.fieldCheckBoxListMaxPanel);
+            this.fieldCheckBoxListMinPanel.setCountOption(this.selectionDatas.count);
+            this.fieldCheckBoxListMaxPanel.setCountOption(this.selectionDatas.count);
+            if(this.fieldInfo.iFieldMin < 0){this.fieldCheckBoxListMinPanel.setSelection(NameHelper.unlimit);}
+            else{this.fieldCheckBoxListMinPanel.setSelection(this.fieldInfo.iFieldMin.toString());}
+            if(this.fieldInfo.iFieldMax < 0){this.fieldCheckBoxListMaxPanel.setSelection(NameHelper.unlimit);}
+            else{this.fieldCheckBoxListMaxPanel.setSelection(this.fieldInfo.iFieldMax.toString());}
+            
+            this.fieldCheckBoxListMinPanel.propertyComboChanged +=(OBJECT sender, EventArgs args){
+                this.verifyMinMaxCount();
+            };
+            this.fieldCheckBoxListMaxPanel.propertyComboChanged +=(OBJECT sender, EventArgs args){
+                this.verifyMinMaxCount();
+            };
+
+            this.addButtonClick +=(OBJECT sender, EventArgs args){
+                this.fieldCheckBoxListMaxPanel.setCountOption(this.selectionDatas.count);
+                this.fieldCheckBoxListMinPanel.setCountOption(this.selectionDatas.count);
+            };
+        
+        } }
+        { FieldCheckBoxListEditor, verifyMinMaxCount, {  }, {  }, {  }, void, {
+            if(fieldCheckBoxListMinPanel.getSelection() == NameHelper.unlimit || fieldCheckBoxListMaxPanel.getSelection() == NameHelper.unlimit)
+            {
+                return;
+            }
+            int minCount = int.parse(fieldCheckBoxListMinPanel.getSelection());
+            int maxCount = int.parse(fieldCheckBoxListMaxPanel.getSelection());
+            if(minCount>maxCount)
+            {
+                Message.alert(TextHelper.illegalMaxCount);
+                this.fieldCheckBoxListMinPanel.setSelection(maxCount.toString());
+            }
+        } }
+        { FieldCheckBoxListEditor, refreshFieldInfo, {  }, {  }, {  }, Result, {
+            Result baseResult = base.refreshFieldInfo();
+            if(!baseResult.isOk){return baseResult;}
+            verifyMinMaxCount();//这里出现异常会直接帮用户修改
+            if(this.fieldCheckBoxListMaxPanel.getSelection() == NameHelper.unlimit){this.fieldInfo.iFieldMax=-1;}
+            else{this.fieldInfo.iFieldMax = int.parse(this.fieldCheckBoxListMaxPanel.getSelection());}
+            if(this.fieldCheckBoxListMaxPanel.getSelection() == NameHelper.unlimit){this.fieldInfo.iFieldMin=-1;}
+            else{this.fieldInfo.iFieldMin = int.parse(this.fieldCheckBoxListMinPanel.getSelection());}
+            
+            return new Result(){isOk=true};
+        } }
+        
+        { FieldComboBoxEditor, FieldComboBoxEditor, , {  }, { Row~formField fieldInfo }, , {
+            base(fieldInfo);
+            this.readSelections(fieldInfo.iSelectValue.split('\n'));
+            this.buildSelectionItems();
+        } }
+        
+        { FieldSliderEditor, FieldSliderEditor, , {  }, {Row~formField fieldInfo  }, , {
+            base(fieldInfo);
+            this.buildSliderPropertyEditor();
+        } }
+        { FieldSliderEditor, buildSliderPropertyEditor, {  }, {  }, {  }, void, {
+            this.propertyEditor.add(this.fieldSliderMinPanel);
+            this.propertyEditor.add(this.fieldSliderMaxPanel);
+            this.propertyEditor.add(this.fieldSliderDeltaPanel);
+            string[] sliderProperty = this.fieldInfo.iSelectValue.split('\n');
+            if(sliderProperty.length==3)
+            {
+                this.fieldSliderMinPanel.setValue(int.parse(sliderProperty[0]));
+                this.fieldSliderMaxPanel.setValue(int.parse(sliderProperty[1]));
+                this.fieldSliderDeltaPanel.setValue(int.parse(sliderProperty[2]));
+            }
+            
+            
+        } }
+        { FieldSliderEditor, refreshFieldInfo, {  }, {  }, {  }, Result, {
+            Result baseResult = base.refreshFieldInfo();
+            if(!baseResult.isOk){return baseResult;}
+            decimal sliderMin = this.fieldSliderMinPanel.getValue();
+            decimal sliderMax = this.fieldSliderMaxPanel.getValue();
+            decimal sliderDelta = this.fieldSliderDeltaPanel.getValue();
+            if(sliderMin>=sliderMax){return new Result(){isOk=false,info=TextHelper.sliderMinMaxCountError};}
+            //todo: 处理滑块最大值最小值间隔 超出Int.MAX的问题
+            string sliderSelectValue = sliderMin.toString()+"\n"+sliderMax.toString()+"\n"+sliderDelta.toString();
+            if(sliderSelectValue.length>ValueHelper.selectionsLengthMax){
+                return new Result(){isOk=false,info=Common.getLengthMaxError("滑块相关数值总",ValueHelper.selectionsLengthMax)};
+            }
+            this.fieldInfo.iSelectValue = sliderSelectValue;
+            return new Result(){isOk=true};
+        } }
+        
+        { FieldRadioButtonGroupEditor, FieldRadioButtonGroupEditor, , {  }, { Row~formField fieldInfo  }, , {
+            base(fieldInfo);
+            this.readSelections(fieldInfo.iSelectValue.split('\n'));
+            this.buildSelectionItems();
+  
+        } }
+        { FieldTextBoxEditor, FieldTextBoxEditor, , {  }, { Row~formField fieldInfo }, , {
+            base(fieldInfo);
+            this.buildTextPropertyEditor();
+            
+        } }      
+        { FieldTextBoxEditor, refreshFieldInfo, {  }, {  }, {  }, Result, {
+            Result baseResult = base.refreshFieldInfo();
+            if(!baseResult.isOk){return baseResult;}
+            int fieldMin = (int)fieldMinPanel.getValue();
+            int fieldMax = (int)fieldMaxPanel.getValue();
+            if(fieldMin>fieldMax){
+                return new Result(){isOk=false,info=TextHelper.fieldMinMaxCountError};
+            }
+            if(fieldMin<0 || fieldMax<0){
+                return new Result(){isOk=false,info=TextHelper.negativeMinMaxError};
+            }
+            if(this.fieldInfo.iFieldType == "string" && fieldMax>ValueHelper.formDataCellMax){
+                return new Result(){isOk=false,info=TextHelper.dataLengthMaxError+ValueHelper.formDataCellMax.toString()};
+            }
+            if(this.fieldRegPanel.getText().length>ValueHelper.generalTextMax){
+                return new Result(){isOk=false,info=Common.getLengthMaxError(this.fieldRegPanel.getName(),ValueHelper.generalTextMax)};
+            }
+            if(this.fieldRegMsgPanel.getText().length>ValueHelper.generalTextMax){
+                return new Result(){isOk=false,info=Common.getLengthMaxError(this.fieldRegMsgPanel.getName(),ValueHelper.generalTextMax)};
+            }
+            
+            this.fieldInfo.iFieldMin = fieldMin;
+            this.fieldInfo.iFieldMax = fieldMax;
+            this.fieldInfo.iFieldReg = this.fieldRegPanel.getText();
+            this.fieldInfo.iFieldRegMsg = this.fieldRegMsgPanel.getText();
+            return new Result(){isOk=true};
+
+        } }
+        { FieldMultiTextBoxEditor, FieldMultiTextBoxEditor, , {  }, { Row~formField fieldInfo }, , {
+            base(fieldInfo);
+            
+        } }
+        { FieldDateTimePickerEditor, FieldDateTimePickerEditor, , {  }, { Row~formField fieldInfo }, , {
+            base(fieldInfo);
+        } }
+
+        { SelectionEditor, SelectionEditor, , {  }, {SelectionData selectionData ,bool isExtensible }, , {
+            base();
+            this.data = selectionData;
+            this.selectionValueBox.text = selectionData.text;
+            
+            this.add(this.selectionLabel);
+            this.add(this.selectionValueBox);
+            if(isExtensible){
+                this.add(this.addButton);
+                this.add(this.delButton);
+            }
+            scene(web)
+            {
+                this.setPlaceHolderText(selectionData.defaultText);
+                this.selectionLabel.element.addClass(CssClassNameHelper.generalDetailSelectionLabel);
+                this.selectionValueBox.element.addClass(CssClassNameHelper.generalDetailSelectionValueBox);
+                this.addButton.element.addClass(CssClassNameHelper.generalDetailSelectionAddButton);
+                this.delButton.element.addClass(CssClassNameHelper.generalDetailSelectionDelButton);
+            }
+            
+            
+            this.addButton.click+=(OBJECT sender, EventArgs args){
+                this.addButtonClick(this,args);
+            };
+            this.delButton.click+=(OBJECT sender, EventArgs args){
+                this.delButtonClick(this,args);
+            };
+            this.selectionValueBox.textChanged +=(OBJECT sender, EventArgs args){
+                this.textBoxTextChanged(this,args);
+            };
+        
+        } }
+        { SelectionEditor, getText, {  }, {  }, {  }, string, {
+            scene(web){
+                return Common.isEmptyString(this.selectionValueBox.text)?this.getPlaceHolderText():this.selectionValueBox.text;
+            }
+            scene(client){
+                return this.selectionValueBox.text;
+            }
+        } }
+        { SelectionEditor, setPlaceHolderText, { web }, {  }, { string value }, void, {
+            WebElement inputElement = this.selectionValueBox.element.children[0];
+            if(inputElement == null || inputElement.tagName.toLower() != NameHelper.placeHolderTag){Message.alert("当前输入框子成员不存在input标签"+inputElement.tagName); return;}
+            inputElement.addAttribute(NameHelper.placeholderAttributeName,value);
+        } }
+        { SelectionEditor, getPlaceHolderText, { web }, {  }, { }, string, {
+            WebElement inputElement = this.selectionValueBox.element.children[0];
+            if(inputElement == null || inputElement.tagName.toLower() != NameHelper.placeHolderTag){Message.alert("当前输入框子成员不存在input标签"+inputElement.tagName); return "";}
+            string placeHolderText = inputElement.getAttribute(NameHelper.placeholderAttributeName);
+            return placeHolderText==null?"":placeHolderText;
+        } }
+        
+        
+        //表单列举项
+        { FormItem~I, FormItem, , {  }, {Row~form row}, , {
+            this.nameLabel.text = row.iName;
+            this.idLabel.text = row.iID;
+            this.createDateLabel.text = row.iCreateDt==null?TextHelper.formOutdateError:row.iCreateDt.format("yyyy-MM-dd hh:mm:ss");
+            
+            this.add(this.infoArea);
+            this.add(this.operateArea);
+            this.infoArea.add(this.nameLabel);
+            this.infoArea.add(this.statePanel);
+            //this.statePanel.add(this.idLabel);
+            this.statePanel.add(this.createDateLabel);
+            this.operateArea.add(this.editButton);
+            this.operateArea.add(this.sendButton);
+            this.operateArea.add(this.deleteButton);
+            this.operateArea.add(this.viewResultButton);
+            this.operateArea.add(this.statisticsButton);
+            this.relativeRow = row;
+
+            scene(web)
+            {
+                this.infoArea.element.addClass(CssClassNameHelper.formItemInfoArea);
+                this.operateArea.element.addClass(CssClassNameHelper.formItemOperateArea);
+                this.idLabel.element.addClass(CssClassNameHelper.formItemIDLabel);
+                this.nameLabel.element.addClass(CssClassNameHelper.formItemNameLabel);
+                this.statePanel.element.addClass(CssClassNameHelper.formItemStatePanel);
+                this.createDateLabel.element.addClass(CssClassNameHelper.formItemCreateDateLabel);
+                this.editButton.element.addClass(CssClassNameHelper.formItemEditButton);
+                this.sendButton.element.addClass(CssClassNameHelper.formItemSendButton);
+                this.deleteButton.element.addClass(CssClassNameHelper.formItemDeleteButton);
+                this.viewResultButton.element.addClass(CssClassNameHelper.formItemViewResultButton);
+                this.statisticsButton.element.addClass(CssClassNameHelper.formItemStatisticsButton);
+            }
+            
+            this.editButton.click +=(OBJECT sender, EventArgs args){
+                this.editButtonClick(this,args);
+            };
+            this.deleteButton.click +=(OBJECT sender, EventArgs args){
+                this.delButtonClick(this,args);
+            };
+            this.sendButton.click +=(OBJECT sender, EventArgs args){
+                this.sendButtonClick(this,args);
+            };
+            this.viewResultButton.click +=(OBJECT sender, EventArgs args){
+                this.resultButtonClick(this,args);
+            };
+            this.statisticsButton.click +=(OBJECT sender, EventArgs args){
+                this.statisticsButtonClick(this,args);
+            };
+        } }
+        
+        //表单名称编辑区
+        { FormNameEditor, FormNameEditor, , {  }, { Row~form row }, , {
+            this.formRow = row;
+            this.add(this.formNamePanel);
+            this.add(this.formSummaryPanel);
+            this.add(this.formSuccessMessagePanel);
+            this.add(this.formSubmitButtonTextPanel);
+            this.add(this.saveEditor);
+
+            
+            this.saveEditor.add(this.saveButton);
+            this.saveEditor.add(this.cancelButton);
+            
+            
+            this.formNamePanel.setText(row.iName); 
+            this.formSummaryPanel.setText(row.iSummary);
+            this.formSuccessMessagePanel.setText(row.iSuccessMsg);
+            this.formSubmitButtonTextPanel.setText(row.iSubmitButton);
+            
+            scene(web)
+            {
+                this.formNamePanel.setPlaceHolderText(TextHelper.defaultFormName);
+                this.formSummaryPanel.setPlaceHolderText(TextHelper.defaultFormSummary);
+                this.formSuccessMessagePanel.setPlaceHolderText(TextHelper.defaultSubmitSuccessMessage);
+                this.formSubmitButtonTextPanel.setPlaceHolderText(TextHelper.defaultSubmitButtonText);
+                this.saveButton.element.addClass(CssClassNameHelper.generalDetailSaveButton);
+                this.cancelButton.element.addClass(CssClassNameHelper.generalDetailCancelButton);
+            }
+            
+            this.formNamePanel.propertyTextChanged +=(OBJECT sender, EventArgs args){
+                this.formNameChange(this,args);
+            };
+            this.formSummaryPanel.propertyTextChanged +=(OBJECT sender, EventArgs args){
+                this.formSummaryChange(this,args);
+            };
+            this.formSuccessMessagePanel.propertyTextChanged+=(OBJECT sender, EventArgs args){
+                this.formSuccessMsgChange(this,args);
+            };
+            this.formSubmitButtonTextPanel.propertyTextChanged+=(OBJECT sender, EventArgs args){
+                this.formSubmitButtonTextChange(this,args);
+            };
+            
+            this.saveButton.click +=(OBJECT sender, EventArgs args){
+                this.saveButtonClick(this,args);
+            };
+            this.cancelButton.click +=(OBJECT sender, EventArgs args){
+                this.cancelButtonClick(this,args);
+            };
+                
+        } }
+        { FormNameEditor, getEditFormName, {  }, {  }, {  }, string, {
+            return this.formNamePanel.getText();
+        } }
+        { FormNameEditor, getEditFormSummary, {  }, {  }, {  }, string, {
+            return this.formSummaryPanel.getText();
+        } }
+        { FormNameEditor, getEditFormSuccessMsg, {  }, {  }, {  }, string, {
+            return this.formSuccessMessagePanel.getText();
+        } }
+        { FormNameEditor, getEditFormSubmitButtonText, {  }, {  }, {  }, string, {
+            return this.formSubmitButtonTextPanel.getText();
+        } }
+        
+        
+        { ResultPanel, ResultPanel, , {  }, { List<Row~formData> formDatas }, , {
+            this.hasBorder = false;
+            this.paddingTop = ValueHelper.resultPanelPaddingTop;
+            this.paddingBottom = ValueHelper.resultPanelPaddingBottom;
+            this.add(this.headPanel);
+            this.headPanel.add(this.headLabel);
+            
+            this.add(this.contentPanel);
+            foreach(Row~formData data in formDatas)
+            {
+                FieldResultPanel fieldResultPanel = new FieldResultPanel(data.iFieldName,data.iCellValue);
+                //fieldResultPanel.analyzeButton.click +=(OBJECT sender, EventArgs args)
+                //{
+                //    scene(web){
+                //        Page.open(data.:from:.rFormSys.rFormAnalyzer,NameHelper.fieldID+"="+data.iFieldID);
+                //    }
+                //};
+                this.contentPanel.add(fieldResultPanel);
+            }
+            scene(web)
+            {
+                this.element.addClass(CssClassNameHelper.resultPanel);
+                this.headPanel.element.addClass(CssClassNameHelper.resultHeadPanel);
+                this.headLabel.element.addClass(CssClassNameHelper.resultHeadLabel);
+                this.contentPanel.element.addClass(CssClassNameHelper.resultContentPanel);
+            }
+        } }
+        { ResultPanel, setHeadInfo, {  }, {  }, {string info  }, void, {
+            this.headLabel.text = info;
+        } }
+        
+        { FieldResultPanel, FieldResultPanel, , {  }, {string fieldName, string fieldValue  }, , {
+            this.hasBorder = false;
+            this.fieldNameValueLabel.text = fieldName;
+            this.fieldValueValueLabel.text = fieldValue;
+            this.add(this.fieldNameValueLabel);
+            this.add(this.fieldValueValueLabel);
+            
+            //this.fieldValueValueLabel.
+            //this.add(this.analyzeButton);
+            scene(web)
+            {
+                this.fieldValueValueLabel.element.children[0].style.setProperty("width","100%");
+                this.fieldValueValueLabel.element.children[0].style.setProperty("height","max-content");
+                this.fieldValueValueLabel.element.children[0].style.setProperty("text-align","left");
+                //this.fi
+                this.element.addClass(CssClassNameHelper.resultFieldPanel);
+                this.element.addClass(CssClassNameHelper.resultFieldNameLabel);
+                this.element.addClass(CssClassNameHelper.resultFieldValueLabel);
+            }
+
+            
+            
+        } }
+        
+        
+        //向外发布的问卷 
+        { FormInstancePanel, FormInstancePanel, , {  }, {Row~form f_row  }, , {
+            //this.hasBorder = false;
+            this.add(this.headPanel);
+            this.add(this.contentPanel);
+            this.add(this.operatePanel);
+            this.headPanel.add(this.namePanel);
+            if(f_row.iSummary!=null && f_row.iSummary!="")
+            {
+                this.summaryLabel.text = f_row.iSummary;
+                this.headPanel.add(this.summaryPanel);
+            }
+            this.namePanel.add(this.nameLabel);
+            this.summaryPanel.add(this.summaryLabel);
+            this.operatePanel.add(this.submitButton);
+            //this.operatePanel.add(this.cancelButton);
+            this.nameLabel.text =  f_row.iName ;
+            
+            this.submitButton.text = (f_row.iSubmitButton!= null && f_row.iSubmitButton !="") ?f_row.iSubmitButton:TextHelper.defaultSubmitButtonText;
+            scene(web)
+            {
+                
+                this.element.addClass(CssClassNameHelper.publishFormPanel);
+                this.headPanel.element.addClass(CssClassNameHelper.publishFormHeadPanel);
+                this.namePanel.element.addClass(CssClassNameHelper.publishFormNamePanel);
+                this.summaryPanel.element.addClass(CssClassNameHelper.publishFormSummaryPanel);
+                this.summaryPanel.element.children[0].addClass(CssClassNameHelper.publishFormSummaryPanelInner);
+                this.contentPanel.element.addClass(CssClassNameHelper.publishFormContentPanel);
+                this.operatePanel.element.addClass(CssClassNameHelper.publishFormOperatePanel);
+                this.nameLabel.element.addClass(CssClassNameHelper.publishFormNameLabel);
+                this.summaryLabel.element.addClass(CssClassNameHelper.publishFormSummaryLabel);
+                this.summaryLabel.element.children[0].addClass(CssClassNameHelper.publishFormSummaryLabelInner);
+                this.submitButton.element.addClass(CssClassNameHelper.publishFormSubmitButton);
+                this.cancelButton.element.addClass(CssClassNameHelper.publishFormCancelButton);
+            }
+            
+            this.submitButton.click +=(OBJECT sender, EventArgs args){
+                this.submitButtonClick(this,args);
+            };
+            this.cancelButton.click +=(OBJECT sender, EventArgs args){
+                this.cancelButtonClick(this,args);
+            };
+
+        } }
+        { FormInstancePanel, getContentPanel, {  }, {  }, {  }, Panel, {
+            return this.contentPanel;
+        } }
+        { FormInstancePanel, setSubmitButtonText, {  }, {  }, { string text }, void, {
+            this.submitButton.text = text;
+        } }
+        
+        { FieldControl, FieldControl, , {  }, {Row~formField row  }, , {
+            this.fieldRow = row;
+            this.add(this.titlePanel);
+            this.add(this.contentPanel);
+            this.titlePanel.add(this.orderLabel);
+            this.titlePanel.add(this.titleLabel);
+            this.titlePanel.add(this.notNullLabel);
+            this.contentPanel.add(this.fieldPanel);
+            this.hasBorder = false;
+            scene(web)
+            {
+                this.titlePanel.element.addClass(CssClassNameHelper.publishFieldTitlePanel);
+                this.orderLabel.element.addClass(CssClassNameHelper.publishFieldOrderLabel);
+                this.titleLabel.element.addClass(CssClassNameHelper.publishFieldTitleLabel);
+                this.notNullLabel.element.addClass(CssClassNameHelper.publishFieldNotNullLabel);
+                this.summaryPanel.element.addClass(CssClassNameHelper.publishFieldSummaryPanel);
+                this.summaryLabel.element.addClass(CssClassNameHelper.publishFieldSummaryLabel);
+                this.contentPanel.element.addClass(CssClassNameHelper.publishFieldContentPanel);
+                this.fieldPanel.element.addClass(CssClassNameHelper.publishFieldFieldPanel);
+                this.messageLabel.element.addClass(CssClassNameHelper.publishFieldMessageLabel);
+                if(this.fieldRow.iNotNull){this.titleLabel.element.addClass(CssClassNameHelper.publishFieldNotNull);}
+            }
+
+            this.titleLabel.text = row.iFieldName;
+            this.titleLabel.toolTip = row.iSummary;
+            this.notNullLabel.text = this.fieldRow.iNotNull?"*":"";
+            
+            this.setOrder(int.parse(row.iFieldNO)+1);
+            this.paddingTop = 10;
+            this.paddingBottom = 10;
+            this.hasBorder = false;
+
+        } }
+        { FieldControl, clearMessage, {  }, {  }, {  }, void, {
+            this.messageLabel.text = "";
+            this.messageLabel.remove();
+            
+        } }
+        { FieldControl, setMessage, {  }, {  }, {string msg,Color color  }, void, {
+            this.clearMessage();
+            if(msg==null || msg==""){return;}
+            this.messageLabel.text = msg;
+            this.messageLabel.foreColor = color;
+            this.contentPanel.add(this.messageLabel);
+        } }
+        { FieldControl, setMessage, {  }, {  }, {string msg  }, void, {
+            this.setMessage(msg,Color.RED);
+        } }
+        { FieldControl, getMessage, {  }, {  }, {  }, string, {
+            return this.messageLabel.text;
+        } }
+        { FieldControl, setOrder, {  }, {  }, { int order }, void, {
+            this.orderLabel.text = order.toString()+".";
+        } }
+        { FieldControl, verify, {  }, {  }, {  }, Result, {
+            return new Result(){isOk=true};
+        } }
+        
+        { FieldTextBox, FieldTextBox, , {  }, {Row~formField row  }, , {
+            base(row);
+            this.fieldPanel.add(this.inputBox);
+            this.contentPanel.add(this.lengthCountLabel);
+            this.inputBox.text = row.iFieldDefault;
+            this.inputBox.textChanged += onTextChanged;
+            this.inputBox.keyUp += onKeyUp;
+            if(row.iFieldType == "int"){  this.lengthCountLabel.text = TextHelper.valueMin+ ":"+row.iFieldMin+", "+TextHelper.valueMax+":"+row.iFieldMax;}
+            else if(row.iFieldType == "string"){this.lengthCountLabel.text = this.inputBox.text.length.toString()+"/"+this.fieldRow.iFieldMax.toString();}
+        } }
+        { FieldTextBox, onTextChanged, {  }, {  }, { OBJECT sender,EventArgs args }, void, {
+            this.clearMessage();
+            Result result = this.verifyText();
+            if(!result.isOk)
+            {
+               this.setMessage(result.info);
+            }
+        } }
+        { FieldTextBox, onKeyUp, {  }, {  }, {OBJECT sender,KeyEventArgs args  }, void, {
+            if(this.fieldRow.iFieldType == "int"){}
+            else if(this.fieldRow.iFieldType == "string")
+            {
+                if(this.fieldRow.iFieldMax>0)
+                {
+                    this.lengthCountLabel.text = this.inputBox.text.length.toString()+"/"+this.fieldRow.iFieldMax.toString();
+                    if(this.inputBox.text.length>this.fieldRow.iFieldMax)
+                    {
+                       this.lengthCountLabel.foreColor = Color.RED;
+                    }
+                    else
+                    {
+                        this.lengthCountLabel.foreColor = Color.BLACK;
+                    }
+                    
+                }
+                //this.lengthCountLabel.text =  
+            }
+        } }
+        { FieldTextBox, getValue, {  }, {  }, {  }, string, {
+            return this.inputBox.text;
+        } }
+        { FieldTextBox, verifyStringText, {  }, {private  }, {  }, Result, {
+            
+            string value = this.inputBox.text;
+            if(this.fieldRow.iFieldMax> 0 && value.length>this.fieldRow.iFieldMax)
+            {
+                return new Result(){isOk=false,info="长度限制在"+this.fieldRow.iFieldMin+"-"+this.fieldRow.iFieldMax+"个字符!"};
+                //return new Result(){isOk=false,info="不能超过"+this.fieldRow.iFieldMax+"个字符!"};
+            }
+            if(this.fieldRow.iFieldMin>0 && value.length<this.fieldRow.iFieldMin)
+            {
+                return new Result(){isOk=false,info="长度限制在"+this.fieldRow.iFieldMin+"-"+this.fieldRow.iFieldMax+"个字符!"};
+            }
+            return new Result(){isOk = true};
+            
+        } }
+        { FieldTextBox, verifyIntText, {  }, {private  }, {  }, Result, {
+            
+            if(!this.inputBox.text.isMatch("^(\\-|\\+)?\\d+(\\.\\d+)?$",RegexMode.multiline))
+            {
+                return new Result(){isOk=false,info="格式错误,非数值类型！"};
+            }
+            int value = int.parse(this.inputBox.text);
+            if(value>this.fieldRow.iFieldMax || value<this.fieldRow.iFieldMin)
+            {
+                return new Result(){isOk=false,info="数值超出范围，最小值:"+this.fieldRow.iFieldMin+",最大值:"+this.fieldRow.iFieldMax};
+            }
+            return new Result(){isOk=true};
+            
+        } }
+        { FieldTextBox, verifyText, {  }, { private }, {  }, Result, {
+            string value = this.inputBox.text;
+            if(value=="" || value==null)
+            {
+                if(this.fieldRow.iNotNull){return new Result(){isOk=false,info="此项为必填项"};}
+                else{return new Result(){isOk=true};}
+            }
+            
+            
+            if(this.fieldRow.iFieldType == "int"){
+                Result result = this.verifyIntText();
+                if(!result.isOk){ return result;}
+            }
+            
+            if(this.fieldRow.iFieldType == "string"){
+                Result result = this.verifyStringText();
+                if(!result.isOk){ return result;}
+            }
+            //添加跳出
+
+            if(this.fieldRow.iFieldReg!=null && this.fieldRow.iFieldReg!="")
+            {
+                
+                if(!value.isMatch(this.fieldRow.iFieldReg,RegexMode.multiIgnoreCase)){
+                    return new Result(){isOk=false,info=this.fieldRow.iFieldRegMsg};
+                }
+            }
+            if(Common.isQuoted(value)){
+                return new Result(){isOk =false,info="不能有单引号或双引号!"};
+            }
+            return new Result(){isOk=true};
+        } }
+        { FieldTextBox, verify, {  }, {  }, {  }, Result, {
+            Result textResult = verifyText();
+            this.setMessage(textResult.info);
+            return textResult;
+        } }
+        
+        { FieldSlider, FieldSlider, , {  }, { Row~formField row }, , {
+            base(row);
+            this.fieldPanel.add(this.slider);
+            string[] sliderProperty = row.iSelectValue.split('\n');
+            if(sliderProperty.length==3)
+            {
+                this.slider.min = int.parse(sliderProperty[0]);
+                this.slider.max = int.parse(sliderProperty[1]);
+                this.slider.delta = int.parse(sliderProperty[2]);
+            }
+        } }
+        { FieldSlider, getValue, {  }, {  }, { }, string, {
+            return this.slider.value.toString();
+        } }
+        { FieldSlider, verify, {  }, {  }, {  }, Result, {
+            return base.verify();
+        } }
+        
+        { FieldCheckBox, FieldCheckBox, , {  }, { Row~formField row }, , {
+            base(row);
+            this.checkBox.text=row.iSelectValue;
+            this.fieldPanel.add(this.checkBox);
+        } }
+        { FieldCheckBox, getValue, {  }, {  }, {  }, string, {
+            return this.checkBox.isChecked? "1" : "0";
+        } }
+        { FieldCheckBox, verify, {  }, {  }, {  }, Result, {
+            return base.verify();
+        } }
+        
+        { FieldCheckBoxList, FieldCheckBoxList, , {  }, { Row~formField row }, , {
+            base(row);
+            this.fieldPanel.add(this.checkBoxList);
+            foreach(string selectValue in row.iSelectValue.split('\n'))
+            {
+                CheckBox checkBox = new CheckBox(){text=selectValue};
+                checkBox.checkedChanged +=(OBJECT sender, EventArgs args)
+                {
+                    this.clearMessage();
+                    this.verifySelectionCount();
+                };
+                this.checkBoxList.add(checkBox);
+            }
+        } }
+        { FieldCheckBoxList, getValue, {  }, {  }, {  }, string, {
+            string checkedValue = "";
+            foreach(Control control in this.checkBoxList.children)
+            {
+                CheckBox checkBox = control as CheckBox;
+                if(checkBox.isChecked)
+                {
+                    if(checkedValue != ""){checkedValue+="\n";}
+                    checkedValue+=checkBox.text;
+                }
+            }
+            return checkedValue;
+        } }
+        { FieldCheckBoxList, verifySelectionCount, {  }, { private }, {  }, Result, {
+            int count = 0;
+            foreach(Control control in this.checkBoxList.children){
+                if((control as CheckBox).isChecked ){count++;}
+            }
+            if(count>this.fieldRow.iFieldMax && this.fieldRow.iFieldMax>0)
+            { 
+                string errorInfo = "勾选数不能超过"+this.fieldRow.iFieldMax.toString();
+                return new Result(){isOk=false,info = errorInfo};
+            }
+            if(count<this.fieldRow.iFieldMin && this.fieldRow.iFieldMin>0)
+            {
+                string errorInfo = "勾选数不能少于"+this.fieldRow.iFieldMin.toString();
+                return new Result(){isOk=false,info = errorInfo};
+            }
+            
+            return new Result(){isOk=true};
+        } }
+        { FieldCheckBoxList, verify, {  }, {  }, {  }, Result, {
+            Result result = this.verifySelectionCount();
+            this.setMessage(result.info); 
+            return result;
+        } }
+        
+        { FieldComboBox, FieldComboBox, , {  }, { Row~formField row }, , {
+            base(row);
+            this.fieldPanel.add(this.comboBox);
+            foreach(string selectValue in row.iSelectValue.split('\n'))
+            {
+                this.comboBox.add(selectValue);
+            }
+        } }
+        { FieldComboBox, getValue, {  }, {  }, {  }, string, {
+            if(this.comboBox.selectedItem==null){return null;}
+            return this.comboBox.selectedItem.toString();
+        } }
+        { FieldComboBox, verifyEmpty, {  }, { private }, {  }, Result, {
+            if(this.fieldRow.iNotNull && this.comboBox.selectedIndex == -1)
+            {
+                return new Result(){isOk = false,info="此项未必填项"};
+            }
+            return new Result(){isOk=true};
+        } }
+        { FieldComboBox, verify, {  }, {  }, {  }, Result, {
+            return verifyEmpty();
+        } }
+        
+        { FieldMultiTextBox, FieldMultiTextBox, , {  }, { Row~formField row }, , {
+            base(row);
+            this.inputBox.isMultiLine = true;
+            this.inputBox.width = 200;
+            this.inputBox.height = 100;
+            
+        } }
+        { FieldMultiTextBox, verify, {  }, {  }, {  }, Result, {
+            return base.verify();
+        } }
+        
+        { FieldRadioButtonGroup, FieldRadioButtonGroup, , {  }, { Row~formField row }, , {
+            base(row);
+            foreach(string selectValue in row.iSelectValue.split('\n'))
+            {
+                this.radioButtonGroup.add(new RadioButton(){text = selectValue});
+            }
+            this.fieldPanel.add(this.radioButtonGroup);
+        } }
+        { FieldRadioButtonGroup, getValue, {  }, {  }, {  }, string, {
+            if(this.radioButtonGroup.checkedButton != null)
+            {
+                return this.radioButtonGroup.checkedButton.text;
+            }
+            else{return "";}
+        } }
+        { FieldRadioButtonGroup, verify, {  }, {  }, {  }, Result, {
+            return base.verify();
+        } }
+        
+        { FieldDateTimePicker, FieldDateTimePicker, , {  }, {Row~formField row  }, , {
+            base(row);
+            this.fieldPanel.add(this.dateTimePicker);
+            Common.setDateTimePickerMode(this.dateTimePicker,row.iFieldCtrl);
+            this.dateTimePicker.valueChanged +=(OBJECT sender, EventArgs args)
+            {
+                this.verify();
+            };
+            
+        } }
+        { FieldDateTimePicker, getValue, {  }, {  }, {  }, string, {
+            DateTime value = this.dateTimePicker.value;
+            
+            string[] datetimeSplit = value.toString().split(' ');
+            
+            if( this.fieldRow.iFieldCtrl == ctrType.datePicker)
+            {
+                return datetimeSplit[0];
+            }
+            else if(this.fieldRow.iFieldCtrl == ctrType.timePicker)
+            {
+                return datetimeSplit[1];
+            }
+            else
+            {
+                return value.toString();
+            }
+            
+            
+        } }
+        { FieldDateTimePicker, verifyEmpty, {  }, { private }, {  }, Result, {
+            if(this.fieldRow.iNotNull && this.dateTimePicker.value == null)
+            {
+                return new Result(){isOk=false,info="此项为必填项"};
+            }
+            return new Result(){isOk=true};
+        } }
+        { FieldDateTimePicker, verify, {  }, {  }, {  }, Result, {
+            Result result = this.verifyEmpty();
+            this.setMessage(result.info);
+            return result;
+        } }
+        
+        //统计
+        { FormInfoArea, FormInfoArea, , {  }, { Row~form formRow }, , {
+            this.hasBorder = false;
+            this.formInfoLabel.text = formRow.iName;
+            this.add(this.formInfoLabel);
+            this.add(this.createChartButton);
+            scene(web)
+            {
+                this.element.addClass(CssClassNameHelper.formItemInfoArea);
+                this.formInfoLabel.element.addClass(CssClassNameHelper.formNameValueLabel);
+                this.createChartButton.element.addClass(CssClassNameHelper.analyzerChartCreateButton);
+                
+            }
+            
+            this.createChartButton.click +=(OBJECT sender, EventArgs args){
+                this.createButtonClick(this,args);
+            };
+            
+        } }
+        { FormDataAnalyzeArea, FormDataAnalyzeArea, , {  }, { Row~form formRow,List<Row~formField> fieldRows }, , {
+            this.fieldSelectionsPanel.add(new FieldAnalyzePanel(fieldRows));
+            this.add(this.fieldSelectionsPanel);
+            this.add(this.buttonContainer);
+            this.buttonContainer.add(this.appendButton);
+            this.buttonContainer.add(this.displayButton);
+            this.buttonContainer.add(this.deleteButton);
+            scene(web)
+            {   
+                this.buttonContainer.element.addClass(CssClassNameHelper.analyzerFieldButtonContainer);
+                this.appendButton.element.addClass(CssClassNameHelper.analyzerFieldAddButton);
+                this.displayButton.element.addClass(CssClassNameHelper.analyzerFieldDisplayButton);
+                this.deleteButton.element.addClass(CssClassNameHelper.analyzerFieldDeleteButton);
+            }
+            
+            this.hasBorder = false;
+            this.displayButton.click+=(OBJECT sender, EventArgs args){
+                this.displayButtonClick(this,args);
+            };
+            this.appendButton.click+=(OBJECT sender, EventArgs args){
+                if(fieldRows.count == 0){Message.alert(TextHelper.stasticsFieldLess);return;}
+                this.fieldSelectionsPanel.add(new FieldAnalyzePanel(fieldRows));
+            };
+            this.deleteButton.click +=(OBJECT sender, EventArgs args){
+                this.deleteButtonClick(this,args);
+            };
+        } }
+        { FormDataAnalyzeArea, getAnalyzeConfig, {  }, {  }, {  }, AnalyzeConfigInfo, {
+            AnalyzeConfigInfo info = new AnalyzeConfigInfo();
+            info.fieldID = (this.fieldSelectionsPanel.children[0] as FieldAnalyzePanel).getFieldID();
+            info.chartType = (this.fieldSelectionsPanel.children[0] as FieldAnalyzePanel).getChartType();
+            return info;
+        } }
+        { FormDataAnalyzeArea, getAnalyzeConfigs, {  }, {  }, {  }, List<AnalyzeConfigInfo>, {
+            List<AnalyzeConfigInfo> analyzeConfigInfoList = new List<AnalyzeConfigInfo>();
+            foreach(Control selectionControl in this.fieldSelectionsPanel.children)
+            {
+                FieldAnalyzePanel fieldAnalyzePanel = selectionControl as FieldAnalyzePanel;
+                AnalyzeConfigInfo info = new AnalyzeConfigInfo();
+                info.fieldID = fieldAnalyzePanel.getFieldID();
+                info.chartType = fieldAnalyzePanel.getChartType();
+                analyzeConfigInfoList.add(info);
+            }
+            return analyzeConfigInfoList;
+            
+        } }
+        
+        { FieldAnalyzePanel, FieldAnalyzePanel, , {  }, { List<Row~formField> fields }, , {
+            this.hasBorder = false;
+            this.add(this.fieldSelector);
+            this.add(this.chartSelector);
+            this.add(this.deleteButton);
+            this.fields = fields;
+            scene(web)
+            {
+                this.deleteButton.element.addClass(CssClassNameHelper.generalFieldDeleteButton);
+                this.fieldSelector.element.addClass(CssClassNameHelper.analyzeFieldSelector);
+                this.chartSelector.element.addClass(CssClassNameHelper.analyzerChartSelector);
+                
+            }
+            
+            foreach(Row~formField field in fields)
+            {
+                this.fieldSelector.add(field.iFieldName);
+            }
+            foreach(chartType type in enum.chartType.getValues())
+            {
+                this.chartSelector.add(type);
+            }
+            this.chartSelector.selectedIndex = 0;
+            this.deleteButton.click+=(OBJECT sender, EventArgs args)
+            {
+                this.remove();
+            };
+            
+        } }
+        { FieldAnalyzePanel, getFieldID, {  }, {  }, {  }, string, {
+            if( this.fieldSelector.selectedIndex == -1){return null;}
+            else
+            {
+                return this.fields[this.fieldSelector.selectedIndex].iID;
+            }
+        } }
+        { FieldAnalyzePanel, getChartType, {  }, {  }, {  }, chartType, {
+            foreach(chartType type in enum.chartType.getValues())
+            {
+                if(type.toString() == this.chartSelector.selectedItem.toString())
+                {
+                    return type;
+                }
+            }
+            //是否抛出异常
+            return chartType.bar;
+        } }
+        
+        //带名称的输入框
+        { PropertyInputBox, PropertyInputBox, , {  }, { string propertyName }, , {
+            scene(web)
+            {
+                this.webWidthFilled = true;
+                this.propertyLabel.webWidthFilled = true;
+                this.propertyBox.webWidthFilled = true;
+            }
+            this.scrollable = false;
+            this.setName(propertyName);
+            this.add(this.propertyLabel);
+            this.add(this.propertyBox);
+            this.propertyBox.textChanged+=(OBJECT sender, EventArgs args){
+                this.propertyTextChanged(this,args);
+            };
+        } }
+        { PropertyInputBox, setName, {  }, {  }, { string propertyName }, void, {
+            this.propertyLabel.text = propertyName;
+        } }
+        { PropertyInputBox, getName, {  }, {  }, {  }, string, {
+            return this.propertyLabel.text;
+        } }
+        { PropertyInputBox, setText, {  }, {  }, { string value }, void, {
+            this.propertyBox.text = value;
+        } }
+        { PropertyInputBox, getText, {  }, {  }, {  }, string, {
+            scene(web){
+                return Common.isEmptyString(this.propertyBox.text)?this.getPlaceHolderText():this.propertyBox.text;
+            }
+            scene(client){
+                return this.propertyBox.text;
+            }
+        } }
+        { PropertyInputBox, setPlaceHolderText, { web }, {  }, { string value }, void, {
+            WebElement inputElement = this.propertyBox.element.children[0];
+            if(inputElement == null || inputElement.tagName.toLower() != NameHelper.placeHolderTag){Message.alert("当前输入框子成员不存在input标签"+inputElement.tagName); return;}
+            inputElement.addAttribute(NameHelper.placeholderAttributeName,value);
+        } }
+        { PropertyInputBox, getPlaceHolderText, { web }, {  }, {  }, string, {
+            WebElement inputElement = this.propertyBox.element.children[0];
+            if(inputElement == null || inputElement.tagName.toLower() != NameHelper.placeHolderTag){ return "";}
+            string placeHolderText = inputElement.getAttribute(NameHelper.placeholderAttributeName);
+            return placeHolderText==null?"":placeHolderText;
+            
+        } }
+        
+        { PropertyMultilineInputBox, PropertyMultilineInputBox, , {  }, { string propertyName }, , {
+            base(propertyName);
+            this.propertyBox.isMultiLine = true;
+            this.propertyBox.width = ValueHelper.multiTextboxWidth;
+            this.propertyBox.height = ValueHelper.multiTextboxHeight;
+            scene(web)
+            {
+                try{
+                    this.propertyBox.element.children[1].style.setProperty("width","100%");
+                }
+                catch(Exception e){}
+            }
+            
+        } }
+        { PropertyMultilineInputBox, setBoxWidth, {  }, {  }, { int width }, void, {
+            this.propertyBox.width = width;
+        } }
+        { PropertyMultilineInputBox, setBoxHeight, {  }, {  }, { int height }, void, {
+            this.propertyBox.height = height;
+        } }
+        
+        { PropertyNumberBox, PropertyNumberBox, , {  }, { string propertyName }, , {
+            scene(web)
+            {
+                this.propertyLabel.webWidthFilled = true;
+                this.propertyBox.webWidthFilled = true;
+            }
+            this.scrollable = false;
+            this.setName(propertyName);
+            this.add(this.propertyLabel);
+            this.add(this.propertyBox);
+            this.propertyBox.valueChanged +=(OBJECT sender, EventArgs args){
+                if(this.propertyBox.text == "" || this.propertyBox.text == null){
+                    this.setValue(restoreValue);
+                    Message.alert(TextHelper.invalidValueError+TextHelper.restored);
+                    return;
+                }
+                this.restoreValue = this.getValue();
+            };
+
+        } }
+        { PropertyNumberBox, setName, {  }, {  }, { string propertyName }, void, {
+            this.propertyLabel.text = propertyName;
+        } }
+        { PropertyNumberBox, setValue, {  }, {  }, { decimal value }, void, {
+            this.propertyBox.value = value;
+        } }
+        { PropertyNumberBox, getValue, {  }, {  }, { }, decimal, {
+            return this.propertyBox.value;
+        } }
+        
+        
+        { PropertyComboBox, PropertyComboBox, , {  }, { string proeprtyName  }, , {
+            scene(web)
+            {
+                this.propertyLabel.webWidthFilled = true;
+                this.propertyComboBox.webWidthFilled = true;
+            }
+            this.scrollable = false;
+            this.add(this.propertyLabel);
+            this.add(this.propertyComboBox);
+            
+            this.propertyLabel.text = proeprtyName;
+            this.propertyComboBox.selectionChanged +=(OBJECT sender, EventArgs args)
+            {
+                this.propertyComboChanged(this,args);
+            };
+            
+            
+        } }
+        { PropertyComboBox, addOption, {  }, {  }, { string option }, void, {
+            this.propertyComboBox.add(option);
+        } }
+        { PropertyComboBox, setOptions, {  }, {  }, {string[] options  }, void, {
+            this.propertyComboBox.clear();
+            foreach(string op in options)
+            {
+                this.addOption(op);
+            }
+        } }
+        { PropertyComboBox, setCountOption, {  }, {  }, { int optionCount }, void, {
+            OBJECT selection = this.propertyComboBox.selectedItem;
+            this.propertyComboBox.clear();
+            this.propertyComboBox.add(NameHelper.unlimit);
+            for(int i=1;i<=optionCount;i++)
+            {
+                this.propertyComboBox.add(i.toString());
+            }
+            this.propertyComboBox.selectedItem = selection;
+        } }
+        { PropertyComboBox, getSelection, {  }, {  }, {  }, string, {
+            return this.propertyComboBox.selectedItem.toString();
+        } }
+        { PropertyComboBox, setSelection, {  }, {  }, { string selection }, void, {
+            try{
+                this.propertyComboBox.selectedItem = selection;
+            }
+            catch(Exception e)
+            {
+                throw new Exception("未添加的下拉框选项"+e.message);
+            }
+        } }
+        
+        
+
+        
+        
+        //工具方法
+        { Common, isInt, {  }, { static }, { string value }, bool, {
+            return value.isMatch("^-?[1-9]\\d*|0$",RegexMode.multiIgnoreCase);
+        } }
+        { Common, isPositiveInt, {  }, { static }, {string value  }, bool, {
+            return value.isMatch("^[1-9]\\d*$",RegexMode.multiIgnoreCase);
+        } }
+        { Common, isNonnegativeInt, {  }, { static }, { string value }, bool, {
+            return value.isMatch("^[1-9]\\d*|0$",RegexMode.multiIgnoreCase);
+        } }
+        { Common, isQuoted, {  }, {static  }, {string value  }, bool, {
+            return value.isMatch("^[\'\"]+$",RegexMode.multiIgnoreCase);
+        } }
+        { Common, setDateTimePickerMode, {  }, { static }, {DateTimePicker dateTimePicker,  ctrType pickerType }, void, {
+            if(pickerType == ctrType.datePicker){dateTimePicker.mode=DateTimeStyle.date;}
+            else if(pickerType == ctrType.timePicker){dateTimePicker.mode = DateTimeStyle.time;}
+            else if(pickerType == ctrType.dateTimePicker){dateTimePicker.mode = DateTimeStyle.dateTime;}
+            else
+            {
+                throw new Exception("时间日期选择器类型错误");
+            }
+        } }
+        { Common, getColors, {  }, { static }, { int length, int a }, Color[], {
+            
+
+            Color[] colors = new Color[length];
+            
+            for(int colorIndex =0;colorIndex<length;colorIndex++)
+            {
+                int r = random.next(0,256);
+                int g = random.next(0,256);
+                int b = random.next(0,256);
+                if(a==255){colors[colorIndex] = new Color(r,g,b);}
+                else{colors[colorIndex] = new Color(r,g,b,a);}
+            }
+            return colors;
+        } }
+        { Common, getStringColors, {  }, { static }, {int length,float a  }, string[], {
+            string[] colors = new string[length];
+            for(int colorIndex =0;colorIndex<length;colorIndex++)
+            {
+                int r = random.next(0,256);
+                int g = random.next(0,256);
+                int b = random.next(0,256);
+                if(a==255){colors[colorIndex] = "rgb("+r+","+g+","+b+")";}
+                else{colors[colorIndex] = "rgba("+r+","+g+","+b+","+a+")";}
+            }
+            return colors;
+            
+        } }
+        
+        { Common, toFloatArray, {  }, {static  }, {int[] ints  }, float[], {
+            List<float> floatValues = new List<float>();
+            foreach(int tempValue in ints)
+            {
+                floatValues.add(tempValue);
+            }
+            return floatValues.toArray();
+        } }
+        { Common, isEmptyString, {  }, { static }, { string value }, bool, {
+            return value==null||value=="";
+        } }
+        { Common, getLengthMaxError, {  }, { static }, { string name,int maxLength }, string, {
+            return name+TextHelper.lengthMaxError+maxLength;
+        } }
+
+    }
+}

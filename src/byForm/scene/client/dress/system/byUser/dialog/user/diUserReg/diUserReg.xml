@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <dialog ClassAndFileName="diUserReg" ku="byUser" identity="user" dialog="diUserReg" path="byUser\dialog\user\diUserReg" namespace="byUser.dress.user">
+    <field name="cLblName" alias="cLblName" />
+    <field name="cTxtName" alias="cTxtName" />
+    <field name="cLblPwd" alias="cLblPwd" />
+    <field name="cTxtPwd" alias="cTxtPwd" />
+    <field name="cLblConfirmPwd" alias="cLblConfirmPwd" />
+    <field name="cTxtConfirmPwd" alias="cTxtConfirmPwd" />
+    <field name="cLblMobile" alias="cLblMobile" />
+    <field name="cTxtMobile" alias="cTxtMobile" />
+    <field name="cLblMail" alias="cLblMail" />
+    <field name="cTxtMail" alias="cTxtMail" />
+    <field name="cLblSafetyCode" alias="cLblSafetyCode" />
+    <field name="cTxtSafetyCode" alias="cTxtSafetyCode" />
+    <field name="cLblSendCode" alias="cLblSendCode" />
+    <field name="cBtnReg" alias="cBtnReg" />
+    <field name="cBtnCancel" alias="cBtnCancel" />
+  </dialog>
+</root>

@@ -1,0 +1,76 @@
+﻿ku byFormNew
+{
+    data biao fieldTemplate [primaryKey(iD)] (
+    string iD "ID" [by.identity.ID, notNull, max: 32]
+    , string name "名称" [by.identity.Name, notNull, max: 32]
+    , string summary "说明" [by.identity.Attribute, max: 32]
+    , byForm.enum.ctrType ctrType "控件类型" [by.identity.Attribute]
+    , string ico "图标" [by.identity.Attribute, max: 128]
+    , int min "最小值" [by.identity.Attribute, max: 256]
+    , int max "最大值" [by.identity.Attribute, max: 256]
+    , string default2 "默认值" [by.identity.Attribute, min: 0, max: 32]
+    , string reg "正则验证" [by.identity.Attribute, min: 0, max: 256]
+    , string regMsg "正则验证出错后消息" [by.identity.Attribute, min: 0, max: 256]
+    , datetime createDt "创建时间" [by.identity.Attribute])
+    {
+        { "1","singleTextbox","单行文本",textbox,"singleTextbox.svg",0,0,"","^[^''\"\"]*$","不能输入单引号 及双引号", "2024-04-28 00:00:00"}
+        { "2","multiTextbox","多行文本",muiltTextbox,"multiTextbox.svg",0,0,"","^[^'']*$","不能输入单引号", "2024-04-28 00:00:10"}
+        { "3","checkBox","判断",checkBox,"checkBox.svg",0,0,"","","", "2024-04-28 00:00:20"}
+        { "4","dropdownList","下拉",dropdownList,"dropdownList.svg",0,0,"","","", "2024-04-28 00:00:30"}
+        { "5","radbutton","单选",radbutton,"radbutton.svg",0,0,"","","", "2024-04-28 00:00:40"}
+        { "6","checkBoxList","多选",checkBoxList,"checkBoxList.svg",0,0,"","","", "2024-04-28 00:00:50"}
+        { "7","name","姓名",textbox,"name.svg",0,0,"","^[\u4e00-\u9fa5_a-zA-Z0-9]+$","仅支持字母、数字及中文", "2024-04-28 00:01:00"}
+        { "8","address","地址",muiltTextbox,"address.svg",0,0,"","^[^''\"\"]*$","不能输入单引号 及双引号", "2024-04-28 00:01:10"}
+        { "9","telephone","电话",textbox,"telephone.svg",0,0,"","(^\\d+[\\-]\\d{5,11}$)|(^\\d{11}$)","非法的手机号或固定电话号码", "2024-04-28 00:01:20"} 
+        { "10","mail","邮箱",textbox,"mail.svg",0,0,"","^[\\-_\\w]{1,}@[\\w]{1,}\\.[\\-_\\w\\.]+$","邮箱格式非法", "2024-04-28 00:01:30"}
+        { "11","summary","说明",muiltTextbox,"summary.svg",0,0,"","^[^'']*$","不能输入单引号", "2024-04-28 00:01:40"}
+        { "12","NO","编号",textbox,"no.svg",0,0,"","^[_\\-0-9a-zA-Z]+$","仅支持字母、数字及\"-_\"", "2024-04-28 00:01:50"}
+        { "13","decimal","小数",textbox,"decimal.svg",0,0,"","(^\\-?[\\d]+$)|(^\\-?[\\d]+\\.[\\d]+$)","非法的小数格式", "2024-04-28 00:02:00"}
+        { "14","date","日期",datePicker,"date.svg",0,0,"","","", "2024-04-28 00:02:10" } 
+        { "15","time","时间",timePicker,"time.svg",0,0,"","","", "2024-04-28 00:02:20"}
+        { "16","datetime","日期时间",dateTimePicker,"datetime.svg",0,0,"","","", "2024-04-28 00:02:30"}
+        { "17","money","货币",textbox,"money.svg",0,0,"","(^\\-?[\\d]+$)|(^\\-?[\\d]+\\.[\\d]+$)","非法的金额", "2024-04-28 00:02:40"}
+        { "18","slider","滑块",slider,"slider.svg",0,0,"","","", "2024-04-28 00:02:50"}
+    }
+
+    config biao fieldTemplate.source "数据源配置表。必须配置 SQL 后才有效，例 select [config 配置名], a.* from this, 直接写 select a.* from this 则相关配置无效" (
+    string name "名称"
+    , string mode "模式"
+    , string[] actions "动作"
+    , string fieldAccess "字段访问"
+    , string[] settings "设置")
+    {
+        { iD, user, { select, insert }, iD, { name: "iD", text: "ID" } }
+        { name, user, { insert, delete, update, select }, name, { name: "name", text: "名称" } }
+        { summary, user, { insert, delete, update, select }, summary, { name: "summary", text: "说明" } }
+        { ctrType "获取枚举类型的枚举值数组", client, { insert, delete, update, select }, ctrType, { name: "ctrType", text: "控件类型", value: ctrType.getValues() } }
+        { ico, user, { insert, delete, update, select }, ico, { name: "ico", text: "图标" } }
+        { min, user, { insert, delete, update, select }, min, { name: "min", text: "最小值" } }
+        { max, user, { insert, delete, update, select }, max, { name: "max", text: "最大值" } }
+        { default2, user, { insert, delete, update, select }, default2, { name: "default2", text: "默认值" } }
+        { reg, user, { insert, delete, update, select }, reg, { name: "reg", text: "正则验证" } }
+        { regMsg, user, { insert, delete, update, select }, regMsg, { name: "regMsg", text: "正则验证出错后消息" } }
+        { createDt "获取一个 DateTime对象, 该对象设置为此计算机上的当前日期和时间", server, { insert, delete, update, select }, createDt, { name: "createDt", text: "创建时间", value: datetime.getNow() } }
+    }
+
+    config biao fieldTemplate.flow "数据流配置表" (
+    string name "名称"
+    , string action "动作"
+    , string[] sources "数据源(source.name)")
+    {
+        { insert, insert, { iD, name, summary, ctrType, ico, min, max, default2, reg, regMsg, createDt } }
+        { update, update, { name, summary, ctrType, ico, min, max, default2, reg, regMsg, createDt } }
+        { delete, delete, { iD } }
+        { select, select, { iD, name, summary, ctrType, ico, min, max, default2, reg, regMsg, createDt } }
+        { popup, select, { iD, name, createDt } }
+    }
+
+    config biao fieldTemplate.control "控件配置表" (
+    string name "名称"
+    , string[] types "控件类型"
+    , string[] sources "数据源(source.name)")
+    {
+        { edit, { Grid, EditArea }, { name, summary, ctrType, ico, min, max, default2, reg, regMsg, createDt } }
+        { popup, { Grid, QueryArea }, { iD, name, createDt } }
+    }
+}

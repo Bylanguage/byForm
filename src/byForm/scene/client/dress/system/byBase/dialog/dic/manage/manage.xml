@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <dialog ClassAndFileName="manage" ku="byBase" identity="dic" dialog="manage" path="byBase\dialog\dic\manage" namespace="byBase.dress.dic">
+    <field name="cGrid" alias="cGrid" />
+    <field name="cBtnQuery" alias="cBtnQuery" />
+    <field name="cBtnAdd" alias="cBtnAdd" />
+    <field name="cBtnDelete" alias="cBtnDelete" />
+    <field name="cBtnModify" alias="cBtnModify" />
+    <field name="cBtnSave" alias="cBtnSave" />
+    <field name="cBtnCancel" alias="cBtnCancel" />
+    <field name="cQueryArea" alias="cQueryArea" />
+    <field name="cEditArea" alias="cEditArea" />
+  </dialog>
+</root>

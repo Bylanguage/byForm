@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <dialog ClassAndFileName="adminManager" ku="byUser" identity="userAdmin" dialog="adminManager" path="byUser\dialog\userAdmin\adminManager" namespace="byUser.dress.userAdmin">
+    <field name="cGrid" alias="cGrid" />
+    <field name="cBtnAdd" alias="cBtnAdd" />
+    <field name="cBtnDelete" alias="cBtnDelete" />
+  </dialog>
+</root>

@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <dialog ClassAndFileName="dlForgetPwd" ku="byUser" identity="user" dialog="dlForgetPwd" path="byUser\dialog\user\dlForgetPwd" namespace="byUser.dress.user">
+    <field name="cRdGroup" alias="cRdGroup" />
+    <field name="cLblValue" alias="cLblValue" />
+    <field name="cTxtValue" alias="cTxtValue" />
+    <field name="cBtnSend" alias="cBtnSend" />
+    <field name="cBtnCancel" alias="cBtnCancel" />
+  </dialog>
+</root>

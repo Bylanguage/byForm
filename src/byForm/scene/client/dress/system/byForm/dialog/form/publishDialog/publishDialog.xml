@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <dialog ClassAndFileName="publishDialog" ku="byForm" identity="form" dialog="publishDialog" path="byForm\dialog\form\publishDialog" namespace="byForm.dress.form">
+    <field name="saasPanel" alias="saasPanel" />
+    <field name="saasSamplePanel" alias="saasSamplePanel" />
+    <field name="urlLabel" alias="urlLabel" />
+  </dialog>
+</root>

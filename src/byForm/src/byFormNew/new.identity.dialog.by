@@ -1,0 +1,11 @@
+﻿ku byFormNew
+{
+    new biao identity.dialog "身份实例窗体表" (
+    string belong "所属身份实例"
+    , string name "名称"
+    , string to "标记项")
+    {
+        { fieldTemplate, manage, { cEditArea: edit, cGrid: edit, cQueryArea: popup } }
+   
+    }
+}

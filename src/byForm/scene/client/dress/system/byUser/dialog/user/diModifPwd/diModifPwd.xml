@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <dialog ClassAndFileName="diModifPwd" ku="byUser" identity="user" dialog="diModifPwd" path="byUser\dialog\user\diModifPwd" namespace="byUser.dress.user">
+    <field name="cLblSourcePwd" alias="cLblSourcePwd" />
+    <field name="cTxtSourcePwd" alias="cTxtSourcePwd" />
+    <field name="cLblNewPwd" alias="cLblNewPwd" />
+    <field name="cTxtNewPwd" alias="cTxtNewPwd" />
+    <field name="cLblConfirmNewPwd" alias="cLblConfirmNewPwd" />
+    <field name="cTxtConfirmNewPwd" alias="cTxtConfirmNewPwd" />
+    <field name="cBtnSure" alias="cBtnSure" />
+    <field name="cBtnCancel" alias="cBtnCancel" />
+  </dialog>
+</root>

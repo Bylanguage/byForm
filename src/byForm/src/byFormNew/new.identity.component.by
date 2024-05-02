@@ -1,0 +1,87 @@
+﻿ku byFormNew
+{
+    new biao identity.component "身份实例构件表" (
+    string belong "所属身份实例"
+    , string name "名称"
+    , string to "标记项")
+    {
+        { formSys, rForm, :new identity:.form }
+        { formSys, rFormField, :new identity:.formField }
+        { formSys, rFormData, :new identity:.formData }
+        { formSys, rFieldTemplate, :new identity:.fieldTemplate }
+        { formSys, rFormTemplate, :new identity:.formTemplate }
+        { formSys, rVData64, :new identity:.formData }
+        { formSys, rVData256, :new identity:.formData }
+        { formSys, rVData1024, :new identity:.formData }
+        { formSys, rVData4000, :new identity:.formData }
+        { formSys, rUser, byUser.:new identity:.user }
+        { formSys, rFormFilling, :new identity:.formFilling }
+        { formSys, rPreviewFormFilling, :new identity:.previewFormFilling }
+        { formSys, rFormResult, :new identity:.formResult }
+        { formSys, rFormAnalyzer, :new identity:.formAnalyzer }
+        
+        { form, iID, iD }
+        { form, iName, name }
+        { form, iSuccessMsg, successMsg }
+        { form, iSubmitButton, submitButton }
+        { form, iSummary, summary }
+        { form, iUserID, userID }
+        { form, rFormSys, :new identity:.formSys }
+        { form, iCreateDt, createDt }
+        { form, iCurrentModifyDt, currentModifyDt }
+
+        { formField, iID, iD } 
+        { formField, iFormID, form }
+        { formField, iFieldNO, fieldNO }
+        { formField, iFieldName, fieldName } 
+        { formField, iSummary, summary }
+        { formField, iFieldType, fieldType }
+        { formField, iFieldCtrl, fieldCtrl }
+        { formField, iSelectValue, selectValue }
+        { formField, iFieldMin, fieldMin }
+        { formField, iFieldMax, fieldMax }
+        { formField, iFieldReg, fieldReg }
+        { formField, iFieldRegMsg, fieldRegMsg }
+        { formField, iFieldDefault, fieldDefault } 
+        { formField, iOrder, order }
+        { formField, iVDataValue, vDataValue }
+        { formField, rFormSys, :new identity:.formSys }
+        { formField, iUserID, userID }
+        { formField, iNotNull, notNull }
+        { formData, iID, iD }
+        { formData, iFormID, formID }
+        { formData, iRowPK, rowPK }
+        { formData, iFieldID, fieldID }
+        { formData, iFieldName, fieldName }
+        { formData, iCellValue, cellValue }
+        { formData, iUserID, userID }
+        { formData, rFormSys, :new identity:.formSys }
+        { fieldTemplate, iID, iD }
+        { fieldTemplate, iName, name }
+        { fieldTemplate, iSummary, summary }
+        { fieldTemplate, iCtrType, ctrType }
+        { fieldTemplate, iIco, ico }
+        { fieldTemplate, iMin, min }
+        { fieldTemplate, iMax, max }
+        { fieldTemplate, iDefault, default2 }
+        { fieldTemplate, iReg, reg }
+        { fieldTemplate, iRegMsg, regMsg }
+        { fieldTemplate, rFormSys, :new identity:.formSys }
+        { fieldTemplate, rUser, byUser.:new identity:.user }
+        { fieldTemplate, iCreateDt, createDt }
+        
+        { formTemplate, iID, ID }
+        { formTemplate, iFormID, formID }
+        { formTemplate, iUserID, userID }
+        { formTemplate, iName, name }
+        { formTemplate, rFormSys, :new identity:.formSys }
+
+        
+
+        
+        { formFilling, rFormSys, :new identity:.formSys }
+        { formResult, rFormSys, :new identity:.formSys }
+        { formAnalyzer, rFormSys, :new identity:.formSys }
+        { previewFormFilling, rFormSys, :new identity:.formSys }
+    }
+}

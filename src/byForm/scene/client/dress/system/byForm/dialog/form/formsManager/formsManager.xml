@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <dialog ClassAndFileName="formsManager" ku="byForm" identity="form" dialog="formsManager" path="byForm\dialog\form\formsManager" namespace="byForm.dress.form">
+    <field name="mainPanel" alias="mainPanel" />
+    <field name="operateArea" alias="operateArea" />
+    <field name="displayArea" alias="displayArea" />
+    <field name="formsHeader" alias="formsHeader" />
+    <field name="formListLabel" alias="formListLabel" />
+    <field name="formListPanel" alias="formListPanel" />
+    <field name="createFormButton" alias="createFormButton" />
+  </dialog>
+</root>

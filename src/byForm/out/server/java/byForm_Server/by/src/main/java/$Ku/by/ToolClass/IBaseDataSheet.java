@@ -1,0 +1,44 @@
+package $Ku.by.ToolClass;
+
+public interface IBaseDataSheet{
+    void assembleFieldReference() ;
+    java.lang.String getKuName() ;
+    void setKuName(java.lang.String kuName) ;
+    java.lang.String getSheetName() ;
+    void setSheetName(java.lang.String sheetName) ;
+    java.util.ArrayList<$Ku.by.ToolClass.Sql.SqlField> getPrimaryKeyList() ;
+    void setPrimaryKeyList(java.util.ArrayList<$Ku.by.ToolClass.Sql.SqlField> PrimaryKeyList) ;
+    java.util.ArrayList<java.lang.String> getDefaultColumnList() ;
+    void setDefaultColumnList(java.util.ArrayList<java.lang.String> DefaultColumnList) ;
+    java.util.LinkedHashMap<java.lang.String, $Ku.by.ToolClass.Sql.SqlField> getComponentDic() ;
+    void setComponentDic(java.util.LinkedHashMap<java.lang.String, $Ku.by.ToolClass.Sql.SqlField> ComponentDic) ;
+    java.util.LinkedHashMap<java.lang.String, $Ku.by.ToolClass.Sql.SqlField> getFieldDic() ;
+    void setFieldDic(java.util.LinkedHashMap<java.lang.String, $Ku.by.ToolClass.Sql.SqlField> FieldDic) ;
+    java.util.LinkedHashMap<java.lang.String, java.util.ArrayList<$Ku.by.ToolClass.Source>> getFlowDic() ;
+    void setFlowDic(java.util.LinkedHashMap<java.lang.String, java.util.ArrayList<$Ku.by.ToolClass.Source>> FlowDic) ;
+    java.util.LinkedHashMap<java.lang.String, java.lang.String> getReferenceDic() ;
+    void setReferenceDic(java.util.LinkedHashMap<java.lang.String, java.lang.String> ReferenceDic) ;
+    java.util.LinkedHashMap<java.lang.String, $Ku.by.ToolClass.Source> getSourceDic() ;
+    void setSourceDic(java.util.LinkedHashMap<java.lang.String, $Ku.by.ToolClass.Source> SourceDic) ;
+    java.util.LinkedHashMap<java.lang.String, java.util.LinkedHashMap<$Ku.by.Enum.Attribute, java.lang.String>> getVerifyDic() ;
+    void setVerifyDic(java.util.LinkedHashMap<java.lang.String, java.util.LinkedHashMap<$Ku.by.Enum.Attribute, java.lang.String>> VerifyDic) ;
+    $Ku.by.ToolClass.AbstractIdentityBase getIdentity() ;
+    void setIdentity($Ku.by.ToolClass.AbstractIdentityBase Identity) ;
+    java.lang.String getIdentityName() ;
+    void setIdentityName(java.lang.String IdentityName) ;
+    java.lang.Boolean getIsConst() ;
+    void setIsConst(java.lang.Boolean IsConst) ;
+    java.lang.String getFieldDefault(java.lang.String FieldDefault) ;
+    java.util.LinkedHashMap<java.lang.String, $Ku.by.ToolClass.IRowFlow> getRowFlowDic() ;
+    void setRowFlowDic(java.util.LinkedHashMap<java.lang.String, $Ku.by.ToolClass.IRowFlow> value) ;
+    java.util.LinkedHashMap<java.lang.String, $Ku.by.ToolClass.IRowsFlow> getRowsFlowDic() ;
+    void setRowsFlowDic(java.util.LinkedHashMap<java.lang.String, $Ku.by.ToolClass.IRowsFlow> value) ;
+    java.util.LinkedHashMap<java.lang.String, $Ku.by.ToolClass.IRowArrayFlow> getRowArrayFlowDic() ;
+    void setRowArrayFlowDic(java.util.LinkedHashMap<java.lang.String, $Ku.by.ToolClass.IRowArrayFlow> value) ;
+    java.util.LinkedHashMap<java.lang.String, $Ku.by.ToolClass.IRowFlowInTran> getRowFlowInTranDic() ;
+    void setRowFlowInTranDic(java.util.LinkedHashMap<java.lang.String, $Ku.by.ToolClass.IRowFlowInTran> value) ;
+    java.util.LinkedHashMap<java.lang.String, $Ku.by.ToolClass.IRowsFlowInTran> getRowsFlowInTranDic() ;
+    void setRowsFlowInTranDic(java.util.LinkedHashMap<java.lang.String, $Ku.by.ToolClass.IRowsFlowInTran> value) ;
+    java.util.LinkedHashMap<java.lang.String, $Ku.by.ToolClass.IRowArrayFlowInTran> getRowArrayFlowInTranDic() ;
+    void setRowArrayFlowInTranDic(java.util.LinkedHashMap<java.lang.String, $Ku.by.ToolClass.IRowArrayFlowInTran> value) ;
+}

@@ -1,0 +1,88 @@
+﻿ku byForm
+{
+    system biao identity.component "身份构件表" (
+    string belong "所属类型"
+    , string name "名称"
+    , string[] scenes "场景"
+    , string type "类型"
+    , string[] constraints "约束")
+    {
+        { formSys, rForm"表单据", {  }, form , {  } } 
+        { formSys, rFormField"表单字段明细数据", {  }, formField , {  } } 
+        { formSys, rFormData"表单数据", {  }, formData , {  } }
+        { formSys, rFieldTemplate "字段模板列", {  }, fieldTemplate , {  } }  
+        { formSys, rFormTemplate "表单模板列", {  }, formTemplate, {  } }
+        { formSys, rVData64"长度 varchar(64)", , formData, {  } }
+        { formSys, rVData256"长度 varchar(256)", , formData, {  } }
+        { formSys, rVData1024"长度 varchar(1024)", , formData, {  } }
+        { formSys, rVData4000"长度 varchar(4000)", , formData, {  } }
+        { formSys, rUser "用户", , user, } 
+        { formSys, rFormFilling "表单填写页面", { web }, formFilling, {  } }
+        { formSys, rPreviewFormFilling, { web }, previewFormFilling, {  } }
+        { formSys, rFormResult "表单填写结果展示页面", { web }, formResult, {  } }
+        { formSys, rFormAnalyzer "表单分析页面", { web }, formAnalyzer, {  } }
+        
+        { form, iID "编号", , ID, { specific:string,max:32 } } 
+        { form, iName "表单名称", , Name,{specific:string}  } 
+        { form, iSuccessMsg "用户保存成功后提示消息", , Attribute,{specific:string,default:"谢谢，我们会尽快处理！"} } 
+        { form, iSubmitButton"提交按钮的文本说明", {  }, Attribute , { specific:string,default:"确认提交" } }
+        { form, iSummary "说明", , ID, { specific:string,max:256 } } 
+        { form, iUserID "用户ID", {  }, by.identity.Attribute, { specific:string,ref:this.rFormSys.rUser.iID } }
+        { form, rFormSys "表单系统", , formSys, }
+        { form, iCreateDt "创建时间", {  }, by.identity.Attribute, {  specific:datetime} }
+        { form, iCurrentModifyDt, {  }, by.identity.Attribute, { specific:datetime } }
+    
+        
+        { formField, iID "编号", , ID, { specific:string,max:32 } } 
+        { formField, iFormID "表单ID", , Reference, { specific:string,ref:form.iID } }
+        { formField, iFieldNO "系统自动编号", , Attribute, {specific:string} }
+        { formField, iFieldName "字段名", , Attribute, { specific:string } } 
+        { formField, iSummary "说明", , ID, { specific:string,max:256 } }
+        { formField, iFieldType "字段类型，int string", , Attribute, {specific:string} }
+        { formField, iFieldCtrl "显示为文本框、下拉框、单选、多选", {  }, Attribute, { specific:ctrType } }
+        { formField, iSelectValue "单选、多选、下拉列表值,多项用回车换行", {  }, Attribute, { specific:string } }
+        { formField, iFieldMin "字段最小值", , Attribute, {specific:int} }
+        { formField, iFieldMax "字段最大值，最大值为 4000即表的最大长度 ", , Attribute, {specific:int} }
+        { formField, iFieldReg "正则验证", , Attribute, {specific:string}}
+        { formField, iFieldRegMsg "正则验证提示消息文本", , Attribute,{specific:string} }
+        { formField, iFieldDefault "默认值", , Attribute,{specific:string} }
+        { formField, iNotNull "必填,true=必填", , Attribute,{specific:bool} }
+        { formField, iOrder"排序", {  }, by.identity.Attribute, { specific:int } }
+        { formField, iVDataValue "目前仅支持64、256、1024、4000，对应相关formData表", , Attribute, { specific:int } }
+        { formField, iUserID "用户ID", {  }, by.identity.Attribute, { specific:string,ref:this.rFormSys.rUser.iID } }
+        { formField, rFormSys "表单系统", , formSys, }
+        
+        { formData, iID "ID", , ID, { specific:string } }
+        { formData, iFormID "表单ID", , Reference, { specific:string,ref:this.rFormSys.rForm.iID } }
+        { formData, iRowPK "数据行中的主键，非用户录入的表字段主键值，该项由系统自动编号", , Attribute, { specific:string } }
+        { formData, iFieldID "字段ID", {  }, Reference, { specific:string,ref:this.rFormSys.rFormField.iID } }
+        { formData, iFieldName "字段名", , Reference, { specific:string } }
+        { formData, iCellValue "单元格中的值", , Attribute, { specific:string } }
+        { formData, iUserID "用户ID", {  }, by.identity.Attribute, { specific:string,ref:formSys.rUser.iID } }
+        { formData, rFormSys "表单系统", , formSys, }
+        
+        { fieldTemplate, iID "ID", , ID, { specific:string,max:32 } } 
+        { fieldTemplate, iName "名称", , Name,{specific:string,max:32} }
+        { fieldTemplate, iSummary "说明", , Attribute,{specific:string,max:32} }
+        { fieldTemplate, iCtrType "控件类型", , Attribute,{specific:ctrType} } 
+        { fieldTemplate, iIco "图标", , Attribute,{specific:string,max:128} }
+        { fieldTemplate, iMin "最小值", , Attribute,{specific:int,max:256} }
+        { fieldTemplate, iMax "最大值", , Attribute,{specific:int,max:256} }
+        { fieldTemplate, iDefault "默认值", , Attribute,{specific:string,min:0,max:32} }
+        { fieldTemplate, iReg "正则验证", , Attribute,{specific:string,min:0,max:256} }
+        { fieldTemplate, iRegMsg "正则验证出错后消息", , Attribute,{specific:string,min:0,max:256} } 
+        { fieldTemplate, iCreateDt "创建时间", {  }, by.identity.Attribute, {  specific:datetime} }
+        { fieldTemplate, rFormSys "表单系统", , formSys, }  
+        { fieldTemplate, rUser, {  }, byUser.identity.user, {  } }
+        
+        { formTemplate, iID "ID", {  }, by.identity.ID, { specific:string,max:32 } }
+        { formTemplate, iName "名称", {  }, by.identity.Name, { specific:string,max:32 } }
+        { formTemplate, iFormID "对应的表单id", {  }, by.identity.Reference, { specific:string,ref:this.rFormSys.rForm.iID } }
+        { formTemplate, iUserID "用户ID", {  }, by.identity.Attribute, { specific:string,ref:this.rFormSys.rUser.iID } }
+        { formTemplate, rFormSys "表单系统", {  }, formSys, {  } }
+        { formFilling, rFormSys, {  }, formSys, {  } }
+        { formResult, rFormSys, {  }, formSys, {  } }
+        { formAnalyzer, rFormSys, {  }, formSys, {  } }
+        { previewFormFilling, rFormSys, {  }, formSys, {  } }
+    }
+}

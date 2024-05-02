@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <dialog ClassAndFileName="popup" ku="byBase" identity="popupTable" dialog="popup" path="byBase\dialog\popupTable\popup" namespace="byBase.dress.popupTable">
+    <field name="cGrid" alias="cGrid" />
+    <field name="cContextMenu" alias="cContextMenu" />
+    <field name="cBtnQuery" alias="cBtnQuery" />
+    <field name="cBtnComplete" alias="cBtnComplete" />
+    <field name="cMQueryArea" alias="cMQueryArea" />
+  </dialog>
+</root>

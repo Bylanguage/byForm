@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <dialog ClassAndFileName="diLogin" ku="byUser" identity="user" dialog="diLogin" path="byUser\dialog\user\diLogin" namespace="byUser.dress.user">
+    <field name="cLblName" alias="cLblName" />
+    <field name="cTxtName" alias="cTxtName" />
+    <field name="cLblPwd" alias="cLblPwd" />
+    <field name="cTxtPwd" alias="cTxtPwd" />
+    <field name="cBtnLogin" alias="cBtnLogin" />
+    <field name="cBtnReg" alias="cBtnReg" />
+    <field name="cLblFindPwd" alias="cLblFindPwd" />
+  </dialog>
+</root>
