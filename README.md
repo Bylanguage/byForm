@@ -6,16 +6,14 @@ This is an online form designer, allow users to design a form using drag & drop 
 All of the following application forms can be built in jsut one step: 
     Online-ordering, online-registration, online feedback collection, online questionnaires and online conferences arrangement...
 
-Supporting inserting to any website using just one line of <script> tag, which cannot be achieved by current form-generators;
+Supporting inserting to any website using just one line of &lt;script&gt; tag, which cannot be achieved by current form-generators;
 This project is written in the By Language, with a total of 4442 lines of codes, including Webside Javascript, Desktop-side c# client, Server-side c# program and server-side Java program, supporting MS sqlServer, MySql and Oracle as its Sql Engine. 
 
 Online demo at: https://saas.baiyuyan.com/
 
 Inject the following script tag into your html file to try this app：
 
-```html
-<script>window.localStorage.setItem("_byt_saasid_storage", "0F8BFBFF000506570257810700030001")</script> <script src="https://saas.baiyuyan.com/form.js"> </script>
-```
+&lt;script&gt;window.localStorage.setItem("_byt_saasid_storage", "0F8BFBFF000506570257810700030001")&lt;/script&gt; &lt;script src="https://saas.baiyuyan.com/form.js"&gt; &lt;/script&gt;
 
 ## Project Structure
 This project is written in the By Language, the project includes one part of By Language Source code, and all the above platform sides code transpiled from the By-code base.(Web JavaScript, C# client, C# server, Java server, Sql database)
@@ -54,7 +52,7 @@ Donations
 
 表单设计器允许直接使用拖拽进行操作，可以一站式制作：在线订单、在线报名、在线登记、在线收集意见反馈、调查统计、会议预约等。
 
-通过插入一行  `<script>`  标签，就可以集成到任意的网页中运行， 这是现在主流的在线表单程序做不到的。 
+通过插入一行 &lt;script&gt; 标签，就可以集成到任意的网页中运行， 这是现在主流的在线表单程序做不到的。 
 
 本项目是使用拜语言开发的，共计 4442 行代码，包括 JavaScript 开发的网页端和独立的 C# 服务端、Java 服务端，两者任选其一部署。并且支持链接 MS sqlServer, MySql 或 Oracle 数据库。
 
@@ -62,9 +60,7 @@ Donations
 
 插入以下代码即可运行：
 
-```html
-<script>window.localStorage.setItem("_byt_saasid_storage", "0F8BFBFF000506570257810700030001")</script> <script src="https://saas.baiyuyan.com/form.js"> </script>
-```
+&lt;script&gt;window.localStorage.setItem("_byt_saasid_storage", "0F8BFBFF000506570257810700030001")&lt;/script&gt; &lt;script src="https://saas.baiyuyan.com/form.js"&gt; &lt;/script&gt;
 
 ## 项目架构
 本项目主要由拜语言开发，以上所有平台端代码都是从拜语言源代码使用转译而得到的。(Web JavaScript, C# server, Java server, Sql database)
