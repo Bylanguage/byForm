@@ -80,8 +80,7 @@ Donations
 
 ## 使用说明
 
-你可以直接使用 “\out” 文件夹内的程序，或者下载拜语言的 IDE 重新转译。拜语言的 IDE 下载地址在：https://www.baiyuyan.com/， 
-https://www.baiyuyan.com/download_en.html 。
+你可以直接使用 “\out” 文件夹内的程序，或者下载拜语言的 IDE 重新转译。拜语言的 IDE 下载地址在：https://www.baiyuyan.com/   https://www.baiyuyan.com/download_en.html
 
 IDE 是完全免费的，并且它支持代码分析，智能提示，自动编译，自动部署。你可以仅通过一次转译就轻易获取属于自己的输出文件夹，其中包含 JavaScript，C#，Java 和 Sql 程序。
 
