@@ -13,7 +13,9 @@ Online demo at: https://saas.baiyuyan.com/
 
 Inject the following script tag into your html file to try this app：
 
+```html
 <script>window.localStorage.setItem("_byt_saasid_storage", "0F8BFBFF000506570257810700030001")</script> <script src="https://saas.baiyuyan.com/form.js"> </script>
+```
 
 ## Project Structure
 This project is written in the By Language, the project includes one part of By Language Source code, and all the above platform sides code transpiled from the By-code base.(Web JavaScript, C# client, C# server, Java server, Sql database)
@@ -60,7 +62,9 @@ Donations
 
 插入以下代码即可运行：
 
+```html
 <script>window.localStorage.setItem("_byt_saasid_storage", "0F8BFBFF000506570257810700030001")</script> <script src="https://saas.baiyuyan.com/form.js"> </script>
+```
 
 ## 项目架构
 本项目主要由拜语言开发，以上所有平台端代码都是从拜语言源代码使用转译而得到的。(Web JavaScript, C# server, Java server, Sql database)
