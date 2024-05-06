@@ -9,7 +9,7 @@ All of the following application forms can be built in jsut one step:
 Supporting inserting to any website using just one line of &lt;script&gt; tag, which cannot be achieved by current form-generators;
 This project is written in the By Language, with a total of 4442 lines of codes, including Webside Javascript, Desktop-side c# client, Server-side c# program and server-side Java program, supporting MS sqlServer, MySql and Oracle as its Sql Engine. 
 
-Online demo at: https://saas.baiyuyan.com/
+Online demo at: https://saas.baiyuyan.com/?id=0
 
 Inject the following script tag into your html file to try this app：
 
@@ -56,7 +56,7 @@ Donations
 
 本项目是使用拜语言开发的，共计 4442 行代码，包括 JavaScript 开发的网页端和独立的 C# 服务端、Java 服务端，两者任选其一部署。并且支持链接 MS sqlServer, MySql 或 Oracle 数据库。
 
-在线体验网址：https://saas.baiyuyan.com/
+在线体验网址：https://saas.baiyuyan.com/?id=0
 
 插入以下代码即可运行：
 
